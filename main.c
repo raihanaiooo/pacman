@@ -1,19 +1,19 @@
 #include <stdio.h>
 #include <graphics.h>
+//#include "header/ui.h"
+
+void map() {
+    line(100, 100, 200, 200);
+}
 
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL); // initialize graphics windows
     // MAIN STRUCTUR OF INITGRAPH
-    // void initgraph(int *graphicsDriver, int *graphicsMode, char *driverDirectoryPath);
-
-    int x1 = 200, y1 = 200; 
-    int x2 = 300, y2 = 300; 
-    setcolor(BLUE);
-    line(x1,y1,x2,y2);
-
+    
+    map();// void initgraph(int *graphicsDriver, int *graphicsMode, char *driverDirectoryPath);
     getch();  // Tunggu input sebelum menutup window
     closegraph();
-
-    return 0;
+    return 0; 
 }
+
