@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <graphics.h>
-//#include "header/ui.h"
 
 void map() {
     // Map luar
@@ -89,32 +88,5 @@ void map() {
     linerel(0, 50);
     moveto(472, 320);
     linerel(0, -50);
-
-
-
-
-    // Draw some walls inside the map
-    //rectangle(240, 190, 400, 290);
-    // rectangle(300, 100, 350, 150);
-    // rectangle(100, 200, 150, 250);
-    // rectangle(300, 200, 350, 250);
-    // rectangle(100, 300, 150, 350);
-    // rectangle(200, 300, 250, 350);
-    // rectangle(300, 300, 350, 350);
-
-    // Draw the path for PaBcman
-    // line(50, 250, 450, 250);
-    // line(250, 50, 250, 450);
-}
-
-int main() {
-    int gd = DETECT, gm;
-    initgraph(&gd, &gm, NULL); // initialize graphics windows
-     // MAIN STRUCTUR OF INITGRAPH
-    
-    map();// void initgraph(int *graphicsDriver, int *graphicsMode, char *driverDirectoryPath);
-    getch();  // Tunggu input sebelum menutup window
-    closegraph();
-    return 0; 
 }
 

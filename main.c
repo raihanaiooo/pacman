@@ -2,9 +2,6 @@
 #include <graphics.h>
 //#include "header/ui.h"
 
-void map() {
-    line(100, 100, 200, 200);
-}
 
 int main() {
     int gd = DETECT, gm;
