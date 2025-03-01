@@ -1,19 +1,25 @@
 #include <stdio.h>
 #include <graphics.h>
+#include "ghost.h"
 
 int main() {
     int gd = DETECT, gm;
-    int x1 = 200, y1 = 200; 
-    int x2 = 300, y2 = 300; 
-    
-    initgraph(&gd, &gm, NULL); // initialize graphics windows
-    // MAIN STRUCTUR OF INITGRAPH
+
     // void initgraph(int *graphicsDriver, int *graphicsMode, char *driverDirectoryPath);
+    initgraph(&gd, &gm, NULL); // initialize graphics windows
 
-    setcolor(BLUE);
-    line(x1,y1,x2,y2);
+    Ghost ghost;
+    theGhost(&ghost, 100, 100, RED);  // Buat ghost merah di (100,100)
 
-    getch();  // Tunggu input sebelum menutup window
+    // MAIN STRUCTUR 
+    while (!kbhit()) {  // Loop sampai tombol ditekan
+        cleardevice();
+        designGhost(&ghost);
+        shiftGhost(&ghost, getmaxx(), getmaxy());
+        delay(50);
+    }
+
+    getch();
     closegraph();
 
     return 0;
