@@ -1,4 +1,4 @@
-#include "header.h"
+#include "../header/pacman.h"
 
 Position pacman, food;
 bool gameOver;
@@ -72,17 +72,4 @@ void logic() {
     if (pacman.x <= 0 || pacman.x >= WIDTH - 1 || pacman.y <= 0 || pacman.y >= HEIGHT - 1) {
         gameOver = true;
     }
-}
-
-// Fungsi utama
-int main() {
-    initGame();
-    while (!gameOver) {
-        drawMap();
-        input();
-        logic();
-    }
-
-    printf("Game Over!\n");
-    return 0;
 }
