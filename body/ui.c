@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <graphics.h>
+#include "../header/ui.h"
 
 void map() {
     // Map luar

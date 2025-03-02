@@ -1,7 +1,7 @@
-// #ifndef UI_H
-// #define UI_H
-// #include "pacman/body/ui.c"
+#ifndef UI_H
+#define UI_H
 
-// void map();
 
-// #endif
+void map();
+
+#endif
