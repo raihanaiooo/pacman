@@ -1,6 +1,21 @@
 #include <graphics.h>
 #include "../header/pacman.h"
-#include <conio.h>
+#include <stdio.h>
+
+int isColliding(Pacman *p, int newX, int newY) {
+    int checkX = newX;
+    int checkY = newY;
+
+    switch (p->direction)
+    {
+        case 0: checkX += p->radius; break; // Kanan
+        case 1: checkX -= p->radius; break; // Kiri
+        case 2: checkY -= p->radius; break; // Atas
+        case 3: checkY += p->radius; break; // Bawah
+    }
+    int color = getpixel(checkX, checkY);  // Ambil warna pixel di posisi baru
+    return (color == YELLOW);    // Jika pixel kuning, tabrakan terjadi
+}
 
 void drawPacman(Pacman *p) {
     //? Pacmannya
@@ -38,27 +53,20 @@ void clearPacman(Pacman *p) {
 }
 
 void movePacman(Pacman *p, char key) {
-    clearPacman(p);
+    int newX = p->x;
+    int newY = p->y;
 
-    switch (key)
-    {
-        case 75: 
-            p->x -= 10;
-            p->direction = 1;
-        break; // Left arrow
-        case 77: 
-            p->x += 10; 
-            p->direction = 0; 
-        break; // Right arrow
-        case 72: 
-            p->y -= 10; 
-            p->direction = 2; 
-        break; // Up arrow
-        case 80: 
-            p->y += 10; 
-            p->direction = 3; 
-        break; // Down arrow
+    
+    switch (key) {
+        case 75: newX -= 10; p->direction = 1; break; // Kiri
+        case 77: newX += 10; p->direction = 0; break; // Kanan
+        case 72: newY -= 10; p->direction = 2; break; // Atas
+        case 80: newY += 10; p->direction = 3; break; // Bawah
     }
-
-    drawPacman(p);
+    if(!isColliding(p, newX, newY)){
+        clearPacman(p);
+        p->x = newX;
+        p->y = newY;
+        drawPacman(p);
+    }
 }

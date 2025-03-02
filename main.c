@@ -13,9 +13,14 @@ int main() {
     Ghost ghost;
     theGhost(&ghost, 100, 100, RED);  // Buat ghost merah di (100,100)
 
+<<<<<<< HEAD
     Pacman pacman = {200,200,20,0};
 
     int score = 0;
+=======
+    Pacman pacman = {200,200,10,0};
+    
+>>>>>>> bd326dfd388d046c15b2477a4113589a17e514aa
     int page = 0;
     int key = 0;
     // MAIN STRUCTUR 

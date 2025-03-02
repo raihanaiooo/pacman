@@ -14,4 +14,6 @@ void clearPacman(Pacman *p);
 
 void movePacman(Pacman *p, char key);
 
+int isColliding(Pacman *p, int newX, int newY);
+
 #endif
