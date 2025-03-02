@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <graphics.h>
-#include "header/ui.h"
 #include "header/ghost.h"
 #include "header/pacman.h"
+#include "header/ui.h"
 
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL); // initialize graphics windows
 
     Ghost ghost;
-    theGhost(&ghost, 100, 100, RED);  // Buat ghost merah di (100,100)
+    theGhost(&ghost, 100, 100, RED);  // Buat ghost biru di (100,100)
 
     Pacman pacman = {200,200,10,0};
     
