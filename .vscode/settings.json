@@ -55,6 +55,11 @@
 	"C_Cpp_Runner.msvcSecureNoWarnings": false,
 	"C_Cpp.errorSquiggles": "disabled",
 	"files.associations": {
+<<<<<<< HEAD
 		"pacman.h": "c"
+=======
+		"ghost.h": "c",
+		"scoring.h": "c"
+>>>>>>> f8d98a9f59a1559bb8c934d76cd26fbb4f3c48e2
 	}
 }
