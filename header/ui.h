@@ -2,6 +2,6 @@
 #define UI_H
 
 
-void map();
+void Map();
 
 #endif

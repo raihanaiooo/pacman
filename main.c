@@ -24,7 +24,7 @@ int main() {
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
-        map();
+        Map();
         
          //* ====================================dot=======================================
         drawDots();
