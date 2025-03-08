@@ -3,5 +3,7 @@
 
 
 void Map();
+void hitungScore(int score);
+
 
 #endif

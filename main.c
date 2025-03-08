@@ -9,7 +9,7 @@ int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL); // initialize graphics windows
 
-    initializeDots(); // inisialisasi dot 
+    setTitikDot(); // inisialisasi dot 
     Ghost ghost;
     theGhost(&ghost, 100, 100, RED);  // Buat ghost biru di (100,100)
 
@@ -27,13 +27,13 @@ int main() {
         Map();
         
          //* ====================================dot=======================================
-        drawDots();
+        gambarDot();
 
         //* ====================================GHOST=======================================
         designGhost(&ghost);
         shiftGhost(&ghost, getmaxx(), getmaxy());
         
-        drawDots();
+        gambarDot();
         //* ====================================PACMAN=======================================
         if (kbhit()) { 
             key = getch();
@@ -43,9 +43,10 @@ int main() {
                 key = getch();
             movePacman(&pacman, key);
 
-            checkCollisionWithDots(pacman.x, pacman.y, &score); //check dot kemakan
+            scoring(pacman.x, pacman.y, &score); //check dot kemakan
         }
         drawPacman(&pacman);
+        hitungScore(score);
         if (GetAsyncKeyState(VK_ESCAPE)) 
             break;
 
