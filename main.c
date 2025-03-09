@@ -10,16 +10,13 @@ int main() {
     initgraph(&gd, &gm, NULL); // initialize graphics windows
 
     setTitikDot(); // inisialisasi dot 
-    // Ghost ghost;
-    // theGhost(&ghost, 100, 100, RED);  // Buat ghost merah di (100,100)
-    // initializeDots(); // inisialisasi dot 
     Ghost ghosts[MAX_GHOSTS];
     theGhost(&ghosts[0], 100, 100, RED);
     theGhost(&ghosts[1], 400, 100, WHITE);
     theGhost(&ghosts[2], 100, 300, GREEN);
     theGhost(&ghosts[3], 400, 300, CYAN);
 
-    Pacman pacman = {200, 200, 10, 0, 1};  // Pac-Man dengan 3 nyawa
+    Pacman pacman = {190, 190, 8, 0, 1};  // Pac-Man dengan 3 nyawa
     int score = 0;
     int page = 0;
     int key = 0;
