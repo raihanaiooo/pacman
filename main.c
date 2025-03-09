@@ -10,9 +10,9 @@ int main() {
     initgraph(&gd, &gm, NULL); // initialize graphics windows
 
     setTitikDot(); // inisialisasi dot 
-    Ghost ghost;
-    theGhost(&ghost, 100, 100, RED);  // Buat ghost biru di (100,100)
-    initializeDots(); // inisialisasi dot 
+    // Ghost ghost;
+    // theGhost(&ghost, 100, 100, RED);  // Buat ghost biru di (100,100)
+    // initializeDots(); // inisialisasi dot 
     Ghost ghosts[MAX_GHOSTS];
     theGhost(&ghosts[0], 100, 100, RED);
     theGhost(&ghosts[1], 400, 100, WHITE);
