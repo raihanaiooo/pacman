@@ -1,5 +1,6 @@
 #include "../header/ghost.h"
 #include "../header/ui.h"
+#include "../header/pacman.h"
 #include <stdlib.h>
 
 // Cek dinding terbentur ghost
@@ -62,7 +63,6 @@ void theGhost(Ghost *gh, int x, int y, int hue) {
     } while (gh->dy == 0);
 }
 
-
 void designGhost(Ghost *gh) {
     setcolor(gh->hue);
     setfillstyle(SOLID_FILL, gh->hue);
@@ -93,6 +93,11 @@ void shiftGhost(Ghost *gh, int limitX, int limitY) {
         gh->x = newX;
         gh->y = newY;
     }
-    
 }
 
+// Fungsi untuk mengecek tabrakan antara Pac-Man dan Ghost
+int checkCollisionWithGhost(Pacman *p, Ghost *g) {
+    int distance = (p->x - g->x) * (p->x - g->x) + (p->y - g->y) * (p->y - g->y);
+    int collisionDistance = (p->radius + 15) * (p->radius + 15); // 15 adalah radius ghost
+    return distance <= collisionDistance;
+}
