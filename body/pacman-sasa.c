@@ -1,6 +1,8 @@
 #include <graphics.h>
 #include "../header/pacman.h"
 #include <stdio.h>
+extern int maze[24][32];
+#define TILE_SIZE 20
 
 int isColliding(Pacman *p, int newX, int newY) {
     int checkX = newX;
@@ -13,8 +15,15 @@ int isColliding(Pacman *p, int newX, int newY) {
         case 2: checkY -= p->radius; break; // Atas
         case 3: checkY += p->radius; break; // Bawah
     }
-    int color = getpixel(checkX, checkY);  // Ambil warna pixel di posisi baru
-    return (color == YELLOW);    // Jika pixel kuning, tabrakan terjadi
+    int col = checkX / TILE_SIZE;
+    int row = checkY / TILE_SIZE;
+
+    if (row < 0 || row >= 24 || col < 0 || col >= 32 )
+    {
+        return 1;
+    }
+    return(maze[row][col] == 2);
+    
 }
 
 void drawPacman(Pacman *p) {

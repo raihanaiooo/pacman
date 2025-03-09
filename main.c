@@ -13,7 +13,7 @@ int main() {
     Ghost ghost;
     theGhost(&ghost, 100, 100, RED);  // Buat ghost biru di (100,100)
 
-    Pacman pacman = {200,200,10,0};
+    Pacman pacman = {190,190,8,0};
 
     int score = 0;
     int page = 0;
