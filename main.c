@@ -12,6 +12,12 @@ int main() {
     setTitikDot(); // inisialisasi dot 
     Ghost ghost;
     theGhost(&ghost, 100, 100, RED);  // Buat ghost biru di (100,100)
+    initializeDots(); // inisialisasi dot 
+    Ghost ghosts[MAX_GHOSTS];
+    theGhost(&ghosts[0], 100, 100, RED);
+    theGhost(&ghosts[1], 400, 100, WHITE);
+    theGhost(&ghosts[2], 100, 300, GREEN);
+    theGhost(&ghosts[3], 400, 300, CYAN);
 
     Pacman pacman = {190,190,8,0};
 
@@ -30,8 +36,12 @@ int main() {
         gambarDot();
 
         //* ====================================GHOST=======================================
-        designGhost(&ghost);
-        shiftGhost(&ghost, getmaxx(), getmaxy());
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            shiftGhost(&ghosts[i]);
+            designGhost(&ghosts[i]);
+            pursuePacman(&ghosts[i], &pacman);
+            GhostEatingPacman(&ghosts[i], &pacman);  
+        }  
         
         gambarDot();
         //* ====================================PACMAN=======================================

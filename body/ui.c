@@ -43,7 +43,6 @@ void Map() {
                 setcolor(BLUE);
                 setfillstyle(SOLID_FILL, BLUE);
                 bar(x, y, x + TILE_SIZE, y + TILE_SIZE);
-            }
             else if (maze[i][j] == 0) {  // Jalan
                 setcolor(BLACK);
                 setfillstyle(SOLID_FILL, BLACK);
@@ -52,14 +51,7 @@ void Map() {
             }
         }
     }
-    void hitungScore(int score) {
-        setcolor(WHITE);
-        settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
-        char totalScore[20];
-        sprintf(totalScore, "Score: %d", score);
-        outtextxy(10, getmaxy() - 30, totalScore); // Pojok kiri bawah
-    }
-    
+
 
 void GameStart(){
 
