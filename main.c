@@ -23,17 +23,14 @@ int main() {
     int score = 0;
     int page = 0;
     int key = 0;
-<<<<<<< HEAD
 
     // MAIN STRUCTURE 
     while (pacman.lives > 0) {  // Game berjalan selama Pac-Man masih punya nyawa
-=======
     // MAIN STRUCTUR 
     GameStart();
 
     while (1) {  // Loop sampai tombol ditekan
         //* ====================================MAP=======================================
->>>>>>> upay
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
@@ -89,4 +86,5 @@ int main() {
 
     closegraph();
     return 0; 
+    }
 }

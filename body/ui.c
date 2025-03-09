@@ -44,18 +44,14 @@ void Map() {
                 setcolor(BLUE);
                 setfillstyle(SOLID_FILL, BLUE);
                 bar(x, y, x + TILE_SIZE, y + TILE_SIZE);
-<<<<<<< HEAD
-            }
-            else if (maze[i][j] == 0) {  // Jalan
-=======
             }else if (maze[i][j] == 0) {  // Jalan
->>>>>>> upay
                 setcolor(BLACK);
                 setfillstyle(SOLID_FILL, BLACK);
                 bar(x, y, x + TILE_SIZE, y + TILE_SIZE);
             }
         }
     }
+}
     void hitungScore(int score) {
         setcolor(WHITE);
         settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
@@ -120,11 +116,4 @@ void GamePause() {
             }
         }
     }
-}
-
-
- 
-
-void GameOver(){
-
 }
