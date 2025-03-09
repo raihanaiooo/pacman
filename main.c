@@ -32,7 +32,7 @@ int main() {
         Map();
         
         //* ====================================DOT=======================================
-        drawDots();
+        // drawDots();
 
         //* ====================================GHOST=======================================
         for (int i = 0; i < MAX_GHOSTS; i++) {
@@ -59,7 +59,7 @@ int main() {
         hitungScore(score);
 
         // Cek jika Pac-Man bertabrakan dengan Ghost
-        if (checkCollisionWithGhost(&pacman, &ghost)) {
+        if (checkCollisionWithGhost(&pacman, ghosts)) {
             pacman.lives--; // Kurangi nyawa
             pacman.x = 200;  // Reset posisi Pac-Man
             pacman.y = 200;
