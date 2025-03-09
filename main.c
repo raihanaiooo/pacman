@@ -19,12 +19,15 @@ int main() {
     int page = 0;
     int key = 0;
     // MAIN STRUCTUR 
+    GameStart();
+
     while (1) {  // Loop sampai tombol ditekan
         //* ====================================MAP=======================================
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
         Map();
+
         
          //* ====================================dot=======================================
         drawDots();
@@ -38,7 +41,7 @@ int main() {
         if (kbhit()) { 
             key = getch();
             if (key == 27)
-                break;
+                GamePause();
             if (key == 0 || key == 224)
                 key = getch();
             movePacman(&pacman, key);
