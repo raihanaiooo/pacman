@@ -10,8 +10,11 @@ int main() {
     initgraph(&gd, &gm, NULL); // initialize graphics windows
 
     initializeDots(); // inisialisasi dot 
-    Ghost ghost;
-    theGhost(&ghost, 100, 100, RED);  // Buat ghost biru di (100,100)
+    Ghost ghosts[MAX_GHOSTS];
+    theGhost(&ghosts[0], 100, 100, RED);
+    theGhost(&ghosts[1], 400, 100, WHITE);
+    theGhost(&ghosts[2], 100, 300, GREEN);
+    theGhost(&ghosts[3], 400, 300, CYAN);
 
     Pacman pacman = {200,200,10,0};
 
@@ -30,8 +33,12 @@ int main() {
         drawDots();
 
         //* ====================================GHOST=======================================
-        designGhost(&ghost);
-        shiftGhost(&ghost, getmaxx(), getmaxy());
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            shiftGhost(&ghosts[i]);
+            designGhost(&ghosts[i]);
+            pursuePacman(&ghosts[i], &pacman);
+            GhostEatingPacman(&ghosts[i], &pacman);  
+        }  
         
         drawDots();
         //* ====================================PACMAN=======================================

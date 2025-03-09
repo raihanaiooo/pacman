@@ -43,11 +43,10 @@ void Map() {
                 setcolor(BLUE);
                 setfillstyle(SOLID_FILL, BLUE);
                 bar(x, y, x + TILE_SIZE, y + TILE_SIZE);
-            else if (maze[i][j] == 0) {  // Jalan
-                setcolor(BLACK);
-                setfillstyle(SOLID_FILL, BLACK);
-                bar(x, y, x + TILE_SIZE, y + TILE_SIZE);
-                }
+            } else if (maze[i][j] == 0) {  // Jalan
+            setcolor(BLACK);
+            setfillstyle(SOLID_FILL, BLACK);
+            bar(x, y, x + TILE_SIZE, y + TILE_SIZE);     
             }
         }
     }
