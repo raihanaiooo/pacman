@@ -1,5 +1,6 @@
 #include "../header/ghost.h"
 #include "../header/ui.h"
+#include "../header/pacman.h"
 #include <stdlib.h>
 
 extern int maze[24][32];
@@ -11,6 +12,7 @@ void theGhost(Ghost *gh, int x, int y, int hue) {
     gh->hue = hue;
 }
 
+<<<<<<< HEAD
 // Cek apakah ghost memakan pacman
 int GhostEatingPacman(Ghost *gh, Pacman *pac) {
     int dx = gh->x - pac->x;
@@ -76,6 +78,8 @@ void pursuePacman(Ghost *gh, Pacman *pac) {
     else if (colG > colP && maze[rowG][colG - 1] == 0) gh->x -= TILE_SIZE;
 }
 
+=======
+>>>>>>> seruni
 void designGhost(Ghost *gh) {
     int x = gh->x;
     int y = gh->y;
@@ -89,6 +93,7 @@ void designGhost(Ghost *gh) {
         fillellipse(x + i, spikeY, 2, 3);
     }
 
+<<<<<<< HEAD
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, WHITE);
     fillellipse(x - 4, y - 5, 2, 2);
@@ -98,4 +103,22 @@ void designGhost(Ghost *gh) {
     setfillstyle(SOLID_FILL, BLUE);
     fillellipse(x - 4, y - 5, 1, 1);
     fillellipse(x + 4, y - 5, 1, 1);
+=======
+    if (GhHit(newX, newY)) { 
+        do {
+            gh->dx = (rand() % 7) - 3;
+            gh->dy = (rand() % 7) - 3;
+        } while (gh->dx == 0 && gh->dy == 0);
+    } else {
+        gh->x = newX;
+        gh->y = newY;
+    }
+}
+
+// Fungsi untuk mengecek tabrakan antara Pac-Man dan Ghost
+int checkCollisionWithGhost(Pacman *p, Ghost *g) {
+    int distance = (p->x - g->x) * (p->x - g->x) + (p->y - g->y) * (p->y - g->y);
+    int collisionDistance = (p->radius + 15) * (p->radius + 15); // 15 adalah radius ghost
+    return distance <= collisionDistance;
+>>>>>>> seruni
 }

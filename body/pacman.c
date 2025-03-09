@@ -78,4 +78,5 @@ void movePacman(Pacman *p, char key) {
         p->y = newY;
         drawPacman(p);
     }
+    
 }
