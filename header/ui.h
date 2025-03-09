@@ -4,4 +4,12 @@
 
 void Map();
 
+void GameStart();
+
+void GameOver();
+
+// void GameWin();
+
+void GamePause();
+
 #endif

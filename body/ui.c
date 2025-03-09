@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <graphics.h>
+#include <conio.h>
 #include "../header/ui.h"
 
 #define TILE_SIZE 20
@@ -24,9 +25,9 @@ int maze[24][32] = {
     {2,0,2,2,2,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,2,2,2,0,2},
     {2,0,0,0,2,0,2,2,0,0,2,2,2,0,0,2,2,0,2,0,0,2,0,2,2,2,0,2,0,0,0,2},
     {2,2,2,0,2,0,0,2,0,0,2,0,0,2,0,0,0,0,2,0,2,0,0,0,0,2,0,2,0,2,2,2},
-    {2,2,2,0,2,0,0,2,0,0,2,2,2,0,0,2,2,0,2,2,0,0,0,2,2,2,0,2,0,2,2,2},
-    {2,0,0,0,2,0,0,2,0,0,2,0,0,2,0,2,2,0,2,0,2,0,0,2,0,0,0,2,0,0,0,2},
-    {2,0,2,2,2,0,2,2,2,0,2,2,2,0,0,2,2,0,2,0,0,2,0,2,2,2,0,0,0,0,0,2},
+    {2,0,0,0,2,0,0,2,0,0,2,2,2,0,0,2,2,0,2,2,0,0,0,2,2,2,0,2,0,0,0,2},
+    {2,0,2,2,2,0,0,2,0,0,2,0,0,2,0,2,2,0,2,0,2,0,0,2,0,0,0,2,2,2,0,2},
+    {2,0,0,0,0,0,2,2,2,0,2,2,2,0,0,0,0,0,2,0,0,2,0,2,2,2,0,0,0,0,0,2},
     {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 };
@@ -43,23 +44,77 @@ void Map() {
                 setcolor(BLUE);
                 setfillstyle(SOLID_FILL, BLUE);
                 bar(x, y, x + TILE_SIZE, y + TILE_SIZE);
-            } else if (maze[i][j] == 0) {  // Jalan
+            }else if (maze[i][j] == 0) {  // Jalan
                 setcolor(BLACK);
                 setfillstyle(SOLID_FILL, BLACK);
                 bar(x, y, x + TILE_SIZE, y + TILE_SIZE);
-            } 
+            }
         }
     }
 }
 
-void GameStart(){
+void GameStart() {
+    char start[] = "PRESS SPACE TO PLAY THE GAME!";
+    char pacman[] = "PAC-MAN";
+    char author[] = "1B - Kelompok 2";
 
+    settextstyle(GOTHIC_FONT, HORIZ_DIR, 7);
+    settextjustify(CENTER_TEXT, CENTER_TEXT);
+    setcolor(YELLOW);
+    outtextxy(320, 150, pacman);
+
+    settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+    settextjustify(CENTER_TEXT, CENTER_TEXT);
+    setcolor(YELLOW);
+    outtextxy(320, 200, author);
+    
+    while (1) { // Loop terus berjalan
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+        settextjustify(CENTER_TEXT, CENTER_TEXT);
+        setcolor(WHITE);
+        outtextxy(320, 380, start);
+        delay(500);
+
+        setcolor(BLACK);
+        outtextxy(320, 380, start);
+        delay(500);
+
+        if (kbhit()){
+            char key = getch();
+            if (key == 32) break;
+        }
+    }
+
+    cleardevice(); // Clear the screen
 }
+
+void GamePause() {
+    int running = 1;
+    int paused = 0;
+    char pausedText[] = "Game Paused. Press 'P' to Resume.";
+
+    while (running) {
+        if (kbhit()) {  // Jika ada input keyboard
+            key = getch();
+            if (key == 27){
+                paused = !paused;
+            }
+        }
+        
+        if (!paused) {
+            settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+            settextjustify(CENTER_TEXT, CENTER_TEXT);
+            setcolor(WHITE);
+            outtextxy(320, 240, pausedText);
+        } else {
+            setcolor(BLACK);
+            outtextxy(320, 240, pausedText);
+        }
+    }
+}
+
+ 
 
 void GameOver(){
-
-}
-
-int Scoring(){
 
 }
