@@ -5,30 +5,47 @@
 
 extern int maze[24][32]; // ambil peta dari ui.c
 
-// Array untuk menyimpan status titik (1 = ada, 0 = dimakan atau tidak tersedia)
+// Array buat nyimpen status dot dimakan atau belum
 int dots[24][32];
+
+int dotKosong(int i, int j) {
+    return (
+        // kosongin titik
+        ((i == 18 && (j == 11 || j == 12)) ||  
+         (i == 20 && (j == 11 || j == 12))) ||
+        (i == 9 && (j >= 0 && j <= 4)) ||
+        (i == 9 && (j >= 27 && j <= 31)) ||
+        (i == 13 && (j >= 0 && j <= 4)) ||
+        (i == 13 && (j >= 27 && j <= 31)) ||
+        (i == 11 && (j >= 13 && j <= 18)) ||
+        (i == 12 && (j >= 13 && j <= 18)) ||
+        ((i >= 18 && i <= 20) && j == 6) ||
+        ((i >= 17 && i <= 20) && j == 8) ||
+        (i == 21 && j == 13) ||
+        (i == 19 && j == 13) ||
+        (i == 18 && (j == 19 || (j >= 23 && j <= 24))) ||
+        (i == 17 && (j >= 19 && j <= 20)) ||
+        (i == 20 && (j == 19 || (j >= 24 && j <= 25))) ||
+        (i == 21 && (j >= 19 && j <= 20))||
+        ((i >= 18 && i <= 29) && j == 21)||
+        (i == 19 && j == 20) 
+    );
+}
 
 // inisialisasi titik
 void setTitikDot() {
     for (int i = 0; i < 24; i++) {
         for (int j = 0; j < 32; j++) {
-            if (maze[i][j] == 0) { 
-                // ngosongin titik di rongga huruf "B"
-                if (!((i == 18 && (j == 11 || j == 12)) ||  
-                      (i == 20 && (j == 11 || j == 12)))) {
-                    dots[i][j] = 1;  // Tetap ada dot di jalur biasa
-                } else {
-                    dots[i][j] = 0;  // Kosongkan titik di area rongga
-                }
+            if (maze[i][j] == 0 && !dotKosong(i, j)) { 
+                dots[i][j] = 1;  // Tetap ada dot di jalur biasa
             } else {
-                dots[i][j] = 0;  // Dinding tidak memiliki dot
+                dots[i][j] = 0;  // Kosongin titik di dinding
             }
         }
     }
 }
 
-
-// Menggambar titik-titik yang belum dimakan
+// generate titik-titik yang belum dimakan
 void gambarDot() {
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, WHITE);
@@ -44,7 +61,7 @@ void gambarDot() {
     }
 }
 
-// Mengecek apakah Pac-Man memakan titik
+// pacman makan titik
 void scoring(int pacmanX, int pacmanY, int *score) {
     int i = pacmanY / 20;
     int j = pacmanX / 20;
