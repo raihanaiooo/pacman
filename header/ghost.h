@@ -4,7 +4,7 @@
 #include <graphics.h>
 #include "pacman.h"
 
-#define TILE_SIZE 10
+#define TILE_SIZE 8
 #define MAX_GHOSTS 4  // Jumlah Ghost
 
 typedef struct {
@@ -18,6 +18,7 @@ void designGhost(Ghost *gh);
 void shiftGhost(Ghost *gh);
 void pursuePacman(Ghost *gh, Pacman *pac);
 int GhostEatingPacman(Ghost *gh, Pacman *pac);
+int isColliding(Ghost *gh, int newX, int newY);
 int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);  // Tambahkan ini!
 
 #endif

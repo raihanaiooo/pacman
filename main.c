@@ -11,10 +11,10 @@ int main() {
 
     setTitikDot(); // inisialisasi dot 
     Ghost ghosts[MAX_GHOSTS];
-    theGhost(&ghosts[0], 100, 100, RED);
-    theGhost(&ghosts[1], 400, 100, WHITE);
-    theGhost(&ghosts[2], 100, 300, GREEN);
-    theGhost(&ghosts[3], 400, 300, CYAN);
+    theGhost(&ghosts[0], 320, 240, RED);
+    theGhost(&ghosts[1], 330, 240, WHITE);
+    theGhost(&ghosts[2], 310, 240, GREEN);
+    theGhost(&ghosts[3], 340, 240, CYAN);
 
     Pacman pacman = {190, 190, 8, 0, 1};  // Pac-Man dengan 3 nyawa
     int score = 0;
