@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>  // Tambahkan untuk fungsi sqrt()
 #include "../header/pacman.h"
-#include "header/ghost.h"
+#include "../header/ghost.h"
 
 // Gunakan fungsi dari ghost.c agar tidak duplikasi
 extern int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);

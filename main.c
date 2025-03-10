@@ -9,45 +9,60 @@ int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL); // initialize graphics windows
 
-    initializeDots(); // inisialisasi dot 
-    Ghost ghost;
-    theGhost(&ghost, 100, 100, RED);  // Buat ghost merah di (100,100)
+    setTitikDot(); // inisialisasi dot 
+    Ghost ghosts[MAX_GHOSTS];
+    theGhost(&ghosts[0], 100, 100, RED);
+    theGhost(&ghosts[1], 400, 100, WHITE);
+    theGhost(&ghosts[2], 100, 300, GREEN);
+    theGhost(&ghosts[3], 400, 300, CYAN);
 
-    Pacman pacman = {200, 200, 10, 0, 2};  // Pac-Man dengan 3 nyawa
+    Pacman pacman = {190, 190, 8, 0, 1};  // Pac-Man dengan 3 nyawa
     int score = 0;
     int page = 0;
     int key = 0;
 
     // MAIN STRUCTURE 
     while (pacman.lives > 0) {  // Game berjalan selama Pac-Man masih punya nyawa
+    // MAIN STRUCTUR 
+    GameStart();
+
+    while (1) {  // Loop sampai tombol ditekan
+        //* ====================================MAP=======================================
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
-        map();
+        Map();
+
         
         //* ====================================DOT=======================================
-        drawDots();
+        // drawDots();
 
         //* ====================================GHOST=======================================
-        designGhost(&ghost);
-        shiftGhost(&ghost, getmaxx(), getmaxy());
-
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            shiftGhost(&ghosts[i]);
+            designGhost(&ghosts[i]);
+            pursuePacman(&ghosts[i], &pacman);
+            GhostEatingPacman(&ghosts[i], &pacman);  
+        }  
+        
+        gambarDot();
         //* ====================================PACMAN=======================================
         if (kbhit()) { 
             key = getch();
             if (key == 27)
-                break;
+                GamePause();
             if (key == 0 || key == 224)
                 key = getch();
             movePacman(&pacman, key);
 
-            checkCollisionWithDots(pacman.x, pacman.y, &score); // Cek dot kemakan
+            scoring(pacman.x, pacman.y, &score); // Cek dot kemakan
         }
 
         drawPacman(&pacman);
+        hitungScore(score);
 
         // Cek jika Pac-Man bertabrakan dengan Ghost
-        if (checkCollisionWithGhost(&pacman, &ghost)) {
+        if (checkCollisionWithGhost(&pacman, ghosts)) {
             pacman.lives--; // Kurangi nyawa
             pacman.x = 200;  // Reset posisi Pac-Man
             pacman.y = 200;
@@ -68,4 +83,5 @@ int main() {
 
     closegraph();
     return 0; 
+    }
 }
