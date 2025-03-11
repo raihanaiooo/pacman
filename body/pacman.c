@@ -18,7 +18,7 @@ int isColliding(Pacman *p, int newX, int newY) {
     int col = checkX / TILE_SIZE;
     int row = checkY / TILE_SIZE;
 
-    if (row < 0 || row >= 24 || col < 0 || col >= 32 )
+    if (row < 0 || row >= 25 || col < 0 || col >= 32 )
     {
         return 1;
     }

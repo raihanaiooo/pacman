@@ -1,6 +1,7 @@
 #include <graphics.h>
 #include "../header/scoring.h"
 #include "../header/ui.h"
+#include "../header/powerup.h"
 #include <stdio.h>
 
 extern int maze[24][32]; // ambil peta dari ui.c
@@ -28,7 +29,8 @@ int dotKosong(int i, int j) {
         (i == 20 && (j == 19 || (j >= 24 && j <= 25))) ||
         (i == 21 && (j >= 19 && j <= 20))||
         ((i >= 18 && i <= 29) && j == 21)||
-        (i == 19 && j == 20) 
+        (i == 19 && j == 20) ||
+        (i == 23 && (j >= 0 && j <= 31)) 
     );
 }
 
@@ -68,6 +70,10 @@ void scoring(int pacmanX, int pacmanY, int *score) {
 
     if (i >= 0 && i < 24 && j >= 0 && j < 32 && dots[i][j]) {
         dots[i][j] = 0;  // Titik dimakan
-        (*score) += 10;    // Tambah skor
+        if (doublePointActive) {
+            (*score) += 2; // Skor dikali 2 saat Power-Up aktif
+        } else {
+            (*score) += 1;
+        }    // Tambah skor
     }
 }
