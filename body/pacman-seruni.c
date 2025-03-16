@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>  // Tambahkan untuk fungsi sqrt()
 #include "../header/pacman.h"
 #include "../header/ghost.h"
 
@@ -13,6 +12,7 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost *ghost) {
 
         if (pacman->lives <= 0) {
             printf("\U0001F480 Game Over! Pacman kehabisan nyawa.\n");
+            exit(0);  // Hentikan permainan
         } else {
             // Reset posisi Pacman setelah terkena
             pacman->x = 200;
@@ -20,5 +20,3 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost *ghost) {
         }
     }
 }
-
-

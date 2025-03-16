@@ -18,3 +18,4 @@ void gambarDot();
 void scoring(int pacmanX, int pacmanY, int *score);
 
 #endif
+

@@ -1,6 +1,3 @@
-        // ! ====================================compile=======================================
-        // ! g++ main.c body/pacman.c body/powerup.c body/ui.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32
-
 #include <stdio.h>
 #include <graphics.h>
 #include "header/ui.h"
@@ -9,12 +6,11 @@
 #include "header/scoring.h"
 #include "header/powerup.h"
 
-
 int main() {
     int gd = DETECT, gm;
-    initgraph(&gd, &gm, NULL); // initialize graphics windows
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
 
-    setTitikDot(); // inisialisasi dot 
+    setTitikDot();
     spawnPowerUps();
     Ghost ghosts[MAX_GHOSTS];
     theGhost(&ghosts[0], 320, 240, RED);
@@ -22,38 +18,28 @@ int main() {
     theGhost(&ghosts[2], 310, 240, GREEN);
     theGhost(&ghosts[3], 340, 240, CYAN);
 
-    Pacman pacman = {190, 190, 8, 0, 1};  // Pac-Man dengan 3 nyawa
+    Pacman pacman = {100, 100, 8, 0, 12};  // Pac-Man dengan 12 nyawa
     int score = 0;
     int page = 0;
     int key = 0;
 
-    // MAIN STRUCTURE 
-    while (pacman.lives > 0) {  // Game berjalan selama Pac-Man masih punya nyawa
-    // MAIN STRUCTUR 
     GameStart();
 
-    while (1) {  // Loop sampai tombol ditekan
-        //* ====================================MAP=======================================
+    while (1) {  // Game loop utama
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
         Map();
 
-        
-        //* ====================================DOT=======================================
-        // drawDots();
-        drawPowerUps(); 
+        drawPowerUps();
         gambarDot();
 
-        //* ====================================GHOST=======================================
         for (int i = 0; i < MAX_GHOSTS; i++) {
             shiftGhost(&ghosts[i]);
             designGhost(&ghosts[i]);
             pursuePacman(&ghosts[i], &pacman);
-            GhostEatingPacman(&ghosts[i], &pacman);  
-        }  
-        
-        //* ====================================PACMAN=======================================
+        }
+
         if (kbhit()) { 
             key = getch();
             if (key == 27)
@@ -62,23 +48,29 @@ int main() {
                 key = getch();
             movePacman(&pacman, key);
 
-            scoring(pacman.x, pacman.y, &score); // Cek dot kemakan
+            scoring(pacman.x, pacman.y, &score);
             checkPowerUpCollision(pacman.x, pacman.y);
         }
 
         drawPacman(&pacman);
         hitungScore(score);
         updatePowerUpState();
-        // Cek jika Pac-Man bertabrakan dengan Ghost
-        if (checkCollisionWithGhost(&pacman, ghosts)) {
-            pacman.lives--; // Kurangi nyawa
-            pacman.x = 200;  // Reset posisi Pac-Man
-            pacman.y = 200;
-            printf("Pac-Man terkena Ghost! Nyawa tersisa: %d\n", pacman.lives);
+    
+
+        // Cek tabrakan dengan semua Ghosts
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            updatePacmanAfterCollision(&pacman, &ghosts[i]);
         }
 
+        // Cek jika Pac-Man kehabisan nyawa
         if (pacman.lives <= 0) {
             printf("Game Over! Skor Akhir: %d\n", score);
+            exit(0);
+        }
+
+        // Cek jika semua titik sudah dimakan
+        if (allDotsEaten()) {
+            printf("Selamat! Anda menang dengan skor: %d\n", score);
             break;
         }
 
@@ -91,5 +83,4 @@ int main() {
 
     closegraph();
     return 0; 
-    }
 }
