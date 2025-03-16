@@ -24,7 +24,6 @@ int main()
     setTitikDot(); // Inisialisasi titik-titik
     spawnPowerUps();
 
-<<<<<<< HEAD
     Ghost ghosts[MAX_GHOSTS];
     int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost
     const int ghostSpeed = 3;  // Ghost hanya bergerak setiap 2 frame Pac-Man
@@ -33,13 +32,13 @@ int main()
     theGhost(&ghosts[2], 310, 240, GREEN);
     theGhost(&ghosts[3], 340, 240, CYAN);
 
-    Pacman pacman = {190, 190, 8, 0, 3}; // Pac-Man dengan 3 nyawa
-=======
-    Pacman pacman = {200, 200, 10, 0, 2};  // Pac-Man dengan 3 nyawa
->>>>>>> ae7106c (Menyimpan perubahan lokal sebelum pull)
+    Pacman pacman = {190, 190, 8, 0, 1};  // Pac-Man dengan 3 nyawa
     int score = 0;
     int page = 0;
     int key = 0;
+    
+    Ghost ghosts[MAX_GHOSTS];
+    resetGame(&pacman, ghosts, &score);
 
     PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
     GameStart(); // Tampilan awal
