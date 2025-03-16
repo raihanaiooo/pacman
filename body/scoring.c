@@ -1,8 +1,11 @@
+#include <stdio.h>
 #include <graphics.h>
+#include <windows.h>  
+#include <mmsystem.h> 
+#pragma comment(lib, "winmm.lib")  
 #include "../header/scoring.h"
 #include "../header/ui.h"
 #include "../header/powerup.h"
-#include <stdio.h>
 
 extern int maze[24][32]; // ambil peta dari ui.c
 
@@ -65,16 +68,14 @@ void gambarDot() {
 
 // pacman makan titik
 void scoring(int pacmanX, int pacmanY, int *score) {
-    int i = pacmanY / TILE_SIZE;
-int j = pacmanX / TILE_SIZE;
+    int row = pacmanY / TILE_SIZE;
+    int col = pacmanX / TILE_SIZE;
 
+    if (dots[row][col] == 1) {  // Jika ada dot di posisi Pac-Man
+        dots[row][col] = 0;  // Hilangkan dot dari layar
+        *score += doublePointActive ? 20 : 10;  // Tambah skor (doubled jika power-up aktif)
 
-    if (i >= 0 && i < 24 && j >= 0 && j < 32 && dots[i][j]) {
-        dots[i][j] = 0;  // Hapus dot
-        if (doublePointActive) {
-            (*score) += 2; // Skor dikali 2 jika power-up aktif
-        } else {
-            (*score) += 1;
-        }
+        // ✅ Putar suara saat Pac-Man memakan dot
+        PlaySound("sound/makan.wav", NULL, SND_FILENAME | SND_ASYNC);
     }
 }

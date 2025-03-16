@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <graphics.h>
 #include <time.h>
+#include <windows.h>
+#include <mmsystem.h>
 #include "header/ui.h"
 // #include "header/ghost.h"
 #include "header/pacman.h"
 #include "header/scoring.h"
 #include "header/powerup.h"
+
 
 int main()
 {
@@ -30,8 +33,9 @@ int main()
     int page = 0;
     int key = 0;
 
+    PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
     GameStart(); // Tampilan awal
-
+    PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
     while (pacman.lives > 0)
     {
         setactivepage(page);

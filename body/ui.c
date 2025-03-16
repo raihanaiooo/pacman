@@ -93,7 +93,7 @@ void GameStart() {
             if (key == 32) break;
         }
     }
-
+    PlaySound(NULL, NULL, 0);
     cleardevice(); // Clear the screen
 }
 
