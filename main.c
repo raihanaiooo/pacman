@@ -8,6 +8,7 @@
 #include "header/ghost.h"
 #include "header/pacman.h"
 #include "header/scoring.h"
+#include "header/powerup.h"
 
 int main() {
     int gd = DETECT, gm;
@@ -42,6 +43,8 @@ int main() {
         
         //* ====================================DOT=======================================
         // drawDots();
+        spawnPowerUps();
+        updatePowerUpState();
 
         //* ====================================GHOST=======================================
         
@@ -50,7 +53,6 @@ int main() {
             designGhost(&ghosts[i]);  
         }  
         
-        gambarDot();
         
         //* ====================================PACMAN=======================================
         if (kbhit()) { 
