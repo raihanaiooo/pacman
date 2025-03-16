@@ -58,7 +58,7 @@ void Map() {
         settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
         char totalScore[20];
         sprintf(totalScore, "Score: %d", score);
-        outtextxy(10, getmaxy() - 30, totalScore); // Pojok kiri bawah
+        outtextxy(40, getmaxy() - 5, totalScore); // Pojok kiri bawah
     }
     
 

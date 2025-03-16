@@ -73,7 +73,7 @@ void scoring(int pacmanX, int pacmanY, int *score) {
 
     if (dots[row][col] == 1) {  // Jika ada dot di posisi Pac-Man
         dots[row][col] = 0;  // Hilangkan dot dari layar
-        *score += doublePointActive ? 20 : 10;  // Tambah skor (doubled jika power-up aktif)
+        *score += doublePointActive ? 2 : 1;  // Tambah skor (doubled jika power-up aktif)
 
         // ✅ Putar suara saat Pac-Man memakan dot
         PlaySound("sound/makan.wav", NULL, SND_FILENAME | SND_ASYNC);
