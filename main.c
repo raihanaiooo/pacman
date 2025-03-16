@@ -1,5 +1,6 @@
-        // ! ====================================compile=======================================
-        // ! g++ main.c body/pacman.c body/powerup.c body/ui.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32
+        // ! =================================== compile ==================================================================================================
+        // ! g++ main.c body/pacman.c body/powerup.c body/ui.c body/ghost.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32
+        // ! ==============================================================================================================================================
 
 #include <stdio.h>
 #include <graphics.h>
@@ -16,6 +17,7 @@ int main() {
 
     setTitikDot(); // inisialisasi dot 
     spawnPowerUps();
+
     Ghost ghosts[MAX_GHOSTS];
     theGhost(&ghosts[0], 320, 240, RED);
     theGhost(&ghosts[1], 330, 240, WHITE);
@@ -46,12 +48,12 @@ int main() {
         gambarDot();
 
         //* ====================================GHOST=======================================
+        
         for (int i = 0; i < MAX_GHOSTS; i++) {
-            shiftGhost(&ghosts[i]);
-            designGhost(&ghosts[i]);
-            pursuePacman(&ghosts[i], &pacman);
-            GhostEatingPacman(&ghosts[i], &pacman);  
+            moveGhost(&ghosts[i], &pacman);
+            designGhost(&ghosts[i]);  
         }  
+        
         
         //* ====================================PACMAN=======================================
         if (kbhit()) { 
@@ -69,23 +71,25 @@ int main() {
         drawPacman(&pacman);
         hitungScore(score);
         updatePowerUpState();
-        // Cek jika Pac-Man bertabrakan dengan Ghost
-        if (checkCollisionWithGhost(&pacman, ghosts)) {
-            pacman.lives--; // Kurangi nyawa
-            pacman.x = 200;  // Reset posisi Pac-Man
-            pacman.y = 200;
-            printf("Pac-Man terkena Ghost! Nyawa tersisa: %d\n", pacman.lives);
+
+        // Cek tabrakan dengan semua Ghost
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            if (checkCollisionWithGhost(&pacman, &ghosts[i])) {
+                pacman.lives--;  // Kurangi nyawa Pac-Man
+                if (pacman.lives > 0) {
+                    pacman.x = 190;
+                    pacman.y = 190;
+                } else {
+                    outtextxy(300, 250, (char*) "Game Over!");
+                    delay(2000);
+                    closegraph();
+                    return 0;
+                }
+            }
         }
+    
 
-        if (pacman.lives <= 0) {
-            printf("Game Over! Skor Akhir: %d\n", score);
-            break;
-        }
-
-        if (GetAsyncKeyState(VK_ESCAPE)) 
-            break;
-
-        delay(50);
+        delay(150);
         page = 1 - page;
     }
 
