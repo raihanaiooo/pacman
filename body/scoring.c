@@ -65,15 +65,16 @@ void gambarDot() {
 
 // pacman makan titik
 void scoring(int pacmanX, int pacmanY, int *score) {
-    int i = pacmanY / 20;
-    int j = pacmanX / 20;
+    int i = pacmanY / TILE_SIZE;
+int j = pacmanX / TILE_SIZE;
+
 
     if (i >= 0 && i < 24 && j >= 0 && j < 32 && dots[i][j]) {
-        dots[i][j] = 0;  // Titik dimakan
+        dots[i][j] = 0;  // Hapus dot
         if (doublePointActive) {
-            (*score) += 2; // Skor dikali 2 saat Power-Up aktif
+            (*score) += 2; // Skor dikali 2 jika power-up aktif
         } else {
             (*score) += 1;
-        }    // Tambah skor
+        }
     }
 }

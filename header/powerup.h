@@ -9,7 +9,8 @@
 
 typedef struct {
     int x, y;        // Posisi Power-Up
-    int active;      // 1 jika aktif, 0 jika sudah diambil
+    int active;   
+    int type;   // 1 jika aktif, 0 jika sudah diambil
 } PowerUp;
 
 extern PowerUp powerUps[MAX_POWERUPS];
@@ -20,6 +21,8 @@ void spawnPowerUps();
 void drawPowerUps();
 void checkPowerUpCollision(int pacmanX, int pacmanY);
 void updatePowerUpState();
+void activatePowerUp(int type);
+
 // int powerUpKosong(int i, int j);
 
 #endif
