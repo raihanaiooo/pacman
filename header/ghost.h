@@ -4,20 +4,23 @@
 #include <graphics.h>
 #include "pacman.h"
 
-#define TILE_SIZE 10
+#define TILE_SIZE 20
 #define MAX_GHOSTS 4  // Jumlah Ghost
 
 typedef struct {
     int x, y;
-    int radius;  // Tambahkan ukuran agar sama dengan Pac-Man
-    int hue;
+    int radius;  // Sama dengan ukuran Pac-Man
+    int hue;     // Warna Ghost
 } Ghost;
 
 void theGhost(Ghost *gh, int x, int y, int hue);
 void designGhost(Ghost *gh);
 void shiftGhost(Ghost *gh);
-void pursuePacman(Ghost *gh, Pacman *pac);
-int GhostEatingPacman(Ghost *gh, Pacman *pac);
-int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);  // Tambahkan ini!
+void moveGhost(Ghost *gh, Pacman *pac);  // Tambahkan AI Ghost
+void chasePacman(Ghost *gh, Pacman *pac);
+void runAwayFromPacman(Ghost *gh, Pacman *pac);
+void ambushPacman(Ghost *gh, Pacman *pac);
+int isColliding(Ghost *gh, int newX, int newY);
+int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);  // Untuk deteksi tabrakan
 
 #endif

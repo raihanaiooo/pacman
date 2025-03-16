@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <math.h>  // Tambahkan untuk fungsi sqrt()
 #include "../header/pacman.h"
 #include "../header/ghost.h"
+
 
 // Gunakan fungsi dari ghost.c agar tidak duplikasi
 extern int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);
@@ -13,6 +13,7 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost *ghost) {
 
         if (pacman->lives <= 0) {
             printf("\U0001F480 Game Over! Pacman kehabisan nyawa.\n");
+            exit(0);  // Hentikan permainangit bra
         } else {
             // Reset posisi Pacman setelah terkena
             pacman->x = 200;
@@ -20,5 +21,3 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost *ghost) {
         }
     }
 }
-
-
