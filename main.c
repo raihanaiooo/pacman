@@ -42,70 +42,72 @@ int main()
     
     while (pacman.lives > 0)
     {
-        if (isPaused) {
-            drawPauseScreen();
-            while (1) {
-                if (kbhit()) {
-                    int pauseKey = getch();
-                    if (pauseKey == 'p' || pauseKey == 'P') {
-                        isPaused = 0;
-                        break; // Keluar dari loop pause
-                    }
-                }
-            }
-        }
-
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
         Map();
-
+    
         drawPowerUps();
         gambarDot();
-
+    
         for (int i = 0; i < MAX_GHOSTS; i++) {
             shiftGhost(&ghosts[i]);
             designGhost(&ghosts[i]);
-        }  
-
+        }
+    
         clock_t currentTime = clock();
-
+    
         // Tangkap input keyboard jika ada
         if (kbhit()) {
             int newKey = getch();
-            if (newKey == 0 || newKey == 224) newKey = getch();  // Tangkap arrow keys
-            
-            if (newKey == 'p' || newKey == 'P') {
-                isPaused = 1; // Aktifkan pause
-            }
-            else if (!isPaused) {
-                key = newKey;  // Simpan input terakhir jika tidak pause
-            }
-        }
-
-        if (!isPaused) {
-            // Pastikan Pac-Man hanya bisa bergerak setiap interval waktu tertentu
-            if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
-                if (key) {
-                    movePacman(&pacman, key, &score);
-                } else {
-                    autoMovePacman(&pacman, &score);
+    
+            // Tangkap arrow keys tanpa mempengaruhi pause
+            if (newKey == 0 || newKey == 224) {
+                int arrowKey = getch(); // Tangkap key berikutnya
+                if (arrowKey == 80 || arrowKey == 72 || arrowKey == 75 || arrowKey == 77) {
+                    key = arrowKey; // Simpan input hanya untuk gerakan
                 }
-                lastMoveTime = currentTime;  // Update waktu terakhir pergerakan
+            } 
+            // Hanya toggle pause jika tombol P ditekan
+            else if (newKey == 'p' || newKey == 'P') {
+                isPaused = !isPaused;
+                if (isPaused) {
+                    drawPauseScreen();
+                    delay(100); // Hindari glitching
+                }
             }
-            
-            autoMovePacman(&pacman, &score);
-            drawPacman(&pacman);
-            hitungScore(score);
-            updatePowerUpState();
         }
-
+    
+        // **Jangan lanjut render jika pause aktif**
+        if (isPaused) {
+            drawPauseScreen();
+            delay(100);
+            continue;  // Langsung ke iterasi berikutnya tanpa update game
+        }
+    
+        // Jika tidak pause, lanjutkan game
+        if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
+            if (key) {
+                movePacman(&pacman, key, &score);
+            } else {
+                autoMovePacman(&pacman, &score);
+            }
+            lastMoveTime = currentTime;
+        }
+    
+        autoMovePacman(&pacman, &score);
+        drawPacman(&pacman);
+        hitungScore(score);
+        updatePowerUpState();
+    
         if (GetAsyncKeyState(VK_ESCAPE))
             break;
-
+    
         delay(50);
         page = 1 - page;
     }
+    
+
     
     closegraph();
     return 0;
