@@ -77,5 +77,6 @@ void scoring(int pacmanX, int pacmanY, int *score) {
 
         // ✅ Putar suara saat Pac-Man memakan dot
         PlaySound("sound/makan.wav", NULL, SND_FILENAME | SND_ASYNC);
+
     }
 }
