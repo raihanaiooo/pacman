@@ -76,5 +76,6 @@ void scoring(int pacmanX, int pacmanY, int *score) {
         *score += doublePointActive ? 2 : 1;  // Tambah skor (doubled jika power-up aktif)
 
         PlaySound("sound/makan.wav", NULL, SND_FILENAME | SND_ASYNC);
+
     }
 }
