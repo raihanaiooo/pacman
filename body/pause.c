@@ -15,12 +15,10 @@ void drawPauseScreen() {
     setfillstyle(SOLID_FILL, BLACK);
     
     // Kotak semi-transparan
-    for (int i = 0; i < 50; i++) {
-        setcolor(COLOR(50, 50, 50)); // Warna abu-abu gelap
-        rectangle(90 + i, 90 + i, 310 - i, 210 - i);
-    }
+    bar(90, 90, 310, 210);
+    setcolor(WHITE);
+    rectangle(90, 90, 310, 210); // Kotak tepi
     
-    floodfill(200, 150, WHITE); // Isi dengan warna hitam
     char teks1[] = "Game Paused";
     char teks2[] = "Press P to resume";
     // Teks pause
@@ -28,6 +26,7 @@ void drawPauseScreen() {
     settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
     outtextxy(140, 130, teks1);
     outtextxy(120, 160, teks2);
+    setvisualpage(getactivepage());
 }
 
 void gameLoop() {
