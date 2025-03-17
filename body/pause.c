@@ -11,23 +11,46 @@ void togglePause() {
 }
 
 void drawPauseScreen() {
+    int screenWidth = getmaxx();
+    int screenHeight = getmaxy();
+    
+    int boxWidth = 300;
+    int boxHeight = 150;
+    int boxX1 = (screenWidth - boxWidth) / 2;
+    int boxY1 = (screenHeight - boxHeight) / 2;
+    int boxX2 = boxX1 + boxWidth;
+    int boxY2 = boxY1 + boxHeight;
+
+    // Kotak semi-transparan
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, BLACK);
+    bar(boxX1, boxY1, boxX2, boxY2);
+    rectangle(boxX1, boxY1, boxX2, boxY2); // Kotak tepi
     
-    // Kotak semi-transparan
-    bar(90, 90, 310, 210);
-    setcolor(WHITE);
-    rectangle(90, 90, 310, 210); // Kotak tepi
-    
+    // Teks pause
     char teks1[] = "Game Paused";
     char teks2[] = "Press P to resume";
-    // Teks pause
-    setcolor(WHITE);
+
     settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
-    outtextxy(140, 130, teks1);
-    outtextxy(120, 160, teks2);
+    
+    int teks1Width = textwidth(teks1);
+    int teks1Height = textheight(teks1);
+    int teks2Width = textwidth(teks2);
+    int teks2Height = textheight(teks2);
+
+    int textX1 = boxX1 + (boxWidth - teks1Width) / 2;
+    int textX2 = boxX1 + (boxWidth - teks2Width) / 2;
+    int textY1 = boxY1 + (boxHeight / 3) - (teks1Height / 2);
+    int textY2 = boxY1 + (2 * boxHeight / 3) - (teks2Height / 2);
+
+    setcolor(WHITE);
+    outtextxy(textX1, textY1, teks1);
+    outtextxy(textX2, textY2, teks2);
+
     setvisualpage(getactivepage());
 }
+
+
 
 void gameLoop() {
     while (1) {
