@@ -130,10 +130,45 @@ int main() {
 
         autoMovePacman(&pacman, &score);
         drawPacman(&pacman);
-        hitungScore(score);
+        hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
+<<<<<<< HEAD
         if (GetAsyncKeyState(VK_ESCAPE)) break;
+=======
+        // for (int i = 0; i < MAX_GHOSTS; i++) {
+        //     if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
+        //         pacman.lives--;
+        //         pacman.x = 200;
+        //         pacman.y = 200;
+        //     }
+        // }
+
+        // if (pacman.lives <= 0) {
+        //     printf("Game Over! Skor Akhir: %d\n", score);
+        //     GameOver();
+        //     break;
+        // }
+
+        if (countDotsAndPowerUps() == 0) {
+            setactivepage(1); 
+            setvisualpage(1);  
+            cleardevice();  // ✅ Pastikan layar bersih sebelum menampilkan kemenangan
+        
+            GameWin();  // ✅ Tampilkan "You Win"
+            hitungScore(score, 320, 300, 1);  // ✅ Tampilkan skor akhir di tengah layar
+        
+            delay(1000);  // ✅ Beri jeda sejenak agar pemain bisa melihat layar
+            getch();  // ✅ Tunggu input sebelum keluar
+        
+            break;  // ✅ Keluar dari loop utama
+        }
+        
+    
+
+        if (GetAsyncKeyState(VK_ESCAPE))
+            break;
+>>>>>>> 3a5abba (menambahkan fitur game win)
 
         delay(50);
         page = 1 - page;
@@ -141,4 +176,5 @@ int main() {
 
     closegraph();
     return 0;
-}
+    }
+
