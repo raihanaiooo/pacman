@@ -50,10 +50,15 @@ int main()
         for (int i = 0; i < MAX_GHOSTS; i++) {
             shiftGhost(&ghosts[i]);
             designGhost(&ghosts[i]);
-            if (!doublePointActive) {
-                pursuePacman(&ghosts[i], &pacman); // Hantu mengejar Pac-Man jika tidak dalam power-up
-            }
-        }
+        }  
+
+        // for (int i = 0; i < MAX_GHOSTS; i++) {
+        //     shiftGhost(&ghosts[i]);
+        //     designGhost(&ghosts[i]);
+        //     if (!doublePointActive) {
+        //         pursuePacman(&ghosts[i], &pacman); // Hantu mengejar Pac-Man jika tidak dalam power-up
+        //     }
+        // }
 
         clock_t currentTime = clock();
 
