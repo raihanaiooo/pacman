@@ -1,5 +1,7 @@
 #include <graphics.h>
 #include "../header/pacman.h"
+#include "../header/powerup.h"
+#include "../header/scoring.h"
 #include <stdio.h>
 extern int maze[24][32];
 #define TILE_SIZE 20
@@ -61,22 +63,78 @@ void clearPacman(Pacman *p) {
     fillellipse(p->x, p->y, p->radius, p->radius);
 }
 
-void movePacman(Pacman *p, char key) {
+void movePacman(Pacman *p, char key, int *score, bool isAuto) {
     int newX = p->x;
     int newY = p->y;
 
-    
-    switch (key) {
-        case 75: newX -= 10; p->direction = 1; break; // Kiri
-        case 77: newX += 10; p->direction = 0; break; // Kanan
-        case 72: newY -= 10; p->direction = 2; break; // Atas
-        case 80: newY += 10; p->direction = 3; break; // Bawah
+    if (isAuto) {
+        // Gerakan otomatis berdasarkan arah Pacman saat ini
+        switch (p->direction) {
+            case 1: newX -= PACMAN_SPEED; break;
+            case 0: newX += PACMAN_SPEED; break;
+            case 2: newY -= PACMAN_SPEED; break;
+            case 3: newY += PACMAN_SPEED; break;
+        }
+    } else {
+        // Gerakan manual berdasarkan input pengguna
+        switch (key) {
+            case 75: newX -= 10; p->direction = 1; break; // Kiri
+            case 77: newX += 10; p->direction = 0; break; // Kanan
+            case 72: newY -= 10; p->direction = 2; break; // Atas
+            case 80: newY += 10; p->direction = 3; break; // Bawah
+        }
     }
-    if(!isColliding(p, newX, newY)){
+
+    if (!isColliding(p, newX, newY)) {
         clearPacman(p);
         p->x = newX;
         p->y = newY;
         drawPacman(p);
+        
+        if (isAuto) {
+            scoring(p->x, p->y, score);
+            checkPowerUpCollision(p->x, p->y);
+        }
     }
-    
 }
+
+// void movePacman(Pacman *p, char key) {
+//     int newX = p->x;
+//     int newY = p->y;
+
+    
+//     switch (key) {
+//         case 75: newX -= 10; p->direction = 1; break; // Kiri
+//         case 77: newX += 10; p->direction = 0; break; // Kanan
+//         case 72: newY -= 10; p->direction = 2; break; // Atas
+//         case 80: newY += 10; p->direction = 3; break; // Bawah
+//     }
+//     if(!isColliding(p, newX, newY)){
+//         clearPacman(p);
+//         p->x = newX;
+//         p->y = newY;
+//         drawPacman(p);
+//     }
+    
+// }
+
+// void autoMovePacman(Pacman *p, int *score) {
+//     int newX = p->x;
+//     int newY = p->y;
+
+//     switch (p->direction) {
+//         case 1: newX -= PACMAN_SPEED; break;
+//         case 0: newX += PACMAN_SPEED; break;
+//         case 2: newY -= PACMAN_SPEED; break;
+//         case 3: newY += PACMAN_SPEED; break;
+//     }
+
+//     if (!isColliding(p, newX, newY)) {
+//         clearPacman(p);
+//         p->x = newX;
+//         p->y = newY;
+//         drawPacman(p);
+//         scoring(p->x, p->y, score);
+//         checkPowerUpCollision(p->x, p->y);
+//     }
+// }

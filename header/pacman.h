@@ -1,5 +1,6 @@
 #ifndef PACMAN_H
 #define PACMAN_H
+#define PACMAN_SPEED 5
 #include <graphics.h>
 
 typedef struct {
@@ -13,8 +14,9 @@ void drawPacman(Pacman *p);
 
 void clearPacman(Pacman *p);
 
-void movePacman(Pacman *p, char key);
+void movePacman(Pacman *p, char key, int *score, bool isAuto);
 
+// void autoMovePacman(Pacman *p, int *score);
 
 int isColliding(Pacman *p, int newX, int newY);
 
