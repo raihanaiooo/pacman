@@ -8,9 +8,10 @@ extern int maze[24][32];
 void theGhost(Ghost *gh, int x, int y, int hue) {
     gh->x = x;
     gh->y = y;
-    gh->radius = 8; // Sama dengan Pac-Man
     gh->hue = hue;
+    gh->radius = 8;
 }
+
 
 int isColliding(Ghost *gh, int newX, int newY) {
     int col = newX / TILE_SIZE;
@@ -73,9 +74,6 @@ void shiftGhost(Ghost *gh) {
         possibleDirections[directionCount][1] = 1;
         directionCount++;
     }
-
-    // Debugging tambahan
-    printf("Ghost di (%d, %d) memiliki %d opsi pergerakan.\n", row, col, directionCount);
 
     // Jika tidak ada arah yang valid, tetap diam
     if (directionCount == 0) {

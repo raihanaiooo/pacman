@@ -3,6 +3,7 @@
 #include <time.h>
 #include <windows.h>
 #include <mmsystem.h>
+#include <math.h>
 #include "header/ui.h"
 #include "header/ghost.h"
 #include "header/pacman.h"
@@ -25,6 +26,8 @@ int main() {
     spawnPowerUps();
 
     Ghost ghosts[MAX_GHOSTS];
+    int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost
+    const int ghostSpeed = 3;  // Ghost hanya bergerak setiap 2 frame Pac-Man
     theGhost(&ghosts[0], 320, 240, RED);
     theGhost(&ghosts[1], 330, 240, WHITE);
     theGhost(&ghosts[2], 310, 240, GREEN);
@@ -65,10 +68,24 @@ int main() {
         drawPowerUps();
         gambarDot();
 
+        
+
         for (int i = 0; i < MAX_GHOSTS; i++) {
-            shiftGhost(&ghosts[i]);
+            if (ghostStepCounter[i] % ghostSpeed == 0) {
+                moveGhost(&ghosts[i], &pacman);
+            }
             designGhost(&ghosts[i]);
+            ghostStepCounter[i]++;  // Tambahkan step counter untuk Ghost ini
         }
+         
+
+        // for (int i = 0; i < MAX_GHOSTS; i++) {
+        //     shiftGhost(&ghosts[i]);
+        //     designGhost(&ghosts[i]);
+        //     if (!doublePointActive) {
+        //         pursuePacman(&ghosts[i], &pacman); // Hantu mengejar Pac-Man jika tidak dalam power-up
+        //     }
+        // }
 
         clock_t currentTime = clock();
 
