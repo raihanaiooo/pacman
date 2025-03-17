@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include "header/ui.h"
-// #include "header/ghost.h"
+#include "header/ghost.h"
 #include "header/pacman.h"
 #include "header/scoring.h"
 #include "header/powerup.h"
@@ -23,11 +23,11 @@ int main()
     setTitikDot(); // Inisialisasi titik-titik
     spawnPowerUps();
 
-    // Ghost ghosts[MAX_GHOSTS];
-    // theGhost(&ghosts[0], 320, 240, RED);
-    // theGhost(&ghosts[1], 330, 240, WHITE);
-    // theGhost(&ghosts[2], 310, 240, GREEN);
-    // theGhost(&ghosts[3], 340, 240, CYAN);
+    Ghost ghosts[MAX_GHOSTS];
+    theGhost(&ghosts[0], 320, 240, RED);
+    theGhost(&ghosts[1], 330, 240, WHITE);
+    theGhost(&ghosts[2], 310, 240, GREEN);
+    theGhost(&ghosts[3], 340, 240, CYAN);
 
     Pacman pacman = {190, 190, 8, 0, 3}; // Pac-Man dengan 3 nyawa
     int score = 0;
@@ -47,13 +47,13 @@ int main()
         drawPowerUps();
         gambarDot();
 
-        // for (int i = 0; i < MAX_GHOSTS; i++) {
-        //     shiftGhost(&ghosts[i]);
-        //     designGhost(&ghosts[i]);
-        //     if (!doublePointActive) {
-        //         pursuePacman(&ghosts[i], &pacman); // Hantu mengejar Pac-Man jika tidak dalam power-up
-        //     }
-        // }
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            shiftGhost(&ghosts[i]);
+            designGhost(&ghosts[i]);
+            if (!doublePointActive) {
+                pursuePacman(&ghosts[i], &pacman); // Hantu mengejar Pac-Man jika tidak dalam power-up
+            }
+        }
 
         clock_t currentTime = clock();
 
@@ -75,8 +75,6 @@ int main()
         }
         
         
-        
-
         autoMovePacman(&pacman, &score);
         drawPacman(&pacman);
         hitungScore(score);
