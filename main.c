@@ -11,7 +11,7 @@
 #include "header/pause.h"
 
 // ! COMPILE
-// ! g++ main.c body/pacman.c body/pacman-seruni.c body/powerup.c body/ui.c body/ghost.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -lwinmm
+// ! g++ main.c body/pacman.c body/pacman-seruni.c body/powerup.c body/ui.c body/ghost.c body/scoring.c body/pause.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -lwinmm
 
 int main() {
     int gd = DETECT, gm;
@@ -101,9 +101,7 @@ int main() {
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
-<<<<<<< HEAD
-        if (GetAsyncKeyState(VK_ESCAPE)) break;
-=======
+        // if (GetAsyncKeyState(VK_ESCAPE)) break;
         // for (int i = 0; i < MAX_GHOSTS; i++) {
         //     if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
         //         pacman.lives--;
@@ -136,7 +134,6 @@ int main() {
 
         if (GetAsyncKeyState(VK_ESCAPE))
             break;
->>>>>>> revaldi
 
         delay(50);
         page = 1 - page;
