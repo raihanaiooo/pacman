@@ -9,7 +9,8 @@
 #include "header/scoring.h"
 #include "header/powerup.h"
 
-
+// ! COMPILE
+// ! g++ main.c body/pacman.c body/pacman-seruni.c body/powerup.c body/ui.c body/ghost.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -lwinmm
 int main()
 {
     int gd = DETECT, gm;
@@ -33,9 +34,9 @@ int main()
     int page = 0;
     int key = 0;
 
-    // PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
-    // GameStart(); // Tampilan awal
-    // PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
+    PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
+    GameStart(); // Tampilan awal
+    PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
     while (pacman.lives > 0)
     {
         setactivepage(page);
