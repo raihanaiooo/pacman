@@ -12,8 +12,8 @@
 
 // ! COMPILE
 // ! g++ main.c body/pacman.c body/pacman-seruni.c body/powerup.c body/ui.c body/ghost.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -lwinmm
-int main()
-{
+
+int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);
     clock_t lastMoveTime = 0;  // Menyimpan waktu terakhir Pac-Man bergerak
@@ -39,53 +39,54 @@ int main()
     PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
     GameStart(); // Tampilan awal
     PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
-    
-    while (pacman.lives > 0)
-    {
+
+    while (pacman.lives > 0) {
+        // **Pause Handling**
+        if (isPaused) {
+            drawPauseScreen();     // Tampilkan layar pause
+            setvisualpage(page);   // Update tampilan
+            while (isPaused) {
+                if (kbhit()) {
+                    int newKey = getch();
+                    if (newKey == 'p' || newKey == 'P') {
+                        isPaused = 0; // Resume game
+                    }
+                }
+                delay(100); // Hindari penggunaan CPU tinggi
+            }
+            continue;  // Langsung lanjut loop utama tanpa update game
+        }
+
+        // **Game Rendering**
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
         Map();
-    
         drawPowerUps();
         gambarDot();
-    
+
         for (int i = 0; i < MAX_GHOSTS; i++) {
             shiftGhost(&ghosts[i]);
             designGhost(&ghosts[i]);
         }
-    
+
         clock_t currentTime = clock();
-    
-        // Tangkap input keyboard jika ada
+
+        // **Input Handling**
         if (kbhit()) {
             int newKey = getch();
-    
-            // Tangkap arrow keys tanpa mempengaruhi pause
             if (newKey == 0 || newKey == 224) {
-                int arrowKey = getch(); // Tangkap key berikutnya
+                int arrowKey = getch();
                 if (arrowKey == 80 || arrowKey == 72 || arrowKey == 75 || arrowKey == 77) {
                     key = arrowKey; // Simpan input hanya untuk gerakan
                 }
-            } 
-            // Hanya toggle pause jika tombol P ditekan
-            else if (newKey == 'p' || newKey == 'P') {
-                isPaused = !isPaused;
-                if (isPaused) {
-                    drawPauseScreen();
-                    delay(100); // Hindari glitching
-                }
+            } else if (newKey == 'p' || newKey == 'P') {
+                isPaused = 1; // Pause game
+                continue;
             }
         }
-    
-        // **Jangan lanjut render jika pause aktif**
-        if (isPaused) {
-            drawPauseScreen();
-            delay(100);
-            continue;  // Langsung ke iterasi berikutnya tanpa update game
-        }
-    
-        // Jika tidak pause, lanjutkan game
+
+        // **Pac-Man Movement**
         if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
             if (key) {
                 movePacman(&pacman, key, &score);
@@ -94,21 +95,18 @@ int main()
             }
             lastMoveTime = currentTime;
         }
-    
+
         autoMovePacman(&pacman, &score);
         drawPacman(&pacman);
         hitungScore(score);
         updatePowerUpState();
-    
-        if (GetAsyncKeyState(VK_ESCAPE))
-            break;
-    
+
+        if (GetAsyncKeyState(VK_ESCAPE)) break;
+
         delay(50);
         page = 1 - page;
     }
-    
 
-    
     closegraph();
     return 0;
 }
