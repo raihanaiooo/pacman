@@ -14,9 +14,9 @@ void drawPacman(Pacman *p);
 
 void clearPacman(Pacman *p);
 
-void movePacman(Pacman *p, char key, int *score, bool isAuto);
+void movePacman(Pacman *p, char key, int *score);
 
-// void autoMovePacman(Pacman *p, int *score);
+void autoMovePacman(Pacman *p, int *score); // tambahan FATHI
 
 int isColliding(Pacman *p, int newX, int newY);
 
