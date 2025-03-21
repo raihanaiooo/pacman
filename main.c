@@ -1,102 +1,99 @@
-// ! =================================== compile ==================================================================================================
-// ! g++ main.c body/pacman.c body/powerup.c body/ui.c body/ghost.c body/scoring.c body/pacman-lives.c body/lives-display.c body/game-over-screen.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32
-// ! ==============================================================================================================================================
+        // ! =================================== compile ==================================================================================================
+        // ! g++ main.c body/pacman.c body/powerup.c body/ui.c body/ghost.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32
+        // ! ==============================================================================================================================================
 
 #include <stdio.h>
 #include <graphics.h>
+#include <time.h>
+#include <windows.h>
+#include <mmsystem.h>
+#include <math.h>
 #include "header/ui.h"
 #include "header/ghost.h"
 #include "header/pacman.h"
 #include "header/scoring.h"
 #include "header/powerup.h"
-#include "header/pacman-lives.h"
-#include "header/lives-display.h"
-#include "header/game-over-screen.h"
 
-void resetGame(Pacman *pacman, Ghost ghosts[], int *score) {
-    // Reset kondisi permainan
-    pacman->x = 190;
-    pacman->y = 190;
-    pacman->lives = 8;  
-    *score = 0;
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, NULL); // initialize graphics windows
 
-    // Reset posisi hantu
+    setTitikDot(); // inisialisasi dot 
+    spawnPowerUps();
+
+    Ghost ghosts[MAX_GHOSTS];
     theGhost(&ghosts[0], 320, 240, RED);
     theGhost(&ghosts[1], 330, 240, WHITE);
     theGhost(&ghosts[2], 310, 240, GREEN);
     theGhost(&ghosts[3], 340, 240, CYAN);
 
-    // Reset power-up dan titik dot
-    setTitikDot();
-    spawnPowerUps();
-}
-
-int main() {
-    int gd = DETECT, gm;
-    initgraph(&gd, &gm, NULL); // initialize graphics window
-
-    Pacman pacman = {190, 190, 8, 0, 8};  // Pacman dengan 8 nyawa
+    Pacman pacman = {190, 190, 8, 0, 1};  // Pac-Man dengan 3 nyawa
     int score = 0;
     int page = 0;
     int key = 0;
-    
-    Ghost ghosts[MAX_GHOSTS];
-    resetGame(&pacman, ghosts, &score);
 
     // MAIN STRUCTURE 
-    while (1) {  // Loop utama untuk restart game setelah Game Over
-        GameStart();
+    while (pacman.lives > 0) {  // Game berjalan selama Pac-Man masih punya nyawa
+    // MAIN STRUCTUR 
+    GameStart();
 
-        while (pacman.lives > 0) {  // Game berjalan selama Pac-Man masih punya nyawa
-            //* ====================================MAP=======================================
-            setactivepage(page);
-            setvisualpage(1 - page);
-            cleardevice();
-            Map();
+    while (1) {  // Loop sampai tombol ditekan
+        //* ====================================MAP=======================================
+        setactivepage(page);
+        setvisualpage(1 - page);
+        cleardevice();
+        Map();
 
-            //* ====================================DOT=======================================
-            gambarDot();
+        
+        //* ====================================DOT=======================================
+        gambarDot();
 
-            //* ====================================GHOST=======================================
-            for (int i = 0; i < MAX_GHOSTS; i++) {
-                moveGhost(&ghosts[i], &pacman);
-                designGhost(&ghosts[i]);  
-            }  
-
-            //* ====================================PACMAN=======================================
-            if (kbhit()) { 
+        //* ====================================GHOST=======================================
+        
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            moveGhost(&ghosts[i], &pacman);
+            designGhost(&ghosts[i]);  
+        }  
+        
+        
+        //* ====================================PACMAN=======================================
+        if (kbhit()) { 
+            key = getch();
+            if (key == 27)
+                GamePause();
+            if (key == 0 || key == 224)
                 key = getch();
-                if (key == 27) // ESC untuk pause
-                    GamePause();
-                if (key == 0 || key == 224)
-                    key = getch();
-                movePacman(&pacman, key);
-                scoring(pacman.x, pacman.y, &score); // Cek dot yang dimakan
+            movePacman(&pacman, key);
+
+            scoring(pacman.x, pacman.y, &score); // Cek dot kemakan
+        }
+
+        drawPacman(&pacman);
+        hitungScore(score);
+        updatePowerUpState();
+
+        // Cek tabrakan dengan semua Ghost
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            if (checkCollisionWithGhost(&pacman, &ghosts[i])) {
+                pacman.lives--;  // Kurangi nyawa Pac-Man
+                if (pacman.lives > 0) {
+                    pacman.x = 190;
+                    pacman.y = 190;
+                } else {
+                    outtextxy(300, 250, (char*) "Game Over!");
+                    delay(2000);
+                    closegraph();
+                    return 0;
+                }
             }
-
-            drawPacman(&pacman);
-            hitungScore(score);
-            updatePowerUpState();
-
-            // Cek tabrakan dengan Ghost
-            updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS);
-
-            // Tampilkan jumlah nyawa di layar
-            displayLives(&pacman);
-
-            delay(150);
-            page = 1 - page;
         }
+    
 
-        // Jika Pacman kehabisan nyawa, tampilkan Game Over
-        if (handleGameOver(&pacman) == 0) {
-            break;  // Keluar dari loop utama jika pemain memilih keluar
-        }
-
-        // Jika pemain memilih main lagi, reset game
-        resetGame(&pacman, ghosts, &score);
+        delay(150);
+        page = 1 - page;
     }
 
     closegraph();
-    return 0;
+    return 0; 
+    }
 }
