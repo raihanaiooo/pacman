@@ -124,6 +124,7 @@ void updatePowerUpState() {
         elapsedTime = (clock() - freezeTimer) * 1000 / CLOCKS_PER_SEC;
         if (elapsedTime > POWERUP_DURATION) {
             freezeActive = 0;
+            freezeActive = false; 
             printf("Ghost mulai bergerak kembali!\n");
         }
     }

@@ -1,6 +1,7 @@
 #include "../header/ghost.h"
 #include "../header/ui.h"
 #include "../header/pacman.h"
+#include "../header/powerup.h"
 #include <stdlib.h>
 
 extern int maze[24][32];
@@ -27,6 +28,8 @@ int isColliding(Ghost *gh, int newX, int newY) {
 }
 
 void moveGhost(Ghost *gh, Pacman *pac) {
+    if (freezeActive) return;
+
     switch (gh->hue) {
         case RED:  // Blinky (Merah) - Mengejar Pac-Man
             chasePacman(gh, pac);
@@ -47,6 +50,8 @@ void moveGhost(Ghost *gh, Pacman *pac) {
 }
 
 void shiftGhost(Ghost *gh) {
+    if (freezeActive) return;
+
     int row = gh->y / TILE_SIZE;
     int col = gh->x / TILE_SIZE;
 
