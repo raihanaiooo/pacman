@@ -1,15 +1,18 @@
 #include <graphics.h>
 #include <stdio.h>
-#include "game-over-screen.h"
+#include "../header/game-over-screen.h"
 
 void displayGameOverScreen() {
     cleardevice();
     setcolor(RED);
+    
     settextstyle(BOLD_FONT, HORIZ_DIR, 4);
-    outtextxy(250, 200, "GAME OVER!");
+    char gameOverMsg[] = "GAME OVER!";
+    outtextxy(250, 200, gameOverMsg);
     
     settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
-    outtextxy(200, 250, "Main lagi? (Y/N)");
+    char mainAgainMsg[] = "Main lagi? (Y/N)";
+    outtextxy(200, 250, mainAgainMsg);
 }
 
 int getGameOverChoice() {

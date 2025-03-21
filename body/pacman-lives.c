@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <graphics.h>
-#include "pacman-lives.h"
+#include "../header/pacman-lives.h"
 
 void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
     for (int i = 0; i < numGhosts; i++) {
@@ -9,6 +9,11 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
             pacman->lives--;  
             printf("💀 Pacman terkena hantu! Sisa nyawa: %d\n", pacman->lives);
 
+            // ADDED: Reset posisi semua ghost ke posisi awal setelah tabrakan
+            for (int j = 0; j < numGhosts; j++) {
+                resetGhost(&ghosts[j]);
+            }
+            
             if (pacman->lives <= 0) {
                 if (handleGameOver(pacman) == 0) {
                     exit(0);
@@ -30,11 +35,13 @@ int handleGameOver(Pacman *pacman) {
     cleardevice();
     setcolor(RED);
     settextstyle(3, HORIZ_DIR, 5);
-    outtextxy(250, 200, "Game Over!");
+    char gameOverMsg[] = "Game Over!";
+    outtextxy(250, 200, gameOverMsg);
     
     setcolor(WHITE);
     settextstyle(3, HORIZ_DIR, 3);
-    outtextxy(180, 250, "Main lagi? (Y/N)");
+    char mainAgainMsg[] = "Main lagi? (Y/N)";
+    outtextxy(180, 250, mainAgainMsg);
 
     while (1) {
         char key = getch();

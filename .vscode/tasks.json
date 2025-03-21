@@ -6,6 +6,15 @@
 			"type": "shell",
 			"command": "g++",
 			"args": [
+				"body/game-over-screen.c",
+                "body/lives-display.c",
+                "body/pacman-lives.c",
+                "body/pacman-seruni.c",
+                "body/pacman.c",
+                "body/ghost.c",
+                "body/powerup.c",
+                "body/ui.c",
+                "body/scoring.c",
 				"${file}",
 				"-o",
 				"${fileDirname}/output.exe",
@@ -14,7 +23,8 @@
 				"-lcomdlg32",
 				"-luuid",
 				"-loleaut32",
-				"-lole32"
+				"-lole32",
+				"-lwinmm"
 			],
 			"group": {
 				"kind": "build",

@@ -1,6 +1,6 @@
 #include <graphics.h>
 #include <stdio.h>
-#include "header/lives-display.h"
+#include "../header/lives-display.h"
 
 void displayLives(Pacman *pacman) {
     char livesText[20];
@@ -17,4 +17,17 @@ void displayLives(Pacman *pacman) {
         fillellipse(startX + (i * 20), 20, 8, 8);  // Gambar ikon nyawa Pac-Man
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
