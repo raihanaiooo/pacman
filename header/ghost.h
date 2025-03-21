@@ -9,6 +9,7 @@
 
 typedef struct {
     int x, y;
+    int initialX, initialY;  // Posisi awal ghost
     int radius;  // Sama dengan ukuran Pac-Man
     int hue;     // Warna Ghost
 } Ghost;
@@ -23,10 +24,7 @@ void ambushPacman(Ghost *gh, Pacman *pac);
 int isColliding(Ghost *gh, int newX, int newY);
 int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);  // Untuk deteksi tabrakan
 
-// //! by sasa
-// moveBlinky(Ghost *gh, Pacman *pac); //* Ngejar pacman
-// movePinky(Ghost *gh, Pacman *pac); //* Memprediksi posisi Pac-Man ke depan beberapa langkah.
-// moveInky(Ghost *gh, Pacman *pac); //* Menggunakan strategi lebih kompleks, bisa dengan random atau kalkulasi tertentu.
-// moveClyde(Ghost *gh, Pacman *pac); //* Bergerak acak, tapi menjauhi Pac-Man jika terlalu dekat. 
+// Fungsi baru untuk reset ghost ke posisi awal
+void resetGhost(Ghost *gh);
 
 #endif
