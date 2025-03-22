@@ -15,7 +15,6 @@
 #include "header/powerup.h"
 #include "header/lives-display.h"
 #include "header/game-over-screen.h"
-#include "header/pacman-lives.h"
 
 int main() {
     int gd = DETECT, gm;
