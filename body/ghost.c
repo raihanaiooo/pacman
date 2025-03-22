@@ -184,6 +184,15 @@ int checkCollisionWithGhost(Pacman *p, Ghost *g) {
     int distanceSquared = dx * dx + dy * dy;
     int collisionDistance = (p->radius + g->radius) * (p->radius + g->radius);
 
+    if (distanceSquared <= collisionDistance) {
+        if (kebalActive) {
+            printf("⚡ Pac-Man kebal! Ghost akan kembali ke posisi awal.\n");
+            resetGhost(g);  // Ghost respawn ke posisi awal
+            return 0;  // Jangan hitung tabrakan sebagai kerugian bagi Pac-Man
+        }
+        return 1;  // Tabrakan normal
+    }
+    
     return (distanceSquared <= collisionDistance);  // True jika tabrakan
 }
 

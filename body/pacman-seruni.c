@@ -43,6 +43,17 @@ int handleGameOver(Pacman *pacman) {
 void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
     for (int i = 0; i < numGhosts; i++) {
         if (checkCollisionWithGhost(pacman, &ghosts[i])) {
+
+            // Jika Pac-Man kebal, reset posisi Ghost tanpa mengurangi nyawa. pacman kebal dan ga ngurangin nyawa
+            if (kebalActive) {
+                printf("🔥 Pac-Man kebal! Ghost kembali ke posisi awal.\n");
+
+                // Respawn Ghost ke posisi awal
+                resetGhost(&ghosts[i]);
+                continue;  // Lewati proses pengurangan nyawa
+            }
+
+
             pacman->lives--;  
             printf("💀 Pacman terkena hantu! Sisa nyawa: %d\n", pacman->lives);
 

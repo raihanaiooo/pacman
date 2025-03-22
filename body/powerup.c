@@ -83,6 +83,7 @@ void checkPowerUpCollision(int pacmanX, int pacmanY) {
                 } else if (powerUps[i].type == 2) {
                     kebalActive = 1;
                     kebalTimer = clock();
+                    PlaySound("sound/eatghost.wav", NULL, SND_FILENAME | SND_ASYNC);
                     printf("Pac-Man sekarang kebal terhadap Ghost!\n");
                 } else if (powerUps[i].type == 3) {
                     freezeActive = 1;
