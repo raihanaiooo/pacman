@@ -5,17 +5,11 @@
 #include "../header/pacman.h"
 #include "../header/ghost.h"
 
-
-<<<<<<< HEAD
-<<<<<<< HEAD
 // Gunakan fungsi dari ghost.c agar tidak duplikasi
-=======
 // Fungsi untuk mengecek tabrakan antara Pac-Man dan Ghost
->>>>>>> bdfd02a (Pacman & ghost kembali ke posisi awal kalo bertabrakan)
 extern int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);
-=======
+
 /* --- Fungsi dari pacman-seruni.c --- */
->>>>>>> c027ae6 (nyatuin headerpacman-lives.h ke pacman.h & body pacman-lives.c ke pacman-seruni.c)
 
 // Fungsi resetPacman: menghapus tampilan pacman lama, mereset posisinya, dan menggambarnya ulang.
 void resetPacman(Pacman *p) {
@@ -23,6 +17,29 @@ void resetPacman(Pacman *p) {
     p->x = p->initialX;           // Reset posisi x
     p->y = p->initialY;           // Reset posisi y
     drawPacman(p);                // Gambar ulang pacman di posisi awal
+}
+
+int handleGameOver(Pacman *pacman) {
+    cleardevice();
+    setcolor(RED);
+    settextstyle(3, HORIZ_DIR, 5);
+    char gameOverMsg[] = "Game Over!";
+    outtextxy(250, 200, gameOverMsg);
+    
+    setcolor(WHITE);
+    settextstyle(3, HORIZ_DIR, 3);
+    char mainAgainMsg[] = "Main lagi? (Y/N)";
+    outtextxy(180, 250, mainAgainMsg);
+
+    while (1) {
+        char key = getch();
+        if (key == 'Y' || key == 'y') {
+            return 1;  // Restart game
+        } else if (key == 'N' || key == 'n') {
+            closegraph();
+            return 0;  // Keluar game
+        }
+    }
 }
 
 /* --- Fungsi updatePacmanAfterCollision --- */
@@ -55,25 +72,4 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
     }
 }
 
-int handleGameOver(Pacman *pacman) {
-    cleardevice();
-    setcolor(RED);
-    settextstyle(3, HORIZ_DIR, 5);
-    char gameOverMsg[] = "Game Over!";
-    outtextxy(250, 200, gameOverMsg);
-    
-    setcolor(WHITE);
-    settextstyle(3, HORIZ_DIR, 3);
-    char mainAgainMsg[] = "Main lagi? (Y/N)";
-    outtextxy(180, 250, mainAgainMsg);
 
-    while (1) {
-        char key = getch();
-        if (key == 'Y' || key == 'y') {
-            return 1;  // Restart game
-        } else if (key == 'N' || key == 'n') {
-            closegraph();
-            return 0;  // Keluar game
-        }
-    }
-}
