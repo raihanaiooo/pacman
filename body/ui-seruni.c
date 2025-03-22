@@ -1,6 +1,6 @@
 #include <graphics.h>
 #include <stdio.h>
-#include "../header/lives-display.h"
+#include "../header/ui.h"
 
 void displayLives(Pacman *pacman) {
     char livesText[20];

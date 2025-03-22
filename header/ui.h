@@ -3,6 +3,8 @@
 
 #define TILE_SIZE 20 
 
+#include "pacman.h"
+
 void Map();
 
 void hitungScore(int score, int x, int y, int isWin);
@@ -18,5 +20,8 @@ void checkWin();
 int countDotsAndPowerUps();
 
 // void GamePause();
+
+// Menampilkan jumlah nyawa Pac-Man di layar
+void displayLives(Pacman *pacman);
 
 #endif

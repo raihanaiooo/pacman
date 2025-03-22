@@ -6,8 +6,7 @@
 			"type": "shell",
 			"command": "g++",
 			"args": [
-				"body/game-over-screen.c",
-                "body/lives-display.c",
+                "body/ui-seruni.c",
         		"body/pacman-seruni.c",
                 "body/pacman.c",
                 "body/ghost.c",
