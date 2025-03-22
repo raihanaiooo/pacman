@@ -67,7 +67,6 @@ void gameLoop() {
         
         if (!isPaused) {
             movePacman(&pacman, ' ', &score);
-            autoMovePacman(&pacman, &score);
             for (int i = 0; i < MAX_GHOSTS; i++) {
                 moveGhost(&ghosts[i], &pacman);
             }

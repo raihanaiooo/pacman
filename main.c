@@ -93,17 +93,12 @@ int main() {
         }
 
         // **Pac-Man Movement**
-        if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
-            if (key) {
-                movePacman(&pacman, key, &score);
-                lastMoveTime = currentTime;
-                key = 0; // Reset key setelah digunakan
-            } else {
-                autoMovePacman(&pacman, &score);
-            }
+        if ((clock() - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
+            movePacman(&pacman, key, &score);
+            lastMoveTime = clock(); // Update waktu terakhir
+            key = 0; // Reset key setelah digunakan
         }
 
-        autoMovePacman(&pacman, &score);
         drawPacman(&pacman);
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
@@ -125,7 +120,7 @@ int main() {
         }
     
 
-        delay(100);
+        delay(50);
         page = 1 - page;
     }
 
