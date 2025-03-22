@@ -43,6 +43,8 @@ int main() {
     PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
 
     while (pacman.lives > 0) {
+        currentTime = clock();
+
         // **Pause Handling**
         if (isPaused) {
             drawPauseScreen();     // Tampilkan layar pause
@@ -94,10 +96,11 @@ int main() {
         if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
             if (key) {
                 movePacman(&pacman, key, &score);
+                lastMoveTime = currentTime;
+                key = 0; // Reset key setelah digunakan
             } else {
                 autoMovePacman(&pacman, &score);
             }
-            lastMoveTime = currentTime;
         }
 
         autoMovePacman(&pacman, &score);
@@ -122,7 +125,7 @@ int main() {
         }
     
 
-        delay(150);
+        delay(100);
         page = 1 - page;
     }
 

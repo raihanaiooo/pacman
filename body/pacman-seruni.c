@@ -5,10 +5,6 @@
 #include "../header/pacman.h"
 #include "../header/ghost.h"
 
-// Gunakan fungsi dari ghost.c agar tidak duplikasi
-// Fungsi untuk mengecek tabrakan antara Pac-Man dan Ghost
-extern int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);
-
 /* --- Fungsi dari pacman-seruni.c --- */
 
 // Fungsi resetPacman: menghapus tampilan pacman lama, mereset posisinya, dan menggambarnya ulang.
