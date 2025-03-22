@@ -4,7 +4,7 @@
 #include <graphics.h>
 #include "../header/pacman.h"
 #include "../header/ghost.h"
-#include "../header/pacman-lives.h"
+
 
 /* --- Fungsi dari pacman-seruni.c --- */
 

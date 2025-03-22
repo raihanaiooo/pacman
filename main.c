@@ -13,8 +13,6 @@
 #include "header/pacman.h"
 #include "header/scoring.h"
 #include "header/powerup.h"
-#include "header/lives-display.h"
-#include "header/game-over-screen.h"
 
 int main() {
     int gd = DETECT, gm;
