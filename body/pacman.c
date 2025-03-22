@@ -52,10 +52,17 @@ void movePacman(Pacman *p, char key, int *score) {
     int newY = p->y;
 
     switch (key) {
-        case 75: newX -= PACMAN_SPEED; p->direction = 1; break;
-        case 77: newX += PACMAN_SPEED; p->direction = 0; break;
-        case 72: newY -= PACMAN_SPEED; p->direction = 2; break;
-        case 80: newY += PACMAN_SPEED; p->direction = 3; break;
+        case 75: newX -= PACMAN_SPEED; p->direction = 1; break; // Kiri
+        case 77: newX += PACMAN_SPEED; p->direction = 0; break; // Kanan
+        case 72: newY -= PACMAN_SPEED; p->direction = 2; break; // Atas
+        case 80: newY += PACMAN_SPEED; p->direction = 3; break; // Bawah
+    }
+
+    // Teleport logic for horizontal boundaries
+    if (newX < 0) {
+        newX = TILE_SIZE * 32 - 1 ; // Teleport ke sisi kanan
+    } else if (newX >= TILE_SIZE * 32 - 1) {
+        newX = 0; // Teleport ke sisi kiri
     }
 
     if (!isColliding(p, newX, newY)) {
@@ -68,16 +75,22 @@ void movePacman(Pacman *p, char key, int *score) {
     }
 }
 
-
 void autoMovePacman(Pacman *p, int *score) {
     int newX = p->x;
     int newY = p->y;
 
     switch (p->direction) {
-        case 1: newX -= PACMAN_SPEED; break;
-        case 0: newX += PACMAN_SPEED; break;
-        case 2: newY -= PACMAN_SPEED; break;
-        case 3: newY += PACMAN_SPEED; break;
+        case 1: newX -= PACMAN_SPEED; break; // Kiri
+        case 0: newX += PACMAN_SPEED; break; // Kanan
+        case 2: newY -= PACMAN_SPEED; break; // Atas
+        case 3: newY += PACMAN_SPEED; break; // Bawah
+    }
+
+    // Teleport logic for horizontal boundaries
+    if (newX < 0) {
+        newX = TILE_SIZE * 32 - 1; // Teleport ke sisi kanan
+    } else if (newX >= TILE_SIZE * 32 - 1) {
+        newX = 0; // Teleport ke sisi kiri
     }
 
     if (!isColliding(p, newX, newY)) {

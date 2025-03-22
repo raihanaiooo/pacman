@@ -68,7 +68,6 @@ void hitungScore(int score, int x, int y, int isWin) {
     outtextxy(x, y, totalScore);  // Cetak di lokasi yang benar
 }
 
-    
 void GameStart() {
     char start[] = "PRESS SPACE TO PLAY THE GAME!";
     char pacman[] = "PAC-MAN";
@@ -131,25 +130,41 @@ int countDotsAndPowerUps() {
     return count;
 }
 
+int GameOver(int score) {
+    char gameOverText[] = "GAME OVER!";
+    char finalScoreText[30];
+    char playAgainText[] = "PRESS 'R' TO PLAY AGAIN OR 'Q' TO QUIT";
 
+    // Bersihkan layar
+    cleardevice();
 
+    // Tampilkan teks "GAME OVER"
+    settextstyle(GOTHIC_FONT, HORIZ_DIR, 5);
+    settextjustify(CENTER_TEXT, CENTER_TEXT);
+    setcolor(RED);
+    outtextxy(320, 150, gameOverText);
 
-// void GamePause() {
-//     // Menampilkan teks pause di halaman yang sedang ditampilkan
-//     int page =  0;
-//     setvisualpage(page);
-//     setactivepage(1 - page);  // Gunakan halaman yang tidak terlihat
-//     char pause[] = "PAUSED - Press SPACE to continue";
-//     setcolor(WHITE);
-//     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
-//     outtextxy(200, 200, pause);
-//     while (1) { 
-//         if (kbhit()) { 
-//             char key = getch(); 
-//             if (key == 32){ // Jika SPACE ditekan, keluar dari pause
-//                 setvisualpage(page);
-//                 setactivepage(page);
-//             }
-//         }
-//     }
-// }
+    // Tampilkan skor akhir
+    sprintf(finalScoreText, "FINAL SCORE: %d", score);
+    settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+    setcolor(WHITE);
+    outtextxy(320, 200, finalScoreText);
+
+    // Tampilkan pilihan untuk bermain lagi atau keluar
+    settextstyle(GOTHIC_FONT, HORIZ_DIR, 1);
+    setcolor(YELLOW);
+    outtextxy(320, 300, playAgainText);
+
+    // Tunggu input dari pemain
+    while (1) {
+        if (kbhit()) {
+            char key = getch();
+            if (key == 'r' || key == 'R') {
+                return 1; // Restart game
+            } else if (key == 'q' || key == 'Q') {
+                return 0; // Quit game
+            }
+        }
+    }
+}
+

@@ -79,13 +79,13 @@ int main() {
         }
          
 
-        // for (int i = 0; i < MAX_GHOSTS; i++) {
-        //     shiftGhost(&ghosts[i]);
-        //     designGhost(&ghosts[i]);
-        //     if (!doublePointActive) {
-        //         pursuePacman(&ghosts[i], &pacman); // Hantu mengejar Pac-Man jika tidak dalam power-up
-        //     }
-        // }
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            shiftGhost(&ghosts[i]);
+            designGhost(&ghosts[i]);
+            if (!doublePointActive) {
+                pursuePacman(&ghosts[i], &pacman); // Hantu mengejar Pac-Man jika tidak dalam power-up
+            }
+        }
 
         clock_t currentTime = clock();
 
@@ -113,42 +113,50 @@ int main() {
             lastMoveTime = currentTime;
         }
 
-        autoMovePacman(&pacman, &score);
         drawPacman(&pacman);
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
-        // if (GetAsyncKeyState(VK_ESCAPE)) break;
-        // for (int i = 0; i < MAX_GHOSTS; i++) {
-        //     if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
-        //         pacman.lives--;
-        //         pacman.x = 200;
-        //         pacman.y = 200;
-        //     }
-        // }
+        if (GetAsyncKeyState(VK_ESCAPE)) break;
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
+                pacman.lives--;
+                pacman.x = 200;
+                pacman.y = 200;
+            }
+        }
 
-        // if (pacman.lives <= 0) {
-        //     printf("Game Over! Skor Akhir: %d\n", score);
-        //     GameOver();
-        //     break;
-        // }
+        if (pacman.lives <= 0) {
+            int playAgain = GameOver(score); // Panggil fungsi GameOver dan simpan hasilnya
+            if (playAgain) {
+                // Reset permainan jika pemain memilih untuk bermain lagi
+                pacman.lives = 3;
+                pacman.x = 190;
+                pacman.y = 190;
+                score = 0;
+                key = 0;
+                setTitikDot(); // Reset titik-titik
+                spawnPowerUps(); // Reset power-ups
+                continue; // Kembali ke awal loop utama
+            } else {
+                break; // Keluar dari loop utama jika pemain memilih untuk keluar
+            }
+        }
 
         if (countDotsAndPowerUps() == 0) {
             setactivepage(1); 
             setvisualpage(1);  
-            cleardevice();  // ✅ Pastikan layar bersih sebelum menampilkan kemenangan
+            cleardevice();  //  Pastikan layar bersih sebelum menampilkan kemenangan
         
-            GameWin();  // ✅ Tampilkan "You Win"
-            hitungScore(score, 320, 300, 1);  // ✅ Tampilkan skor akhir di tengah layar
+            GameWin();  //  Tampilkan "You Win"
+            hitungScore(score, 320, 300, 1);  // Tampilkan skor akhir di tengah layar
         
-            delay(1000);  // ✅ Beri jeda sejenak agar pemain bisa melihat layar
-            getch();  // ✅ Tunggu input sebelum keluar
+            delay(1000);  // Beri jeda sejenak agar pemain bisa melihat layar
+            getch();  // Tunggu input sebelum keluar
         
-            break;  // ✅ Keluar dari loop utama
+            break;  // Keluar dari loop utama
         }
         
-    
-
         if (GetAsyncKeyState(VK_ESCAPE))
             break;
 

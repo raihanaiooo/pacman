@@ -9,14 +9,11 @@ void hitungScore(int score, int x, int y, int isWin);
 
 void GameStart();
 
-// void GameOver();
+int GameOver(int score);
 
 void GameWin();
 
-void checkWin();
-
 int countDotsAndPowerUps();
 
-// void GamePause();
 
 #endif

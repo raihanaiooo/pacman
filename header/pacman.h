@@ -1,6 +1,6 @@
 #ifndef PACMAN_H
 #define PACMAN_H
-#define PACMAN_SPEED 5
+#define PACMAN_SPEED 10
 #include <graphics.h>
 
 typedef struct {
