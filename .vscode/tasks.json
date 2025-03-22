@@ -8,8 +8,7 @@
 			"args": [
 				"body/game-over-screen.c",
                 "body/lives-display.c",
-                "body/pacman-lives.c",
-                "body/pacman-seruni.c",
+        		"body/pacman-seruni.c",
                 "body/pacman.c",
                 "body/ghost.c",
                 "body/powerup.c",

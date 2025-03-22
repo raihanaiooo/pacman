@@ -9,10 +9,15 @@
 #include "header/pacman.h"
 #include "header/scoring.h"
 #include "header/powerup.h"
+<<<<<<< HEAD
 #include "header/pause.h"
 
 // ! COMPILE
 // ! g++ main.c body/pacman.c body/pacman-seruni.c body/powerup.c body/ui.c body/ghost.c body/scoring.c body/pause.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -lwinmm
+=======
+#include "header/lives-display.h"
+#include "header/game-over-screen.h"
+>>>>>>> c027ae6 (nyatuin headerpacman-lives.h ke pacman.h & body pacman-lives.c ke pacman-seruni.c)
 
 int main() {
     int gd = DETECT, gm;
