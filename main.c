@@ -11,9 +11,6 @@
 #include "header/powerup.h"
 #include "header/pause.h"
 
-// ! COMPILE
-// ! g++ main.c body/pacman.c body/pacman-seruni.c body/powerup.c body/ui.c body/ghost.c body/scoring.c body/pause.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -lwinmm
-
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);
@@ -33,17 +30,21 @@ int main() {
     theGhost(&ghosts[2], 310, 240, GREEN);
     theGhost(&ghosts[3], 340, 240, CYAN);
 
-    Pacman pacman = {190, 190, 8, 0, 3}; // Pac-Man dengan 3 nyawa
+    // Update initializer pacman: tambahkan initialX dan initialY
+    Pacman pacman = {190, 190, 8, 0, 8, 190, 190};  // ADDED: Inisialisasi nyawa Pac-Man menjadi 8
     int score = 0;
     int page = 0;
     int key = 0;
-    int isPaused = 0;
+    
+    // resetGame(&pacman, ghosts, &score);
 
     PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
     GameStart(); // Tampilan awal
     PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
 
     while (pacman.lives > 0) {
+        currentTime = clock();
+
         // **Pause Handling**
         if (isPaused) {
             drawPauseScreen();     // Tampilkan layar pause
@@ -68,8 +69,6 @@ int main() {
         drawPowerUps();
         gambarDot();
 
-        
-
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (ghostStepCounter[i] % ghostSpeed == 0) {
                 moveGhost(&ghosts[i], &pacman);
@@ -78,16 +77,6 @@ int main() {
             ghostStepCounter[i]++;  // Tambahkan step counter untuk Ghost ini
         }
          
-
-        // for (int i = 0; i < MAX_GHOSTS; i++) {
-        //     shiftGhost(&ghosts[i]);
-        //     designGhost(&ghosts[i]);
-        //     if (!doublePointActive) {
-        //         pursuePacman(&ghosts[i], &pacman); // Hantu mengejar Pac-Man jika tidak dalam power-up
-        //     }
-        // }
-
-        clock_t currentTime = clock();
 
         // **Input Handling**
         if (kbhit()) {
@@ -104,59 +93,38 @@ int main() {
         }
 
         // **Pac-Man Movement**
-        if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
-            if (key) {
-                movePacman(&pacman, key, &score);
-            } else {
-                autoMovePacman(&pacman, &score);
-            }
-            lastMoveTime = currentTime;
+        if ((clock() - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
+            movePacman(&pacman, key, &score);
+            lastMoveTime = clock(); // Update waktu terakhir
+            key = 0; // Reset key setelah digunakan
         }
 
-        autoMovePacman(&pacman, &score);
         drawPacman(&pacman);
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
-        // if (GetAsyncKeyState(VK_ESCAPE)) break;
-        // for (int i = 0; i < MAX_GHOSTS; i++) {
-        //     if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
-        //         pacman.lives--;
-        //         pacman.x = 200;
-        //         pacman.y = 200;
-        //     }
-        // }
-
-        // if (pacman.lives <= 0) {
-        //     printf("Game Over! Skor Akhir: %d\n", score);
-        //     GameOver();
-        //     break;
-        // }
-
-        if (countDotsAndPowerUps() == 0) {
-            setactivepage(1); 
-            setvisualpage(1);  
-            cleardevice();  // ✅ Pastikan layar bersih sebelum menampilkan kemenangan
-        
-            GameWin();  // ✅ Tampilkan "You Win"
-            hitungScore(score, 320, 300, 1);  // ✅ Tampilkan skor akhir di tengah layar
-        
-            delay(1000);  // ✅ Beri jeda sejenak agar pemain bisa melihat layar
-            getch();  // ✅ Tunggu input sebelum keluar
-        
-            break;  // ✅ Keluar dari loop utama
+        // Cek tabrakan dengan semua Ghost
+        for (int i = 0; i < MAX_GHOSTS; i++) {
+            if (checkCollisionWithGhost(&pacman, &ghosts[i])) {
+                pacman.lives--;  // Kurangi nyawa Pac-Man
+                if (pacman.lives > 0) {
+                    pacman.x = 190;
+                    pacman.y = 190;
+                } else {
+                    outtextxy(300, 250, (char*) "Game Over!");
+                    delay(2000);
+                    closegraph();
+                    return 0;
+                }
+            }
         }
-        
     
-
-        if (GetAsyncKeyState(VK_ESCAPE))
-            break;
 
         delay(50);
         page = 1 - page;
     }
 
     closegraph();
-    return 0;
-    }
+    return 0; 
+}
 

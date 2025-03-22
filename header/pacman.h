@@ -1,6 +1,6 @@
 #ifndef PACMAN_H
 #define PACMAN_H
-#define PACMAN_SPEED 5
+#define PACMAN_SPEED 10
 #include <graphics.h>
 
 typedef struct {
@@ -8,16 +8,18 @@ typedef struct {
     int radius;
     int direction;
     int lives;
+    int initialX, initialY;  // Posisi awal pacman
 } Pacman;
 
+typedef struct Ghost Ghost;
+
 void drawPacman(Pacman *p);
-
 void clearPacman(Pacman *p);
-
-void movePacman(Pacman *p, char key, int *score);
-
-void autoMovePacman(Pacman *p, int *score);
-
+void movePacman(Pacman *p, int key, int *score);
 int isColliding(Pacman *p, int newX, int newY);
+
+// Deklarasi fungsi untuk reset dan update pacman
+void resetPacman(Pacman *p);
+void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts);
 
 #endif

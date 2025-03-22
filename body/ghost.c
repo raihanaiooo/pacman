@@ -9,10 +9,11 @@ extern int maze[24][32];
 void theGhost(Ghost *gh, int x, int y, int hue) {
     gh->x = x;
     gh->y = y;
+    gh->initialX = x;   // Simpan posisi awal
+    gh->initialY = y;
     gh->hue = hue;
     gh->radius = 8;
 }
-
 
 int isColliding(Ghost *gh, int newX, int newY) {
     int col = newX / TILE_SIZE;
@@ -160,7 +161,7 @@ void designGhost(Ghost *gh) {
     setfillstyle(SOLID_FILL, gh->hue);
     fillellipse(x, y, gh->radius, gh->radius);  // Setengah lingkaran
 
-    for (int i = -10; i <=10; i += 5) {
+    for (int i = -10; i <= 10; i += 5) {
         int spikeY = y + gh->radius;
         fillellipse(x + i, spikeY, 2, 3);
     }
@@ -174,8 +175,6 @@ void designGhost(Ghost *gh) {
     setfillstyle(SOLID_FILL, BLUE);
     fillellipse(x - 4, y - 5, 1, 1);
     fillellipse(x + 4, y - 5, 1, 1);
-
-
 }
 
 // Fungsi untuk mengecek tabrakan antara Pac-Man dan Ghost
@@ -188,4 +187,8 @@ int checkCollisionWithGhost(Pacman *p, Ghost *g) {
     return (distanceSquared <= collisionDistance);  // True jika tabrakan
 }
 
-
+// Fungsi baru: Reset ghost ke posisi awal
+void resetGhost(Ghost *gh) {
+    gh->x = gh->initialX;
+    gh->y = gh->initialY;
+}

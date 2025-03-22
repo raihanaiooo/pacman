@@ -6,6 +6,14 @@
 			"type": "shell",
 			"command": "g++",
 			"args": [
+				"body/ghost.c",
+				"body/pacman-seruni.c",
+				"body/pacman.c",
+				"body/pause.c",
+				"body/powerup.c",
+				"body/scoring.c",
+				"body/ui-seruni.c",
+				"body/ui.c",
 				"${file}",
 				"-o",
 				"${fileDirname}/output.exe",
@@ -14,7 +22,8 @@
 				"-lcomdlg32",
 				"-luuid",
 				"-loleaut32",
-				"-lole32"
+				"-lole32",
+				"-lwinmm"
 			],
 			"group": {
 				"kind": "build",

@@ -59,6 +59,8 @@
 		"pause.h": "c",
 		"scoring.h": "c",
 		"ui.h": "c",
-		"powerup.h": "c"
+		"powerup.h": "c",
+		"game-over-screen.h": "c",
+		"graphics.h": "c"
 	}
 }

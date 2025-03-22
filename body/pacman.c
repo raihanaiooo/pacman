@@ -47,39 +47,29 @@ void clearPacman(Pacman *p) {
     fillellipse(p->x, p->y, p->radius, p->radius);
 }
 
-void movePacman(Pacman *p, char key, int *score) {
-    int newX = p->x;
-    int newY = p->y;
-
-    switch (key) {
-        case 75: newX -= PACMAN_SPEED; p->direction = 1; break;
-        case 77: newX += PACMAN_SPEED; p->direction = 0; break;
-        case 72: newY -= PACMAN_SPEED; p->direction = 2; break;
-        case 80: newY += PACMAN_SPEED; p->direction = 3; break;
+void movePacman(Pacman *p, int key, int *score) {
+    // Jika ada input dari pemain, ubah arah Pac-Man
+    if (key == 75 || key == 77 || key == 72 || key == 80) {
+        switch (key) {
+            case 75: p->direction = 1; break; // Kiri
+            case 77: p->direction = 0; break; // Kanan
+            case 72: p->direction = 2; break; // Atas
+            case 80: p->direction = 3; break; // Bawah
+        }
     }
 
-    if (!isColliding(p, newX, newY)) {
-        clearPacman(p);
-        p->x = newX;
-        p->y = newY;
-        drawPacman(p);
-        scoring(p->x, p->y, score);
-        checkPowerUpCollision(p->x, p->y);
-    }
-}
-
-
-void autoMovePacman(Pacman *p, int *score) {
+    // Lanjutkan gerakan otomatis berdasarkan arah terakhir
     int newX = p->x;
     int newY = p->y;
 
     switch (p->direction) {
-        case 1: newX -= PACMAN_SPEED; break;
-        case 0: newX += PACMAN_SPEED; break;
-        case 2: newY -= PACMAN_SPEED; break;
-        case 3: newY += PACMAN_SPEED; break;
+        case 1: newX -= PACMAN_SPEED; break; // Kiri
+        case 0: newX += PACMAN_SPEED; break; // Kanan
+        case 2: newY -= PACMAN_SPEED; break; // Atas
+        case 3: newY += PACMAN_SPEED; break; // Bawah
     }
 
+    // Jika tidak bertabrakan, lakukan pergerakan
     if (!isColliding(p, newX, newY)) {
         clearPacman(p);
         p->x = newX;
@@ -89,4 +79,5 @@ void autoMovePacman(Pacman *p, int *score) {
         checkPowerUpCollision(p->x, p->y);
     }
 }
+
 
