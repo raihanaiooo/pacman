@@ -4,7 +4,9 @@
 #include <graphics.h>
 #include "../header/pacman.h"
 #include "../header/ghost.h"
-#include "../header/pacman-lives.h"
+#include "../header/lives-display.h"
+#include "../header/scoring.h"
+#include "../header/ui.h"
 
 /* --- Fungsi dari pacman-seruni.c --- */
 
@@ -18,7 +20,7 @@ void resetPacman(Pacman *p) {
 
 /* --- Fungsi updatePacmanAfterCollision --- */
 
-void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
+void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score) {
     for (int i = 0; i < numGhosts; i++) {
         if (checkCollisionWithGhost(pacman, &ghosts[i])) {
             pacman->lives--;  
@@ -30,41 +32,15 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
             }
             
             if (pacman->lives <= 0) {
-                if (handleGameOver(pacman) == 0) {
-                    exit(0);
-                } else {
-                    pacman->lives = 8;
-                    pacman->x = pacman->initialX;
-                    pacman->y = pacman->initialY;
-                }
+                GameOver(*score);
+                resetPacman(pacman);
+                // resetPowerUps();
+                // resetLives(pacman);
+                score = 0;
             } else {
-                pacman->x = pacman->initialX;
-                pacman->y = pacman->initialY;
+                resetPacman(pacman);
             }
             break;
-        }
-    }
-}
-
-int handleGameOver(Pacman *pacman) {
-    cleardevice();
-    setcolor(RED);
-    settextstyle(3, HORIZ_DIR, 5);
-    char gameOverMsg[] = "Game Over!";
-    outtextxy(250, 200, gameOverMsg);
-    
-    setcolor(WHITE);
-    settextstyle(3, HORIZ_DIR, 3);
-    char mainAgainMsg[] = "Main lagi? (Y/N)";
-    outtextxy(180, 250, mainAgainMsg);
-
-    while (1) {
-        char key = getch();
-        if (key == 'Y' || key == 'y') {
-            return 1;  // Restart game
-        } else if (key == 'N' || key == 'n') {
-            closegraph();
-            return 0;  // Keluar game
         }
     }
 }

@@ -26,8 +26,7 @@ int isColliding(Pacman *p, int newX, int newY);
 
 // Deklarasi fungsi untuk reset dan update pacman
 void resetPacman(Pacman *p);
-void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts);
-
+void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score);
 #ifdef __cplusplus
 }
 #endif
