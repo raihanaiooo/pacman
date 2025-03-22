@@ -19,6 +19,36 @@ void resetPacman(Pacman *p) {
     drawPacman(p);                // Gambar ulang pacman di posisi awal
 }
 
+/* --- Fungsi updatePacmanAfterCollision --- */
+
+void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
+    for (int i = 0; i < numGhosts; i++) {
+        if (checkCollisionWithGhost(pacman, &ghosts[i])) {
+            pacman->lives--;  
+            printf("💀 Pacman terkena hantu! Sisa nyawa: %d\n", pacman->lives);
+
+            // Reset posisi semua ghost ke posisi awal setelah tabrakan
+            for (int j = 0; j < numGhosts; j++) {
+                resetGhost(&ghosts[j]);
+            }
+            
+            if (pacman->lives <= 0) {
+                if (handleGameOver(pacman) == 0) {
+                    exit(0);
+                } else {
+                    pacman->lives = 8;
+                    pacman->x = pacman->initialX;
+                    pacman->y = pacman->initialY;
+                }
+            } else {
+                pacman->x = pacman->initialX;
+                pacman->y = pacman->initialY;
+            }
+            break;
+        }
+    }
+}
+
 int handleGameOver(Pacman *pacman) {
     cleardevice();
     setcolor(RED);

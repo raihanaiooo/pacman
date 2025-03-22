@@ -1,3 +1,7 @@
+// ! =================================== compile ==================================================================================================
+// ! g++ main.c body/pacman.c body/powerup.c body/ui.c body/ghost.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32
+// ! ==============================================================================================================================================
+
 #include <stdio.h>
 #include <graphics.h>
 #include <time.h>
@@ -84,9 +88,9 @@ int main() {
         if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
             if (key) {
                 movePacman(&pacman, key, &score);
-            } else {
-                autoMovePacman(&pacman, &score);
+                scoring(pacman.x, pacman.y, &score); // Cek dot kemakan
             }
+            //!MERGE CONFLICT
             lastMoveTime = currentTime;
         }
 
@@ -112,8 +116,42 @@ int main() {
 
         delay(150);
         page = 1 - page;
-    }
 
-    closegraph();
-    return 0;
-}
+            drawPacman(&pacman);
+            hitungScore(score, 10, 10, 0);
+            updatePowerUpState();
+
+            //* ====================================LIVES DISPLAY=======================================
+            // ADDED: Panggil fungsi untuk menampilkan jumlah nyawa di layar
+            displayLives(&pacman);
+
+            //* ====================================TUMBAK (COLLISION)=======================================
+            // ADDED: Panggil fungsi update collision dari pacman-lives (yang juga mengatur reset posisi ghost)
+            updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS);
+
+            // ADDED: Jika nyawa habis, tampilkan game over screen
+            if(pacman.lives <= 0) {
+                displayGameOverScreen();
+                if(getGameOverChoice() == 1) {
+                    // Reset game: nyawa Pac-Man dan posisi awal
+                    pacman.lives = 8;  // Set ulang nyawa ke 8
+                    pacman.x = pacman.initialX;
+                    pacman.y = pacman.initialY;
+                    // Reset semua ghost ke posisi awal
+                    for (int i = 0; i < MAX_GHOSTS; i++) {
+                        resetGhost(&ghosts[i]);
+                    }
+                    score = 0; // Opsional: reset score
+                    break; // Kembali ke GameStart()
+                } else {
+                    closegraph();
+                    return 0;
+                }
+            }
+
+            delay(150);
+            page = 1 - page;
+        }
+        closegraph();
+        return 0; 
+    }
