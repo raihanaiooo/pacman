@@ -7,10 +7,10 @@
 #include "../header/ui.h"
 #include "../header/powerup.h"
 
-extern int maze[24][32]; // ambil peta dari ui.c
+extern int maze[ROWS][COLS]; // ambil peta dari ui.c
 
 // Array buat nyimpen status dot dimakan atau belum
-int dots[24][32];
+int dots[ROWS][COLS];
 
 int dotKosong(int i, int j) {
     return (
@@ -39,8 +39,8 @@ int dotKosong(int i, int j) {
 
 // inisialisasi titik
 void setTitikDot() {
-    for (int i = 0; i < 24; i++) {
-        for (int j = 0; j < 32; j++) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
             if (maze[i][j] == 0 && !dotKosong(i, j)) { 
                 dots[i][j] = 1;  // Tetap ada dot di jalur biasa
             } else {
@@ -55,8 +55,8 @@ void gambarDot() {
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, WHITE);
 
-    for (int i = 0; i < 24; i++) {
-        for (int j = 0; j < 32; j++) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
             if (dots[i][j]) {  // Hanya menggambar titik yang belum dimakan
                 int x = j * 20 + 10;
                 int y = i * 20 + 10;

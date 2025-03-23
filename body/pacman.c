@@ -4,7 +4,7 @@
 #include "../header/powerup.h"
 #include <stdio.h>
 
-extern int maze[24][32];
+extern int maze[ROWS][COLS];
 #define TILE_SIZE 20
 
 int isColliding(Pacman *p, int newX, int newY) {
@@ -61,6 +61,13 @@ void movePacman(Pacman *p, int key, int *score) {
     // Lanjutkan gerakan otomatis berdasarkan arah terakhir
     int newX = p->x;
     int newY = p->y;
+
+    // Teleport logic for horizontal boundaries
+    if (newX < 0) {
+        newX = TILE_SIZE * 32 - 1; // Teleport ke sisi kanan
+    } else if (newX >= TILE_SIZE * 32 - 1) {
+        newX = 0; // Teleport ke sisi kiri
+    }
 
     switch (p->direction) {
         case 1: newX -= PACMAN_SPEED; break; // Kiri

@@ -4,7 +4,7 @@
 #include "../header/powerup.h"
 #include <stdlib.h>
 
-extern int maze[24][32];
+extern int maze[ROWS][COLS];
 
 void theGhost(Ghost *gh, int x, int y, int hue) {
     gh->x = x;
@@ -20,7 +20,7 @@ int isColliding(Ghost *gh, int newX, int newY) {
     int row = newY / TILE_SIZE;
 
     // Cek apakah keluar dari batas array
-    if (row < 0 || row >= 24 || col < 0 || col >= 32) {
+    if (row < 0 || row >= ROWS || col < 0 || col >= COLS) {
         return 1;  // Jika di luar batas, anggap tabrakan
     }
 
@@ -139,9 +139,9 @@ void ambushPacman(Ghost *gh, Pacman *pac) {
 
     // Pastikan targetRow dan targetCol tidak keluar dari batas peta
     if (targetRow < 0) targetRow = 0;
-    if (targetRow >= 24) targetRow = 23;
+    if (targetRow >= ROWS) targetRow = 23;
     if (targetCol < 0) targetCol = 0;
-    if (targetCol >= 32) targetCol = 31;
+    if (targetCol >= COLS) targetCol = 31;
 
     // Gerakkan Ghost menuju posisi prediksi
     int rowG = gh->y / TILE_SIZE;
@@ -200,4 +200,16 @@ int checkCollisionWithGhost(Pacman *p, Ghost *g) {
 void resetGhost(Ghost *gh) {
     gh->x = gh->initialX;
     gh->y = gh->initialY;
+}
+
+void pursuePacman(Ghost *gh, Pacman *pac) {
+    int rowG = gh->y / TILE_SIZE;
+    int colG = gh->x / TILE_SIZE;
+    int rowP = pac->y / TILE_SIZE;
+    int colP = pac->x / TILE_SIZE;
+
+    if (rowG < rowP && !isColliding(gh, gh->x, gh->y + TILE_SIZE)) gh->y += TILE_SIZE;
+    else if (rowG > rowP && !isColliding(gh, gh->x, gh->y - TILE_SIZE)) gh->y -= TILE_SIZE;
+    else if (colG < colP && !isColliding(gh, gh->x + TILE_SIZE, gh->y)) gh->x += TILE_SIZE;
+    else if (colG > colP && !isColliding(gh, gh->x - TILE_SIZE, gh->y)) gh->x -= TILE_SIZE;
 }

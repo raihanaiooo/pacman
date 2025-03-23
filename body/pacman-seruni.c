@@ -4,6 +4,9 @@
 #include <graphics.h>
 #include "../header/pacman.h"
 #include "../header/ghost.h"
+#include "../header/scoring.h"
+#include "../header/ui.h"
+#include "../header/powerup.h"
 
 /* --- Fungsi dari pacman-seruni.c --- */
 
@@ -15,26 +18,22 @@ void resetPacman(Pacman *p) {
     drawPacman(p);                // Gambar ulang pacman di posisi awal
 }
 
-int handleGameOver(Pacman *pacman) {
-    cleardevice();
-    setcolor(RED);
-    settextstyle(3, HORIZ_DIR, 5);
-    char gameOverMsg[] = "Game Over!";
-    outtextxy(250, 200, gameOverMsg);
-    
-    setcolor(WHITE);
-    settextstyle(3, HORIZ_DIR, 3);
-    char mainAgainMsg[] = "Main lagi? (Y/N)";
-    outtextxy(180, 250, mainAgainMsg);
-
-    while (1) {
-        char key = getch();
-        if (key == 'Y' || key == 'y') {
-            return 1;  // Restart game
-        } else if (key == 'N' || key == 'n') {
-            closegraph();
-            return 0;  // Keluar game
+int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
+    int playAgain = GameOver(*score);
+    if (playAgain) {
+        // Reset seluruh game state
+        resetPacman(pacman);
+        for (int i = 0; i < numGhosts; i++) {
+            resetGhost(&ghosts[i]);
         }
+        *score = 0;
+        pacman->lives = 3;
+        setTitikDot();     // Reset dots
+        spawnPowerUps();   // Reset power-ups
+        return 1; // Main lagi
+    } else {
+        closegraph();
+        exit(0);
     }
 }
 
@@ -77,4 +76,6 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
             break;
         }
     }
+    // Jika nyawa habis, biarkan loop utama yang urus GameOver
 }
+

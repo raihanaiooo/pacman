@@ -10,45 +10,7 @@ Ghost ghosts[MAX_GHOSTS];
 /** Procedure untuk mengaktifkan atau menonaktifkan mode pause **/
 void togglePause() {
     isPaused = !isPaused;
-    // drawPauseScreen(); // Tampilkan layar pause
-
-    // if (isPaused) {
-    //     setvisualpage(1); // Perbarui tampilan
-    //     while (isPaused) {
-    //         if (kbhit()) {
-    //             int newKey = getch();
-    //             if (newKey == 'p' || newKey == 'P') {
-    //                 isPaused = 0; // Resume game
-    //                 return;
-    //             } else if (newKey == 'q' || newKey == 'Q') {
-    //                 isPaused = 0;
-    //                 cleardevice();
-                    
-    //                 // Reset semua variabel game
-    //                 pacman->x = 190;
-    //                 pacman->y = 190;
-    //                 pacman->lives = 8;
-                    
-    //                 setTitikDot();  // Reset titik-titik
-    //                 spawnPowerUps();  // Reset power-ups
-                    
-    //                 // Reset posisi semua Ghost
-    //                 theGhost(&ghosts[0], 320, 240, RED);
-    //                 theGhost(&ghosts[1], 330, 240, WHITE);
-    //                 theGhost(&ghosts[2], 310, 240, GREEN);
-    //                 theGhost(&ghosts[3], 340, 240, CYAN);
-                    
-    //                 // Tampilkan layar awal kembali
-    //                 PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-    //                 GameStart();
-    //                 PlaySound(NULL, NULL, 0);
-    //             }
-    //         }
-    //         delay(100);
-    //     }
-    // }
 }
-
 /** Procedure untuk menggambar layar pause **/
 void drawPauseScreen() {
     // cleardevice();
@@ -87,36 +49,6 @@ void drawPauseScreen() {
 
     // setvisualpage(getactivepage());
     setvisualpage(1);
-}
-
-void gameLoop() {
-    while (1) {
-        // Tetap gambar map meskipun game di-pause
-        Map();
-        drawPowerUps();
-        gambarDot();
-
-        for (int i = 0; i < MAX_GHOSTS; i++) {
-            designGhost(&ghosts[i]);
-        }
-
-        drawPacman(&pacman);
-        
-        if (!isPaused) {
-            movePacman(&pacman, ' ', &score);
-            for (int i = 0; i < MAX_GHOSTS; i++) {
-                moveGhost(&ghosts[i], &pacman);
-            }
-        } else {
-            drawPauseScreen();
-        }
-
-        if (kbhit()) {
-            char key = getch();
-            handleInput(key, &pacman, ghosts);
-        }
-        delay(100);
-    }
 }
 
 /** Fungsi untuk menangani input tombol */

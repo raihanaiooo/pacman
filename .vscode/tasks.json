@@ -12,7 +12,6 @@
 				"body/pause.c",
 				"body/powerup.c",
 				"body/scoring.c",
-				"body/ui-seruni.c",
 				"body/ui.c",
 				"${file}",
 				"-o",
