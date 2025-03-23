@@ -11,10 +11,6 @@
 #include "header/powerup.h"
 #include "header/pause.h"
 
-//! ====================================COMPILE======================================= 
-//? g++ main.c body/pacman.c body/powerup.c body/ui.c body/scoring.c body/ghost.c body/pause.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -lwinmm 
-//! ================================================================================== 
-
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);

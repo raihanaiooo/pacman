@@ -72,9 +72,9 @@ void handleInput(char key, Pacman *pacman, Ghost ghosts[]) {
                         cleardevice();
                         
                         // Reset semua variabel game
-                        pacman->x = 190;
-                        pacman->y = 190;
-                        pacman->lives = 8;
+                        pacman->x = 320;
+                        pacman->y = 290;
+                        pacman->lives = 3;
                         
                         setTitikDot();  // Reset titik-titik
                         spawnPowerUps();  // Reset power-ups
