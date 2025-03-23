@@ -4,7 +4,7 @@
 #include "../header/powerup.h"
 #include <stdio.h>
 
-extern int maze[24][32];
+extern int maze[ROWS][COLS];
 #define TILE_SIZE 20
 
 int isColliding(Pacman *p, int newX, int newY) {

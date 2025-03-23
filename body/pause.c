@@ -1,19 +1,62 @@
 #include <graphics.h>
 #include "../header/pause.h"
 
+/* Variabel global */
 int isPaused = 0;
 int score = 0;
 Pacman pacman;
 Ghost ghosts[MAX_GHOSTS];
 
+/** Procedure untuk mengaktifkan atau menonaktifkan mode pause **/
 void togglePause() {
     isPaused = !isPaused;
+    // drawPauseScreen(); // Tampilkan layar pause
+
+    // if (isPaused) {
+    //     setvisualpage(1); // Perbarui tampilan
+    //     while (isPaused) {
+    //         if (kbhit()) {
+    //             int newKey = getch();
+    //             if (newKey == 'p' || newKey == 'P') {
+    //                 isPaused = 0; // Resume game
+    //                 return;
+    //             } else if (newKey == 'q' || newKey == 'Q') {
+    //                 isPaused = 0;
+    //                 cleardevice();
+                    
+    //                 // Reset semua variabel game
+    //                 pacman->x = 190;
+    //                 pacman->y = 190;
+    //                 pacman->lives = 8;
+                    
+    //                 setTitikDot();  // Reset titik-titik
+    //                 spawnPowerUps();  // Reset power-ups
+                    
+    //                 // Reset posisi semua Ghost
+    //                 theGhost(&ghosts[0], 320, 240, RED);
+    //                 theGhost(&ghosts[1], 330, 240, WHITE);
+    //                 theGhost(&ghosts[2], 310, 240, GREEN);
+    //                 theGhost(&ghosts[3], 340, 240, CYAN);
+                    
+    //                 // Tampilkan layar awal kembali
+    //                 PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+    //                 GameStart();
+    //                 PlaySound(NULL, NULL, 0);
+    //             }
+    //         }
+    //         delay(100);
+    //     }
+    // }
 }
 
+/** Procedure untuk menggambar layar pause **/
 void drawPauseScreen() {
+    // cleardevice();
+    /* Mendapatkan dimensi layar */
     int screenWidth = getmaxx();
     int screenHeight = getmaxy();
     
+    /* Menentukan ukuran dan posisi kotak pause */
     int boxWidth = 300;
     int boxHeight = 150;
     int boxX1 = (screenWidth - boxWidth) / 2;
@@ -21,30 +64,30 @@ void drawPauseScreen() {
     int boxX2 = boxX1 + boxWidth;
     int boxY2 = boxY1 + boxHeight;
 
-    char teks1[] = "Game Paused";
-    char teks2[] = "Press P to Resume";
-
-    // Kotak hitam semi-transparan di tengah
+    /* Menggambar kotak semi-transparan sebagai tampilan pause */
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, BLACK);
     bar(boxX1, boxY1, boxX2, boxY2);
-    rectangle(boxX1, boxY1, boxX2, boxY2);
+    rectangle(boxX1, boxY1, boxX2, boxY2); // Kotak tepi
+    
+    // Teks pause
+    settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
+    char teks1[] = "Game Paused";
+    char teks2[] = "Press P to resume";
+    char teks3[] = "Press Q to quit";
+    
+    /* Posisi tengah kotak */
+    int centerX = (boxX1 + boxX2) / 2;
+    int centerY = (boxY1 + boxY2) / 2;
 
-    // Set text style
-    settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
-    setcolor(WHITE);
+    /* Tampilkan teks di tengah kotak */
+    outtextxy(centerX - (textwidth(teks1) / 2) + 60, centerY - (textheight(teks1) / 2) - 10, teks1);
+    outtextxy(centerX - (textwidth(teks2) / 2) + 75, centerY + (textheight(teks1) / 2), teks2);
+    outtextxy(centerX - (textwidth(teks3) / 2) + 60, centerY + (textheight(teks1) / 2) + 30, teks3);
 
-    // Set text justify ke tengah-tengah
-    settextjustify(CENTER_TEXT, CENTER_TEXT);
-
-    // Tulis teks tepat di tengah kotak
-    outtextxy(screenWidth / 2, screenHeight / 2 - 20, teks1);
-    outtextxy(screenWidth / 2, screenHeight / 2 + 20, teks2);
-
-    // Update tampilan
-    setvisualpage(getactivepage());
+    // setvisualpage(getactivepage());
+    setvisualpage(1);
 }
-
 
 void gameLoop() {
     while (1) {
@@ -70,14 +113,53 @@ void gameLoop() {
 
         if (kbhit()) {
             char key = getch();
-            handleInput(key);
+            handleInput(key, &pacman, ghosts);
         }
         delay(100);
     }
 }
 
-void handleInput(char key) {
+/** Fungsi untuk menangani input tombol */
+void handleInput(char key, Pacman *pacman, Ghost ghosts[]) {
     if (key == 'P' || key == 'p') {
         togglePause();
+        if (isPaused) {
+            drawPauseScreen(); // Tampilkan layar pause
+            setvisualpage(1);  // Perbarui tampilan pause
+            
+            while (isPaused) {
+                if (kbhit()) {
+                    char newKey = getch();
+                    if (newKey == 'p' || newKey == 'P') {
+                        togglePause(); // Resume game
+                        return;
+                    } else if (newKey == 'q' || newKey == 'Q') {
+                        isPaused = 0;
+                        cleardevice();
+                        
+                        // Reset semua variabel game
+                        pacman->x = 320;
+                        pacman->y = 290;
+                        pacman->lives = 3;
+                        
+                        setTitikDot();  // Reset titik-titik
+                        spawnPowerUps();  // Reset power-ups
+                        
+                        // Reset posisi semua Ghost
+                        theGhost(&ghosts[0], 320, 240, RED);
+                        theGhost(&ghosts[1], 330, 240, WHITE);
+                        theGhost(&ghosts[2], 310, 240, GREEN);
+                        theGhost(&ghosts[3], 340, 240, CYAN);
+                        
+                        // Tampilkan layar awal kembali
+                        PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+                        GameStart();
+                        PlaySound(NULL, NULL, 0);
+                    }
+                }
+                delay(100);
+            }
+        }
     }
 }
+

@@ -37,9 +37,7 @@ int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
     }
 }
 
-
 /* --- Fungsi updatePacmanAfterCollision --- */
-
 void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score) {
     pacman->lives--;
 

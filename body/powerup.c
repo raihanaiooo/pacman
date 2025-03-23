@@ -7,7 +7,7 @@
 PowerUp powerUps[MAX_POWERUPS];  // Menyimpan beberapa Power-Up
 int doublePointActive = 0;
 clock_t doublePointTimer = 0;
-extern int maze[24][32];
+extern int maze[ROWS][COLS];
 
 // Fungsi untuk menempatkan beberapa Power-Up di lokasi acak
 void spawnPowerUps() {

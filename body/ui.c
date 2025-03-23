@@ -5,8 +5,10 @@
 #include "../header/scoring.h"
 
 #define TILE_SIZE 20
-
-int maze[24][32] = {
+#define ROWS 24
+#define COLS 32
+// Deklarasi Array Labirin
+int maze[ROWS][COLS] = {
     {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
     {2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
     {2,0,2,2,2,2,0,2,2,2,2,0,2,0,0,2,2,0,0,2,0,2,2,2,2,0,2,2,2,2,0,2},
@@ -33,11 +35,11 @@ int maze[24][32] = {
     {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
 };
 
-// Fungsi untuk menggambar map berdasarkan array
+// Prosedur untuk menggambar map
 void Map() {
     int i, j;
-    for (i = 0; i < 24; i++) {  // Baris
-        for (j = 0; j < 32; j++) {  // Kolom
+    for (i = 0; i < ROWS; i++) {  // Baris
+        for (j = 0; j < COLS; j++) {  // Kolom
             int x = j * TILE_SIZE;
             int y = i * TILE_SIZE;
 
@@ -53,58 +55,51 @@ void Map() {
         }
     }
 }
-        //* ====================================hitung score======================================= FATHI
+
+// Prosedur untuk menghitung skor  ~Fathi
 void hitungScore(int score, int x, int y, int isWin) {
     setcolor(WHITE);
     settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
-    char totalScore[30];
 
-    if (isWin) {
-        sprintf(totalScore, "FINAL SCORE: %d", score);
-    } else {
-        sprintf(totalScore, "SCORE: %d", score);
-    }
-
-    outtextxy(x, y, totalScore);  // Cetak di lokasi yang benar
+    char scoreText[30];
+    sprintf(scoreText, isWin ? "FINAL SCORE: %d" : "SCORE: %d", score);
+    outtextxy(x, y, scoreText);
 }
 
+// Prosedur untuk menampilkan tampilan awal
 void GameStart() {
-    char start[] = "PRESS SPACE TO PLAY THE GAME!";
-    char pacman[] = "PAC-MAN";
-    char author[] = "1B - Kelompok 2";
+    char title[] = "PAC-MAN";
+    char author[] = "1B - GROUP 2";
+    char instruction[] = "PRESS SPACE TO PLAY THE GAME!";
 
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 7);
     settextjustify(CENTER_TEXT, CENTER_TEXT);
     setcolor(YELLOW);
-    outtextxy(320, 150, pacman);
+    outtextxy(320, 150, title);
 
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
-    settextjustify(CENTER_TEXT, CENTER_TEXT);
-    setcolor(YELLOW);
     outtextxy(320, 200, author);
-    
-    while (1) { // Loop terus berjalan
-        settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
-        settextjustify(CENTER_TEXT, CENTER_TEXT);
+
+    while (1) {
         setcolor(WHITE);
-        outtextxy(320, 380, start);
+        outtextxy(320, 380, instruction);
         delay(500);
 
         setcolor(BLACK);
-        outtextxy(320, 380, start);
+        outtextxy(320, 380, instruction);
         delay(500);
 
-        if (kbhit()){
+        if (kbhit()) {
             char key = getch();
-            if (key == 32) break;
+            if (key == 32) break;  // Space key
         }
     }
-
-    cleardevice(); // Clear the screen
+    cleardevice();
 }
 
+// Prosedur untuk menampilkan kemenangan
 void GameWin() {
-    char win[] = "SELAMAT TELAH MENAMATKAN PAC-MAN!";
+    char win[] = "CONGRATULATIONS! YOU HAVE WIN THE GAME!";
     cleardevice();  // Bersihkan layar
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
     settextjustify(CENTER_TEXT, CENTER_TEXT);
@@ -115,18 +110,18 @@ void GameWin() {
     delay(3000);  // Biarkan layar menampilkan pesan kemenangan selama 3 detik
 }
 
+// Fungsi untuk menghitung dots
 int countDotsAndPowerUps() {
     int count = 0;
-    for (int i = 0; i < 24; i++) {
-        for (int j = 0; j < 32; j++) {
-            if (dots[i][j] == 1) {  // Pastikan menghitung dari array dots
-                count++;
-            }
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            if (dots[i][j] == 1) count++;  // dots[] assumed declared elsewhere
         }
     }
     return count;
 }
 
+// Prosedur untuk menampilkan game over
 int GameOver(int score) {
     char gameOverText[] = "GAME OVER!";
     char finalScoreText[30];
@@ -152,38 +147,35 @@ int GameOver(int score) {
     setcolor(YELLOW);
     outtextxy(320, 300, playAgainText);
 
-    // Tunggu input dari pemain
     while (1) {
         if (kbhit()) {
             char key = getch();
-            if (key == 'r' || key == 'R') {
-                return 1; // Restart
-            } else if (key == 'q' || key == 'Q') {
-                return 0; // Quit
-            }
+            if (key == 'r' || key == 'R') return 1;  // Restart
+            if (key == 'q' || key == 'Q') return 0;  // Quit
         }
         delay(100);
     }
 }
 
+// Prosedur untuk menampilkan nyawa ke layar
 void displayLives(Pacman *pacman) {
     int startX = 295;
+    int y = 20;
+    int size = 8;
+
     for (int i = 0; i < pacman->lives; i++) {
-        int x = startX + (i * 25); // Jarak antar love agak longgar biar rapi
-        int y = 20;
-        int size = 8;
+        int x = startX + (i * 25);
 
         setcolor(RED);
         setfillstyle(SOLID_FILL, RED);
         fillellipse(x - size / 2, y, size / 2, size / 2);
         fillellipse(x + size / 2, y, size / 2, size / 2);
 
-        // Bagian bawah (segitiga)
-        int points[] = {
+        int heartPoints[] = {
             x - size, y,
             x + size, y,
             x, y + size + 4
         };
-        fillpoly(3, points);
+        fillpoly(3, heartPoints);
     }
 }
