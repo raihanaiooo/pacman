@@ -2,26 +2,30 @@
 #define UI_H
 
 #define TILE_SIZE 20 
+#define ROWS 24
+#define COLS 32
 
 #include "pacman.h"
 
+// Prosedur untuk menggambar map
 void Map();
 
+// Prosedur untuk menghitung skor ~Fathi
 void hitungScore(int score, int x, int y, int isWin);
 
+// Prosedur untuk menampilkan tampilan awal
 void GameStart();
 
-// void GameOver();
-
+// Prosedur untuk menampilkan kemenangan
 void GameWin();
 
-void checkWin();
-
+// Fungsi untuk menghitung dots
 int countDotsAndPowerUps();
 
-// void GamePause();
+// Prosedur untuk menampilkan game over
+int GameOver(int score);
 
-// Menampilkan jumlah nyawa Pac-Man di layar
+// Prosedur untuk menampilkan nyawa ke layar ~Seruni
 void displayLives(Pacman *pacman);
 
 #endif
