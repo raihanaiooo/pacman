@@ -1,6 +1,8 @@
 #include "../header/ghost.h"
 #include "../header/ui.h"
 #include "../header/pacman.h"
+#include "../header/powerup.h"
+#include <stdlib.h>
 
 int directionX[4] = {1, -1, 0, 0}; 
 int directionY[4] = {0, 0, -1, 1};  
@@ -55,6 +57,8 @@ int isColliding(Ghost *gh, int newX, int newY) {
 }
 
 void moveGhost(Ghost *gh, Pacman *pac) {
+    if (freezeActive) return;
+
     switch (gh->hue) {
         case GREEN:  // Pie - Bergerak acak tapi tetap di jalur
             shiftGhost(gh);
@@ -75,6 +79,8 @@ void moveGhost(Ghost *gh, Pacman *pac) {
 }
 
 void shiftGhost(Ghost *gh) {
+    if (freezeActive) return;
+
     int row = gh->y / TILE_SIZE;
     int col = gh->x / TILE_SIZE;
 
@@ -245,6 +251,15 @@ int CollisionWithGhost(Pacman *p, Ghost *g) {
     int distanceSquared = dx * dx + dy * dy;
     int collisionDistance = (p->radius + g->radius) * (p->radius + g->radius);
 
+    if (distanceSquared <= collisionDistance) {
+        if (kebalActive) {
+            printf("⚡ Pac-Man kebal! Ghost akan kembali ke posisi awal.\n");
+            resetGhost(g);  // Ghost respawn ke posisi awal
+            return 0;  // Jangan hitung tabrakan sebagai kerugian bagi Pac-Man
+        }
+        return 1;  // Tabrakan normal
+    }
+    
     return (distanceSquared <= collisionDistance);  // True jika tabrakan
 }
 
