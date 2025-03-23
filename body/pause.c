@@ -15,7 +15,6 @@ void togglePause() {
 }
 /** Procedure untuk menggambar layar pause **/
 void drawPauseScreen() {
-    // cleardevice();
     /* Mendapatkan dimensi layar */
     int screenWidth = getmaxx();
     int screenHeight = getmaxy();
@@ -49,17 +48,16 @@ void drawPauseScreen() {
     outtextxy(centerX - (textwidth(teks2) / 2) + 75, centerY + (textheight(teks1) / 2), teks2);
     outtextxy(centerX - (textwidth(teks3) / 2) + 60, centerY + (textheight(teks1) / 2) + 30, teks3);
 
-    // setvisualpage(getactivepage());
     setvisualpage(1);
 }
 
-/** Fungsi untuk menangani input tombol */
+/** Fungsi untuk menangani input tombol **/
 void handleInput(char key, Pacman *pacman, Ghost ghosts[]) {
     if (key == 'P' || key == 'p') {
         togglePause();
         if (isPaused) {
-            drawPauseScreen(); // Tampilkan layar pause
-            setvisualpage(1);  // Perbarui tampilan pause
+            drawPauseScreen();
+            setvisualpage(1);
             
             while (isPaused) {
                 if (kbhit()) {
@@ -71,21 +69,20 @@ void handleInput(char key, Pacman *pacman, Ghost ghosts[]) {
                         isPaused = 0;
                         cleardevice();
                         
-                        // Reset semua variabel game
+                        /* Reset semua variabel game */
                         pacman->x = 320;
                         pacman->y = 290;
                         pacman->lives = 3;
                         
-                        setTitikDot();  // Reset titik-titik
-                        spawnPowerUps();  // Reset power-ups
+                        setTitikDot();
+                        spawnPowerUps();
                         
-                        // Reset posisi semua Ghost
                         theGhost(&ghosts[0], 320, 240, RED);
                         theGhost(&ghosts[1], 330, 240, WHITE);
                         theGhost(&ghosts[2], 310, 240, GREEN);
                         theGhost(&ghosts[3], 340, 240, CYAN);
                         
-                        // Tampilkan layar awal kembali
+                        /* Tampilkan layar awal kembali */
                         PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
                         GameStart();
                         PlaySound(NULL, NULL, 0);

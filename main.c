@@ -55,7 +55,7 @@ int main() {
         gambarDot();
         displayLives(&pacman);
 
-        // Ghost Movement
+        // **Ghost Movement**
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (ghostStepCounter[i] % ghostSpeed == 0) {
                 moveGhost(&ghosts[i], &pacman);
@@ -85,7 +85,7 @@ int main() {
             }
         }
 
-        // Cek tabrakan dengan Ghost
+        // **Cek tabrakan dengan Ghost**
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
                 updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
@@ -93,13 +93,14 @@ int main() {
             }
         }
         
-        // Kondisi jika Pac-Man habis
+        // **Kondisi jika nyawa Pac-Man habis**
         if (pacman.lives == 0) {
             setactivepage(1);
             setvisualpage(1);
             cleardevice();
 
             int isRestart = handleGameOver(&pacman, &score, ghosts, MAX_GHOSTS);
+
             if (isRestart) {
                 continue; // Restart permainan
             } else {
@@ -107,7 +108,7 @@ int main() {
             }
         }
         
-        // Kondisi jika semua dots & powerups habis
+        // **Kondisi jika semua dots & powerups habis**
         if (countDotsAndPowerUps() == 0) {
             setactivepage(1); 
             setvisualpage(1);  

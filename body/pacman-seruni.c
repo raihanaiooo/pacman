@@ -39,42 +39,28 @@ int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
 
 /* --- Fungsi updatePacmanAfterCollision --- */
 void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score) {
-    for (int i = 0; i < numGhosts; i++) {
+    pacman->lives--;
+    
+    if (pacman->lives > 0)
+    {
+        resetPacman(pacman);
+        
+        for (int i = 0; i < numGhosts; i++)
+        {
         if (CollisionWithGhost(pacman, &ghosts[i])) {
-
-            // Jika Pac-Man kebal, reset posisi Ghost tanpa mengurangi nyawa. pacman kebal dan ga ngurangin nyawa
-            if (kebalActive) {
-                printf("🔥 Pac-Man kebal! Ghost kembali ke posisi awal.\n");
-
-                // Respawn Ghost ke posisi awal
-                resetGhost(&ghosts[i]);
-                continue;  // Lewati proses pengurangan nyawa
+        
+        // Jika Pac-Man kebal, reset posisi Ghost tanpa mengurangi nyawa
+        if (kebalActive) {
+        printf("🔥 Pac-Man kebal! Ghost kembali ke posisi awal.\n");
+        
+            // Respawn Ghost ke posisi awal
+            resetGhost(&ghosts[i]);
+            continue;  // Lewati proses pengurangan nyawa
             }
-
-
-            pacman->lives--;  
-            printf("💀 Pacman terkena hantu! Sisa nyawa: %d\n", pacman->lives);
-
-            // Reset posisi semua ghost ke posisi awal setelah tabrakan
-            for (int j = 0; j < numGhosts; j++) {
-                resetGhost(&ghosts[j]);
-            }
-            
-            if (pacman->lives <= 0) {
-                if (handleGameOver(pacman, score, ghosts, numGhosts) == 0) {
-                    exit(0);
-                } else {
-                    pacman->lives = 8;
-                    pacman->x = pacman->initialX;
-                    pacman->y = pacman->initialY;
-                }
-            } else {
-                pacman->x = pacman->initialX;
-                pacman->y = pacman->initialY;
-            }
-            break;
         }
-    }
-    // Jika nyawa habis, biarkan loop utama yang urus GameOver
+        resetGhost(&ghosts[i]);
+        }
+    
+   }
+   
 }
-
