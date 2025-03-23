@@ -35,7 +35,7 @@ int main() {
     //Inisialisasi Ghost
     Ghost ghosts[MAX_GHOSTS];
     int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost
-    const int ghostSpeed = 3;  // Ghost hanya bergerak setiap 2 frame Pac-Man
+    const int ghostSpeed = 4;  // Ghost hanya bergerak setiap 4 frame Pac-Man
     theGhost(&ghosts[0], 320, 240, RED);
     theGhost(&ghosts[1], 330, 240, WHITE);
     theGhost(&ghosts[2], 310, 240, GREEN);
@@ -91,7 +91,11 @@ int main() {
 
         // Cek tabrakan dengan Ghost
         for (int i = 0; i < MAX_GHOSTS; i++) {
+<<<<<<< HEAD
             if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
+=======
+            if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
+>>>>>>> 88329a7a5152076af8848543a23b62e2b0bd0292
                 updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
                 break;
             }
