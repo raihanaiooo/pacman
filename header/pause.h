@@ -24,8 +24,6 @@ extern Ghost ghosts[MAX_GHOSTS];
 void togglePause();
 /** Procedure untuk menggambar layar pause **/
 void drawPauseScreen();
-/** Procedure untuk menjalankan permainan dalam loop **/
-void gameLoop();
 /** Procedure untuk menangani input dari pemain **/
 void handleInput(char key, Pacman *pacman, Ghost ghosts[]);
 
