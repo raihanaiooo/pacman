@@ -11,16 +11,15 @@
 #include "header/powerup.h"
 #include "header/pause.h"
 
-// ! COMPILE
-// ! g++ main.c body/pacman.c body/pacman-seruni.c body/powerup.c body/ui.c body/ghost.c body/scoring.c body/pause.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -lwinmm
-
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);
-    clock_t lastMoveTime = 0;  // Menyimpan waktu terakhir Pac-Man bergerak
-    const int moveDelay = 100; // Delay pergerakan dalam milidetik (0.1 detik)
-    int lastKey = 0;           // Variabel untuk menyimpan input terakhir
-    clock_t currentTime = clock();
+    clock_t lastMoveTime = 0;
+    const int moveDelay = 100; // Delay Pac-Man dalam ms (0.1 detik)
+    int lastKeyPressed = 0; // Menyimpan arah terakhir
+    int score = 0;
+    int page = 0; 
+
 
     // Inisialisasi titik-titik
     setTitikDot(); 
@@ -28,15 +27,11 @@ int main() {
 
     // Inisialisasi Pac-Man
     Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
-    int score = 0;
-    int page = 0;
-    int key = 0;
-    int isPaused = 0;
     
     //Inisialisasi Ghost
     Ghost ghosts[MAX_GHOSTS];
     int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost
-    const int ghostSpeed = 3;  // Ghost hanya bergerak setiap 2 frame Pac-Man
+    const int ghostSpeed = 4;  // Ghost hanya bergerak setiap 4 frame Pac-Man
     theGhost(&ghosts[0], 320, 240, RED);
     theGhost(&ghosts[1], 330, 240, WHITE);
     theGhost(&ghosts[2], 310, 240, GREEN);
@@ -51,12 +46,6 @@ int main() {
     while (pacman.lives > 0) {
         clock_t currentTime = clock();
 
-        // **Pause Handler**
-        if (isPaused) {
-            delay(100);
-            continue; 
-        }
-
         // **Game Rendering**
         setactivepage(page);
         setvisualpage(1 - page);
@@ -66,7 +55,7 @@ int main() {
         gambarDot();
         displayLives(&pacman);
 
-        // Ghost Movement
+        // **Ghost Movement**
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (ghostStepCounter[i] % ghostSpeed == 0) {
                 moveGhost(&ghosts[i], &pacman);
@@ -77,11 +66,7 @@ int main() {
          
         // **Pac-Man Movement**
         if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
-            if (key) {
-                movePacman(&pacman, key, &score);
-            } else {
-                autoMovePacman(&pacman, &score);
-            }
+            movePacman(&pacman, lastKeyPressed, &score);
             lastMoveTime = currentTime;
         }
 
@@ -92,34 +77,30 @@ int main() {
         // **Input Handling**
         if (kbhit()) {
             int newKey = getch();
-            if (newKey == 0 || newKey == 224) {
-                int arrowKey = getch();
-                if (arrowKey == 80 || arrowKey == 72 || arrowKey == 75 || arrowKey == 77) {
-                    key = arrowKey; // Simpan input hanya untuk gerakan
-                }
+            if (newKey == 0 || newKey == 224) { // Menangkap arrow key
+                newKey = getch();
+                lastKeyPressed = newKey; 
             } else {
                 handleInput(newKey, &pacman, ghosts);
             }
         }
 
-
-        if (GetAsyncKeyState(VK_ESCAPE)) break;
-
-        // Cek tabrakan dengan Ghost
+        // **Cek tabrakan dengan Ghost**
         for (int i = 0; i < MAX_GHOSTS; i++) {
-            if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
+            if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
                 updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
                 break;
             }
         }
         
-        // Kondisi jika Pac-Man habis
+        // **Kondisi jika nyawa Pac-Man habis**
         if (pacman.lives == 0) {
             setactivepage(1);
             setvisualpage(1);
             cleardevice();
 
             int isRestart = handleGameOver(&pacman, &score, ghosts, MAX_GHOSTS);
+
             if (isRestart) {
                 continue; // Restart permainan
             } else {
@@ -127,7 +108,7 @@ int main() {
             }
         }
         
-        // Kondisi jika semua dots & powerups habis
+        // **Kondisi jika semua dots & powerups habis**
         if (countDotsAndPowerUps() == 0) {
             setactivepage(1); 
             setvisualpage(1);  
@@ -149,4 +130,3 @@ int main() {
     closegraph();
     return 0;
 }
-
