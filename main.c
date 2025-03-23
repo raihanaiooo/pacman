@@ -31,7 +31,7 @@ int main() {
     //Inisialisasi Ghost
     Ghost ghosts[MAX_GHOSTS];
     int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost
-    const int ghostSpeed = 3;  // Ghost hanya bergerak setiap 3 frame Pac-Man
+    const int ghostSpeed = 4;  // Ghost hanya bergerak setiap 4 frame Pac-Man
     theGhost(&ghosts[0], 320, 240, RED);
     theGhost(&ghosts[1], 330, 240, WHITE);
     theGhost(&ghosts[2], 310, 240, GREEN);
@@ -74,21 +74,6 @@ int main() {
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
-<<<<<<< HEAD
-        // Cek tabrakan dengan semua Ghost
-        for (int i = 0; i < MAX_GHOSTS; i++) {
-            if (CollisionWithGhost(&pacman, &ghosts[i])) {
-                pacman.lives--;  // Kurangi nyawa Pac-Man
-                if (pacman.lives > 0) {
-                    pacman.x = 190;
-                    pacman.y = 190;
-                } else {
-                    outtextxy(300, 250, (char*) "Game Over!");
-                    delay(2000);
-                    closegraph();
-                    return 0;
-                }
-=======
         // **Input Handling**
         if (kbhit()) {
             int newKey = getch();
@@ -97,13 +82,12 @@ int main() {
                 lastKeyPressed = newKey; 
             } else {
                 handleInput(newKey, &pacman, ghosts);
->>>>>>> main
             }
         }
 
         // Cek tabrakan dengan Ghost
         for (int i = 0; i < MAX_GHOSTS; i++) {
-            if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
+            if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
                 updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
                 break;
             }

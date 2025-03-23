@@ -27,21 +27,15 @@ typedef struct Ghost {
 
 extern int maze[24][32];
 
-<<<<<<< HEAD
 void theGhost(Ghost *gh, int x, int y, int hue);            // Inisialisasi Ghost
 void designGhost(Ghost *gh);                                // Pengaturan bentuk dan warna Ghost
 void moveGhost(Ghost *gh, Pacman *pac);                     // Case karakteristik setiap Ghost
 void shiftGhost(Ghost *gh);                                 // Karakteristik gerakan acak
-void pursuePacman(Ghost *gh, Pacman *pac);                   // Karakteristik mengejar
-void escapePacman(Ghost *gh, Pacman *pac);             // Karakteristik menjauh (Teknik Ancaman)
+void pursuePacman(Ghost *gh, Pacman *pac);                  // Karakteristik mengejar
+void escapePacman(Ghost *gh, Pacman *pac);                  // Karakteristik menjauh (Teknik Ancaman)
 void blockPacman(Ghost *gh, Pacman *pac);                   // Karakteristik memotong jalur
 void resetGhost(Ghost *gh);                                 // Posisi Reset
 int isColliding(Ghost *gh, int newX, int newY);             // Cek tabrakan dengan dinding
-int CollisionWithGhost(Pacman *pacman, Ghost *ghost);  // Cek tabrakan dengan Pacman
+int CollisionWithGhost(Pacman *pacman, Ghost *ghost);       // Cek tabrakan dengan Pacman
 
-=======
-// Fungsi baru untuk reset ghost ke posisi awal
-void resetGhost(Ghost *gh);
-void pursuePacman(Ghost *gh, Pacman *pac);
->>>>>>> main
 #endif
