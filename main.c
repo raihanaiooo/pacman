@@ -18,38 +18,38 @@
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);
-    clock_t lastMoveTime = 0;  // Menyimpan waktu terakhir Pac-Man bergerak
-    const int moveDelay = 100; // Delay pergerakan dalam milidetik (0.1 detik)
-    int key = 0;           // Variabel untuk menyimpan input terakhir
-    clock_t currentTime = clock();
+    clock_t lastMoveTime = 0;
+    const int moveDelay = 100; // Delay Pac-Man dalam ms (0.1 detik)
+    int lastKeyPressed = 0; // Menyimpan arah terakhir
+    int score = 0;
+    int page = 0; 
 
-    setTitikDot(); // Inisialisasi titik-titik
+    // Inisialisasi PowerUp dan Dot
+    setTitikDot();
     spawnPowerUps();
 
+    // Inisialisasi Pac-Man
+    Pacman pacman = {190, 190, 8, 0, 8, 190, 190};  
+
+    // Inisialisasi Ghosts
     Ghost ghosts[MAX_GHOSTS];
-    int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost
-    const int ghostSpeed = 3;  // Ghost hanya bergerak setiap 2 frame Pac-Man
+    int ghostStepCounter[MAX_GHOSTS] = {0};  
+    const int ghostSpeed = 3;  
     theGhost(&ghosts[0], 320, 240, RED);
     theGhost(&ghosts[1], 330, 240, WHITE);
     theGhost(&ghosts[2], 310, 240, GREEN);
     theGhost(&ghosts[3], 340, 240, CYAN);
 
-    // Update initializer pacman: tambahkan initialX dan initialY
-    Pacman pacman = {190, 190, 8, 0, 8, 190, 190};  // ADDED: Inisialisasi nyawa Pac-Man menjadi 8
-    int score = 0;
-    int page = 0; 
+    // Musik Start
+    PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+    GameStart(); 
+    PlaySound(NULL, NULL, 0);  
 
-    PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
-    GameStart(); // Tampilan awal
-    PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
-
-    //di bawah gameloop
+    // Game Loop
     while (pacman.lives > 0) {
-        currentTime = clock();
+        clock_t currentTime = clock();
 
-
-
-        // **Game Rendering**
+        // **Render Frame**
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
@@ -57,41 +57,46 @@ int main() {
         drawPowerUps();
         gambarDot();
 
+        // **Ghost Movement**
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (ghostStepCounter[i] % ghostSpeed == 0) {
                 moveGhost(&ghosts[i], &pacman);
             }
             designGhost(&ghosts[i]);
-            ghostStepCounter[i]++;  // Tambahkan step counter untuk Ghost ini
+            ghostStepCounter[i]++;
         }
-         
 
         // **Pac-Man Movement**
-        if ((clock() - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
-            movePacman(&pacman, key, &score);
-            lastMoveTime = clock(); // Update waktu terakhir
-            key = 0; // Reset key setelah digunakan
+        if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
+            movePacman(&pacman, lastKeyPressed, &score);
+            lastMoveTime = currentTime;
         }
 
         drawPacman(&pacman);
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
-        //** Pause handler */
+        // **Keyboard Input**
         if (kbhit()) {
-            char key = getch();
-            handleInput(key, &pacman, ghosts);
+            int newKey = getch();
+            if (newKey == 0 || newKey == 224) { // Menangkap arrow key
+                newKey = getch();
+                lastKeyPressed = newKey; 
+            } else {
+                handleInput(newKey, &pacman, ghosts);
+            }
         }
-        
+
+        // **Pause Handler**
         if (isPaused) {
             delay(100);
-            continue; // Jika game di-pause, lewati loop utama
+            continue; 
         }
-         
-        // Cek tabrakan dengan semua Ghost
+
+        // **Cek Collision dengan Ghost**
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (checkCollisionWithGhost(&pacman, &ghosts[i])) {
-                pacman.lives--;  // Kurangi nyawa Pac-Man
+                pacman.lives--;  
                 if (pacman.lives > 0) {
                     pacman.x = 190;
                     pacman.y = 190;
@@ -103,13 +108,12 @@ int main() {
                 }
             }
         }
-    //di atas delay
 
-        delay(50);
+        // **Update Frame**
+        delay(10); // Delay lebih kecil agar game lebih smooth
         page = 1 - page;
     }
 
     closegraph();
     return 0; 
 }
-
