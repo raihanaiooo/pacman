@@ -130,26 +130,3 @@ int countDotsAndPowerUps() {
     }
     return count;
 }
-
-
-
-
-// void GamePause() {
-//     // Menampilkan teks pause di halaman yang sedang ditampilkan
-//     int page =  0;
-//     setvisualpage(page);
-//     setactivepage(1 - page);  // Gunakan halaman yang tidak terlihat
-//     char pause[] = "PAUSED - Press SPACE to continue";
-//     setcolor(WHITE);
-//     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
-//     outtextxy(200, 200, pause);
-//     while (1) { 
-//         if (kbhit()) { 
-//             char key = getch(); 
-//             if (key == 32){ // Jika SPACE ditekan, keluar dari pause
-//                 setvisualpage(page);
-//                 setactivepage(page);
-//             }
-//         }
-//     }
-// }

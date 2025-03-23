@@ -20,7 +20,7 @@ int main() {
     initgraph(&gd, &gm, NULL);
     clock_t lastMoveTime = 0;  // Menyimpan waktu terakhir Pac-Man bergerak
     const int moveDelay = 100; // Delay pergerakan dalam milidetik (0.1 detik)
-    int lastKey = 0;           // Variabel untuk menyimpan input terakhir
+    int key = 0;           // Variabel untuk menyimpan input terakhir
     clock_t currentTime = clock();
 
     setTitikDot(); // Inisialisasi titik-titik
@@ -37,33 +37,17 @@ int main() {
     // Update initializer pacman: tambahkan initialX dan initialY
     Pacman pacman = {190, 190, 8, 0, 8, 190, 190};  // ADDED: Inisialisasi nyawa Pac-Man menjadi 8
     int score = 0;
-    int page = 0;
-    int key = 0;
-    
-    // resetGame(&pacman, ghosts, &score);
+    int page = 0; 
 
     PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
     GameStart(); // Tampilan awal
     PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
 
+    //di bawah gameloop
     while (pacman.lives > 0) {
         currentTime = clock();
 
-        // **Pause Handling**
-        if (isPaused) {
-            drawPauseScreen();     // Tampilkan layar pause
-            setvisualpage(page);   // Update tampilan
-            while (isPaused) {
-                if (kbhit()) {
-                    int newKey = getch();
-                    if (newKey == 'p' || newKey == 'P') {
-                        isPaused = 0; // Resume game
-                    }
-                }
-                delay(100); // Hindari penggunaan CPU tinggi
-            }
-            continue;  // Langsung lanjut loop utama tanpa update game
-        }
+
 
         // **Game Rendering**
         setactivepage(page);
@@ -82,20 +66,6 @@ int main() {
         }
          
 
-        // **Input Handling**
-        if (kbhit()) {
-            int newKey = getch();
-            if (newKey == 0 || newKey == 224) {
-                int arrowKey = getch();
-                if (arrowKey == 80 || arrowKey == 72 || arrowKey == 75 || arrowKey == 77) {
-                    key = arrowKey; // Simpan input hanya untuk gerakan
-                }
-            } else if (newKey == 'p' || newKey == 'P') {
-                isPaused = 1; // Pause game
-                continue;
-            }
-        }
-
         // **Pac-Man Movement**
         if ((clock() - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
             movePacman(&pacman, key, &score);
@@ -107,6 +77,17 @@ int main() {
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
+        //** Pause handler */
+        if (kbhit()) {
+            char key = getch();
+            handleInput(key, &pacman, ghosts);
+        }
+        
+        if (isPaused) {
+            delay(100);
+            continue; // Jika game di-pause, lewati loop utama
+        }
+         
         // Cek tabrakan dengan semua Ghost
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (checkCollisionWithGhost(&pacman, &ghosts[i])) {
@@ -122,7 +103,7 @@ int main() {
                 }
             }
         }
-    
+    //di atas delay
 
         delay(50);
         page = 1 - page;
