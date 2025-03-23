@@ -42,7 +42,7 @@ int handleGameOver(Pacman *pacman) {
 
 void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
     for (int i = 0; i < numGhosts; i++) {
-        if (checkCollisionWithGhost(pacman, &ghosts[i])) {
+        if (CollisionWithGhost(pacman, &ghosts[i])) {
             pacman->lives--;  
             printf("💀 Pacman terkena hantu! Sisa nyawa: %d\n", pacman->lives);
 
