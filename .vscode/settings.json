@@ -61,6 +61,7 @@
 		"ui.h": "c",
 		"powerup.h": "c",
 		"game-over-screen.h": "c",
-		"graphics.h": "c"
+		"graphics.h": "c",
+		"time.h": "c"
 	}
 }
