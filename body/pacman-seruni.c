@@ -8,16 +8,17 @@
 #include "../header/ui.h"
 #include "../header/powerup.h"
 
-/* --- Fungsi dari pacman-seruni.c --- */
+/* Modul logic pengurangan nyawa Pacman */
 
-// Fungsi resetPacman: menghapus tampilan pacman lama, mereset posisinya, dan menggambarnya ulang.
+// Prosedur resetPacman: menghapus tampilan pacman lama, mereset posisinya, dan menggambarnya ulang
 void resetPacman(Pacman *p) {
-    clearPacman(p);               // Hapus tampilan pacman lama
-    p->x = p->initialX;           // Reset posisi x
-    p->y = p->initialY;           // Reset posisi y
-    drawPacman(p);                // Gambar ulang pacman di posisi awal
+    clearPacman(p);               // Menghapus tampilan pacman lama
+    p->x = p->initialX;           // Mereset posisi x
+    p->y = p->initialY;           // Mereset posisi y
+    drawPacman(p);                // Menggambar ulang pacman di posisi awal
 }
 
+// Fungsi handle game over
 int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
     int playAgain = GameOver(*score);
     if (playAgain) {
@@ -37,12 +38,12 @@ int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
     }
 }
 
-/* --- Fungsi updatePacmanAfterCollision --- */
+// Prosedure respawn pacman 
 void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score) {
     pacman->lives--;
     
-    if (pacman->lives > 0)
-    {
+    if (pacman->lives > 0) {
+    
         resetPacman(pacman);
         
         for (int i = 0; i < numGhosts; i++)

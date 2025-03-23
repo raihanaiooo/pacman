@@ -263,6 +263,7 @@ int CollisionWithGhost(Pacman *p, Ghost *g) {
     return (distanceSquared <= collisionDistance);  // True jika tabrakan
 }
 
+// prosedur reset ghost 
 void resetGhost(Ghost *gh) {
     gh->x = gh->initialX;
     gh->y = gh->initialY;

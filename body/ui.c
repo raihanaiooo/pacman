@@ -176,6 +176,6 @@ void displayLives(Pacman *pacman) {
             x + size, y,
             x, y + size + 4
         };
-        fillpoly(3, heartPoints);
+        fillpoly(3, heartPoints); // Tampilan 3 nyawa berbentuk hati 
     }
 }
