@@ -111,11 +111,8 @@ void GameWin() {
     setcolor(YELLOW);
     outtextxy(320, 240, win);
 
-
     PlaySound("sound/pacman_AwvgsBv.wav", NULL, SND_FILENAME | SND_ASYNC);
     delay(3000);  // Biarkan layar menampilkan pesan kemenangan selama 3 detik
-    // closegraph();  // Tutup window
-    // exit(0);  // Keluar dari permainan
 }
 
 int countDotsAndPowerUps() {
@@ -160,11 +157,33 @@ int GameOver(int score) {
         if (kbhit()) {
             char key = getch();
             if (key == 'r' || key == 'R') {
-                return 1; // Restart game
+                return 1; // Restart
             } else if (key == 'q' || key == 'Q') {
-                return 0; // Quit game
+                return 0; // Quit
             }
         }
+        delay(100);
     }
 }
 
+void displayLives(Pacman *pacman) {
+    int startX = 295;
+    for (int i = 0; i < pacman->lives; i++) {
+        int x = startX + (i * 25); // Jarak antar love agak longgar biar rapi
+        int y = 20;
+        int size = 8;
+
+        setcolor(RED);
+        setfillstyle(SOLID_FILL, RED);
+        fillellipse(x - size / 2, y, size / 2, size / 2);
+        fillellipse(x + size / 2, y, size / 2, size / 2);
+
+        // Bagian bawah (segitiga)
+        int points[] = {
+            x - size, y,
+            x + size, y,
+            x, y + size + 4
+        };
+        fillpoly(3, points);
+    }
+}

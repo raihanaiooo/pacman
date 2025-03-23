@@ -1,7 +1,3 @@
-// ! =================================== compile ==================================================================================================
-// ! g++ main.c body/pacman.c body/powerup.c body/ui.c body/ghost.c body/scoring.c -o pacman.exe -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32
-// ! ==============================================================================================================================================
-
 #include <stdio.h>
 #include <graphics.h>
 #include <time.h>
@@ -37,7 +33,7 @@ int main() {
     theGhost(&ghosts[2], 310, 240, GREEN);
     theGhost(&ghosts[3], 340, 240, CYAN);
 
-    Pacman pacman = {190, 190, 8, 0, 3}; // Pac-Man dengan 3 nyawa
+    Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
     int score = 0;
     int page = 0;
     int key = 0;
@@ -71,8 +67,7 @@ int main() {
         Map();
         drawPowerUps();
         gambarDot();
-
-        
+        displayLives(&pacman);
 
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (ghostStepCounter[i] % ghostSpeed == 0) {
@@ -124,26 +119,21 @@ int main() {
         if (GetAsyncKeyState(VK_ESCAPE)) break;
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
-                pacman.lives--;
-                pacman.x = 200;
-                pacman.y = 200;
+                updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
+                break;
             }
         }
+        
+        if (pacman.lives == 0) {
+            setactivepage(1);
+            setvisualpage(1);
+            cleardevice();
 
-        if (pacman.lives <= 0) {
-            int playAgain = GameOver(score); // Panggil fungsi GameOver dan simpan hasilnya
-            if (playAgain) {
-                // Reset permainan jika pemain memilih untuk bermain lagi
-                pacman.lives = 3;
-                pacman.x = 190;
-                pacman.y = 190;
-                score = 0;
-                key = 0;
-                setTitikDot(); // Reset titik-titik
-                spawnPowerUps(); // Reset power-ups
-                continue; // Kembali ke awal loop utama
+            int isRestart = handleGameOver(&pacman, &score, ghosts, MAX_GHOSTS);
+            if (isRestart) {
+                continue; // Restart permainan
             } else {
-                break; // Keluar dari loop utama jika pemain memilih untuk keluar
+                break; // Keluar dari loop utama
             }
         }
 
@@ -170,4 +160,5 @@ int main() {
 
     closegraph();
     return 0;
-    }
+}
+

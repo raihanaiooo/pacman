@@ -21,35 +21,29 @@ void drawPauseScreen() {
     int boxX2 = boxX1 + boxWidth;
     int boxY2 = boxY1 + boxHeight;
 
-    // Kotak semi-transparan
+    char teks1[] = "Game Paused";
+    char teks2[] = "Press P to Resume";
+
+    // Kotak hitam semi-transparan di tengah
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, BLACK);
     bar(boxX1, boxY1, boxX2, boxY2);
-    rectangle(boxX1, boxY1, boxX2, boxY2); // Kotak tepi
-    
-    // Teks pause
-    char teks1[] = "Game Paused";
-    char teks2[] = "Press P to resume";
+    rectangle(boxX1, boxY1, boxX2, boxY2);
 
+    // Set text style
     settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
-    
-    int teks1Width = textwidth(teks1);
-    int teks1Height = textheight(teks1);
-    int teks2Width = textwidth(teks2);
-    int teks2Height = textheight(teks2);
-
-    int textX1 = boxX1 + (boxWidth - teks1Width) / 2;
-    int textX2 = boxX1 + (boxWidth - teks2Width) / 2;
-    int textY1 = boxY1 + (boxHeight / 3) - (teks1Height / 2);
-    int textY2 = boxY1 + (2 * boxHeight / 3) - (teks2Height / 2);
-
     setcolor(WHITE);
-    outtextxy(textX1, textY1, teks1);
-    outtextxy(textX2, textY2, teks2);
 
+    // Set text justify ke tengah-tengah
+    settextjustify(CENTER_TEXT, CENTER_TEXT);
+
+    // Tulis teks tepat di tengah kotak
+    outtextxy(screenWidth / 2, screenHeight / 2 - 20, teks1);
+    outtextxy(screenWidth / 2, screenHeight / 2 + 20, teks2);
+
+    // Update tampilan
     setvisualpage(getactivepage());
 }
-
 
 
 void gameLoop() {
@@ -67,7 +61,6 @@ void gameLoop() {
         
         if (!isPaused) {
             movePacman(&pacman, ' ', &score);
-            autoMovePacman(&pacman, &score);
             for (int i = 0; i < MAX_GHOSTS; i++) {
                 moveGhost(&ghosts[i], &pacman);
             }

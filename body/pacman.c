@@ -93,6 +93,7 @@ void autoMovePacman(Pacman *p, int *score) {
         newX = 0; // Teleport ke sisi kiri
     }
 
+    // Jika tidak bertabrakan, lakukan pergerakan
     if (!isColliding(p, newX, newY)) {
         clearPacman(p);
         p->x = newX;
@@ -102,4 +103,5 @@ void autoMovePacman(Pacman *p, int *score) {
         checkPowerUpCollision(p->x, p->y);
     }
 }
+
 

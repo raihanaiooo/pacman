@@ -4,9 +4,9 @@
 #include <graphics.h>
 #include "../header/pacman.h"
 #include "../header/ghost.h"
-#include "../header/lives-display.h"
 #include "../header/scoring.h"
 #include "../header/ui.h"
+#include "../header/powerup.h"
 
 /* --- Fungsi dari pacman-seruni.c --- */
 
@@ -18,29 +18,38 @@ void resetPacman(Pacman *p) {
     drawPacman(p);                // Gambar ulang pacman di posisi awal
 }
 
+int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
+    int playAgain = GameOver(*score);
+    if (playAgain) {
+        // Reset seluruh game state
+        resetPacman(pacman);
+        for (int i = 0; i < numGhosts; i++) {
+            resetGhost(&ghosts[i]);
+        }
+        *score = 0;
+        pacman->lives = 3;
+        setTitikDot();     // Reset dots
+        spawnPowerUps();   // Reset power-ups
+        return 1; // Main lagi
+    } else {
+        closegraph();
+        exit(0);
+    }
+}
+
+
 /* --- Fungsi updatePacmanAfterCollision --- */
 
 void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score) {
-    for (int i = 0; i < numGhosts; i++) {
-        if (checkCollisionWithGhost(pacman, &ghosts[i])) {
-            pacman->lives--;  
-            printf("💀 Pacman terkena hantu! Sisa nyawa: %d\n", pacman->lives);
+    pacman->lives--;
 
-            // Reset posisi semua ghost ke posisi awal setelah tabrakan
-            for (int j = 0; j < numGhosts; j++) {
-                resetGhost(&ghosts[j]);
-            }
-            
-            if (pacman->lives <= 0) {
-                GameOver(*score);
-                resetPacman(pacman);
-                // resetPowerUps();
-                // resetLives(pacman);
-                score = 0;
-            } else {
-                resetPacman(pacman);
-            }
-            break;
+    if (pacman->lives > 0) {
+        // Nyawa masih ada, reset posisi tanpa GameOver
+        resetPacman(pacman);
+        for (int i = 0; i < numGhosts; i++) {
+            resetGhost(&ghosts[i]);
         }
     }
+    // Jika nyawa habis, biarkan loop utama yang urus GameOver
 }
+

@@ -187,3 +187,15 @@ void resetGhost(Ghost *gh) {
     gh->x = gh->initialX;
     gh->y = gh->initialY;
 }
+
+void pursuePacman(Ghost *gh, Pacman *pac) {
+    int rowG = gh->y / TILE_SIZE;
+    int colG = gh->x / TILE_SIZE;
+    int rowP = pac->y / TILE_SIZE;
+    int colP = pac->x / TILE_SIZE;
+
+    if (rowG < rowP && !isColliding(gh, gh->x, gh->y + TILE_SIZE)) gh->y += TILE_SIZE;
+    else if (rowG > rowP && !isColliding(gh, gh->x, gh->y - TILE_SIZE)) gh->y -= TILE_SIZE;
+    else if (colG < colP && !isColliding(gh, gh->x + TILE_SIZE, gh->y)) gh->x += TILE_SIZE;
+    else if (colG > colP && !isColliding(gh, gh->x - TILE_SIZE, gh->y)) gh->x -= TILE_SIZE;
+}

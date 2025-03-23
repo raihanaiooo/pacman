@@ -26,5 +26,5 @@ int checkCollisionWithGhost(Pacman *pacman, Ghost *ghost);
 
 // Fungsi baru untuk reset ghost ke posisi awal
 void resetGhost(Ghost *gh);
-
+void pursuePacman(Ghost *gh, Pacman *pac);
 #endif
