@@ -91,11 +91,7 @@ int main() {
 
         // Cek tabrakan dengan Ghost
         for (int i = 0; i < MAX_GHOSTS; i++) {
-<<<<<<< HEAD
-            if (!doublePointActive && checkCollisionWithGhost(&pacman, &ghosts[i])) {
-=======
             if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
->>>>>>> 88329a7a5152076af8848543a23b62e2b0bd0292
                 updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
                 break;
             }

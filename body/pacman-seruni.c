@@ -39,11 +39,8 @@ int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
 
 /* --- Fungsi updatePacmanAfterCollision --- */
 void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score) {
-    pacman->lives--;
-
-void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
     for (int i = 0; i < numGhosts; i++) {
-        if (checkCollisionWithGhost(pacman, &ghosts[i])) {
+        if (CollisionWithGhost(pacman, &ghosts[i])) {
 
             // Jika Pac-Man kebal, reset posisi Ghost tanpa mengurangi nyawa. pacman kebal dan ga ngurangin nyawa
             if (kebalActive) {
@@ -64,7 +61,7 @@ void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts) {
             }
             
             if (pacman->lives <= 0) {
-                if (handleGameOver(pacman) == 0) {
+                if (handleGameOver(pacman, score, ghosts, numGhosts) == 0) {
                     exit(0);
                 } else {
                     pacman->lives = 8;
