@@ -8,32 +8,6 @@
 extern int maze[ROWS][COLS];
 #define TILE_SIZE 20
 
-/** Prosedur untuk mengecek apakah Pacman bertabrakan dengan dinding dalam labirin **/ 
-// int isColliding(Pacman *p, int newX, int newY) {
-//     /* Mengecek koordinat x dan y untuk arah pergerakan Pacman */
-//     int checkX = newX; 
-//     int checkY = newY;
-
-//     /*  Menyesuaikan titik pemeriksaan berdasarkan arah pergerakan Pacman */
-//     switch (p->direction) {
-//     case 0: checkX += p->radius; break; // Ke kanan
-//     case 1: checkX -= p->radius; break; // Ke kiri
-//     case 2: checkY -= p->radius; break; // Ke atas
-//     case 3: checkY += p->radius; break; // Ke bawah
-//     }
-
-//     /* Menghitung kolom dan baris dalam grid labirin berdasarkan koordinat yang diperiksa */ 
-//     int col = checkX / TILE_SIZE;
-//     int row = checkY / TILE_SIZE;
-
-//     /* Jika koordinat keluar dari batas labirin, anggap bertabrakan */
-//     if (row < 0 || row >= 25 || col < 0 || col >= 32) {
-//         return 1; // Tabrakan terjadi
-//     }
-
-//     /* Jika sel di labirin memiliki nilai 2, maka terjadi tabrakan */
-//     return (maze[row][col] == 2);
-// }
 
 /** Prosedur untuk menggambar Pacman di layar **/
 void drawPacman(Pacman *p) {
