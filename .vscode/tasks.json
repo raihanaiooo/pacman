@@ -8,6 +8,7 @@
 			"args": [
 				"body/collision-raihana.c",
 				"body/ghost.c",
+				"body/leaderboard-raihana.c",
 				"body/pacman-raihana.c",
 				"body/pacman-seruni.c",
 				"body/pause.c",

@@ -2,6 +2,7 @@
 #include <graphics.h>
 #include <conio.h>
 #include "../header/ui.h"
+#include "../header/leaderboard.h"
 #include "../header/scoring.h"
 
 #define TILE_SIZE 20
@@ -80,6 +81,7 @@ void GameStart() {
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
     outtextxy(320, 200, author);
 
+    displayLeaderboard();
     while (1) {
         setcolor(WHITE);
         outtextxy(320, 380, instruction);
@@ -126,23 +128,51 @@ int GameOver(int score) {
     char gameOverText[] = "GAME OVER!";
     char finalScoreText[30];
     char playAgainText[] = "PRESS 'R' TO PLAY AGAIN OR 'Q' TO QUIT";
+    char name[50] = "";
+    int nameIndex = 0;
 
-    // Bersihkan layar
     cleardevice();
 
-    // Tampilkan teks "GAME OVER"
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 5);
     settextjustify(CENTER_TEXT, CENTER_TEXT);
     setcolor(RED);
-    outtextxy(320, 150, gameOverText);
+    outtextxy(320, 100, gameOverText);
 
-    // Tampilkan skor akhir
     sprintf(finalScoreText, "FINAL SCORE: %d", score);
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
     setcolor(WHITE);
-    outtextxy(320, 200, finalScoreText);
+    outtextxy(320, 150, finalScoreText);
 
-    // Tampilkan pilihan untuk bermain lagi atau keluar
+    // Input nama pemain
+    setcolor(LIGHTCYAN);
+    char text[] = "ENTER YOUR NAME";
+    outtextxy(320, 200, text);
+
+    while (1) {
+        setcolor(WHITE);
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+        // outtextxy(320, 230, "                         ");  // clear line
+        outtextxy(320, 230, name);
+
+        if (kbhit()) {
+            char ch = getch();
+            if (ch == 13) break;  // ENTER untuk konfirmasi nama
+            else if (ch == 8 && nameIndex > 0) {
+                nameIndex--;
+                name[nameIndex] = '\0';
+            }
+            else if (nameIndex < 20 && ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) {
+                name[nameIndex++] = ch;
+                name[nameIndex] = '\0';
+            }
+        }
+        delay(100);
+    }
+
+    // Simpan ke leaderboard
+    updateLeaderboard(name, score);
+
+    // Tampilkan instruksi lanjut
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 1);
     setcolor(YELLOW);
     outtextxy(320, 300, playAgainText);
@@ -156,7 +186,6 @@ int GameOver(int score) {
         delay(100);
     }
 }
-
 // Prosedur untuk menampilkan nyawa ke layar
 void displayLives(Pacman *pacman) {
     int startX = 295;

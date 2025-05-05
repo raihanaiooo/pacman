@@ -28,4 +28,6 @@ int GameOver(int score);
 // Prosedur untuk menampilkan nyawa ke layar ~Seruni
 void displayLives(Pacman *pacman);
 
+
+
 #endif

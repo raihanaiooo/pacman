@@ -14,7 +14,7 @@
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);
-    clock_t lastMoveTime = 0;
+    clock_t lastMoveTime = 0; 
     const int moveDelay = 100; // Delay Pac-Man dalam ms (0.1 detik)
     int lastKeyPressed = 0; // Menyimpan arah terakhir
     int score = 0;
