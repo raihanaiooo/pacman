@@ -2,6 +2,7 @@
 #include "../header/ui.h"
 #include "../header/pacman.h"
 #include "../header/powerup.h"
+#include "../header/collision.h"
 #include <stdlib.h>
 
 int directionX[4] = {1, -1, 0, 0}; 
@@ -87,29 +88,27 @@ void shiftGhost(Ghost *gh) {
     int possibleDirections[4][2];  
     int directionCount = 0;
 
-    // Mengecek arah yang bisa ditempuh (tidak menabrak dinding)
-    if (row > 0 && !isColliding(gh, gh->x, gh->y - TILE_SIZE)) {  // Atas
+    if (row > 0 && !isColliding(gh->x, gh->y - TILE_SIZE, 0, -1)) {  // Atas
         possibleDirections[directionCount][0] = 0;
         possibleDirections[directionCount][1] = -1;
         directionCount++;
     }
-    if (row < 23 && !isColliding(gh, gh->x, gh->y + TILE_SIZE)) {  // Bawah
+    if (row < 23 && !isColliding(gh->x, gh->y + TILE_SIZE, 0, -1)) {  // Bawah
         possibleDirections[directionCount][0] = 0;
         possibleDirections[directionCount][1] = 1;
         directionCount++;
     }
-    if (col > 0 && !isColliding(gh, gh->x - TILE_SIZE, gh->y)) {  // Kiri
+    if (col > 0 && !isColliding(gh->x - TILE_SIZE, gh->y, 0, -1)) {  // Kiri
         possibleDirections[directionCount][0] = -1;
         possibleDirections[directionCount][1] = 0;
         directionCount++;
     }
-    if (col < 31 && !isColliding(gh, gh->x + TILE_SIZE, gh->y)) {  // Kanan
+    if (col < 31 && !isColliding(gh->x + TILE_SIZE, gh->y, 0, -1)) {  // Kanan
         possibleDirections[directionCount][0] = 1;
         possibleDirections[directionCount][1] = 0;
         directionCount++;
     }
 
-    // Menghindari kembali ke jalur sebelumnya kecuali jika tidak ada pilihan lain
     if (directionCount > 1) {
         for (int i = 0; i < directionCount; i++) {
             if (possibleDirections[i][0] == -gh->lastDirX && possibleDirections[i][1] == -gh->lastDirY) {
@@ -121,7 +120,6 @@ void shiftGhost(Ghost *gh) {
         }
     }
 
-    // Memilih arah secara acak dari opsi yang tersedia
     int randomIndex = rand() % directionCount;
     gh->lastDirX = possibleDirections[randomIndex][0];
     gh->lastDirY = possibleDirections[randomIndex][1];
@@ -196,17 +194,16 @@ void blockPacman(Ghost *gh, Pacman *pac) {
     int dx = targetX - gh->x;
     int dy = targetY - gh->y;
 
-    // Pilih arah terbaik yang tidak terhalang dinding
     if (abs(dx) > abs(dy)) {
-        if (!isColliding(gh, gh->x + (dx > 0 ? TILE_SIZE : -TILE_SIZE), gh->y)) {
+        if (!isColliding(gh->x + (dx > 0 ? TILE_SIZE : -TILE_SIZE), gh->y, 0, -1)) {
             gh->x += (dx > 0 ? TILE_SIZE : -TILE_SIZE);
-        } else if (!isColliding(gh, gh->x, gh->y + (dy > 0 ? TILE_SIZE : -TILE_SIZE))) {
+        } else if (!isColliding(gh->x, gh->y + (dy > 0 ? TILE_SIZE : -TILE_SIZE), 0, -1)) {
             gh->y += (dy > 0 ? TILE_SIZE : -TILE_SIZE);
         }
     } else {
-        if (!isColliding(gh, gh->x, gh->y + (dy > 0 ? TILE_SIZE : -TILE_SIZE))) {
+        if (!isColliding(gh->x, gh->y + (dy > 0 ? TILE_SIZE : -TILE_SIZE), 0, -1)) {
             gh->y += (dy > 0 ? TILE_SIZE : -TILE_SIZE);
-        } else if (!isColliding(gh, gh->x + (dx > 0 ? TILE_SIZE : -TILE_SIZE), gh->y)) {
+        } else if (!isColliding(gh->x + (dx > 0 ? TILE_SIZE : -TILE_SIZE), gh->y, 0, -1)) {
             gh->x += (dx > 0 ? TILE_SIZE : -TILE_SIZE);
         }
     }
@@ -217,21 +214,19 @@ void escapePacman(Ghost *gh, Pacman *pac) {
     int dy = pac->y - gh->y;
     float distance = sqrt(dx * dx + dy * dy);
 
-    // Mengecek jika Clyde terlalu dekat dengan Pac-Man, dia akan mencoba menjauh
     if (distance < 8 * TILE_SIZE) {
-        int possibleDirections[4][2] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};  // Atas, bawah, kiri, kanan
+        int possibleDirections[4][2] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
         int validDirections[4];
         int validCount = 0;
 
         for (int i = 0; i < 4; i++) {
             int newX = gh->x + possibleDirections[i][0] * TILE_SIZE;
             int newY = gh->y + possibleDirections[i][1] * TILE_SIZE;
-            if (!isColliding(gh, newX, newY)) {
+            if (!isColliding(newX, newY, 0, -1)) {
                 validDirections[validCount++] = i;  
             }
         }
 
-        // Jika ada arah yang valid, pilih satu secara acak
         if (validCount > 0) {
             int randomIndex = rand() % validCount;
             gh->x += possibleDirections[validDirections[randomIndex]][0] * TILE_SIZE;
@@ -243,6 +238,7 @@ void escapePacman(Ghost *gh, Pacman *pac) {
         shiftGhost(gh);  
     }
 }
+
 
 // Fungsi untuk mengecek tabrakan antara Pac-Man dan Ghost
 int CollisionWithGhost(Pacman *p, Ghost *g) {

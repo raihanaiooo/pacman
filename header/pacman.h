@@ -17,7 +17,7 @@ typedef struct Ghost Ghost;
 void drawPacman(Pacman *p);
 void clearPacman(Pacman *p);
 void movePacman(Pacman *p, int key, int *score);
-int isColliding(Pacman *p, int newX, int newY);
+// int isColliding(Pacman *p, int newX, int newY);
 
 // Deklarasi fungsi untuk reset dan update pacman
 void resetPacman(Pacman *p);
