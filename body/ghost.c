@@ -264,7 +264,7 @@ int CollisionWithGhost(Pacman *p, Ghost *g) {
 }
 
 // prosedur reset ghost 
-void resetGhost(Ghost *gh) {
-    gh->x = gh->initialX;
-    gh->y = gh->initialY;
-}
+// void resetGhost(Ghost *gh) {
+// gh->x = gh->initialX;
+// gh->y = gh->initialY;
+// } (DIHAPUS)

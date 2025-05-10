@@ -36,6 +36,9 @@ int isColliding(Pacman *p, int newX, int newY) {
 
 /** Prosedur untuk menggambar Pacman di layar **/
 void drawPacman(Pacman *p) {
+    if (p->currentFrame) p->currentFrame = p->currentFrame->next; //izin nambahin
+    Frame *f = p->currentFrame; //izin nambahin
+    
     /* Menggambar Pacman */
     setcolor(YELLOW);
     setfillstyle(SOLID_FILL, BLACK);
@@ -46,12 +49,21 @@ void drawPacman(Pacman *p) {
     setfillstyle(SOLID_FILL, YELLOW);
 
     /* Menggambar mulut Pacman dengan bentuk terbuka sesuai arah pergerakannya */
-    switch (p->direction) {
-    case 0: pieslice(p->x, p->y, 30, 330, p->radius); break;  // Ke kanan
-    case 1: pieslice(p->x, p->y, 210, 150, p->radius); break; // Ke kiri
-    case 2: pieslice(p->x, p->y, 120, 60, p->radius); break;  // Ke atas
-    case 3: pieslice(p->x, p->y, 300, 240, p->radius); break; // Ke bawah
-    }
+    //switch (p->direction) {
+    //case 0: pieslice(p->x, p->y, 30, 330, p->radius); break;  // Ke kanan
+    //case 1: pieslice(p->x, p->y, 210, 150, p->radius); break; // Ke kiri
+    //case 2: pieslice(p->x, p->y, 120, 60, p->radius); break;  // Ke atas
+    //case 3: pieslice(p->x, p->y, 300, 240, p->radius); break; // Ke bawah
+    //} (mau coba ganti dulu yaa sama yang di bawah)
+    
+    // gunakan sudut dari frame linked list
+   int sa = f->start_angle, ea = f->end_angle;
+   switch (p->direction) {
+   case 0: pieslice(p->x, p->y, sa,         ea,         p->radius); break;
+   case 1: pieslice(p->x, p->y, sa + 180,   ea + 180,   p->radius); break;
+   case 2: pieslice(p->x, p->y, sa + 90,    ea + 90,    p->radius); break;
+   case 3: pieslice(p->x, p->y, sa + 270,   ea + 270,   p->radius); break;
+   }
 }
 
 /** Prosedur untuk menghapus gambar Pacman dari layar **/
