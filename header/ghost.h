@@ -23,12 +23,24 @@ typedef struct Ghost {
     int radius;              // Ukuran
     int hue;                 // Warna Ghost
     int lastDirX, lastDirY;
+    int stepCounter;
 } Ghost;
+
+typedef struct GhostNode {
+    Ghost ghost;
+    int x, y;
+    int lifetime; // misalnya dalam frame
+    int color;
+    struct GhostNode* next;
+} GhostNode;
 
 extern int maze[24][32];
 
 void theGhost(Ghost *gh, int x, int y, int hue);            // Inisialisasi Ghost
 void designGhost(Ghost *gh);                                // Pengaturan bentuk dan warna Ghost
+void addGhost(GhostNode** head, int x, int y, int color);
+void updateGhosts(GhostNode** head);
+void drawGhosts(GhostNode* head);
 void moveGhost(Ghost *gh, Pacman *pac);                     // Case karakteristik setiap Ghost
 void shiftGhost(Ghost *gh);                                 // Karakteristik gerakan acak
 void pursuePacman(Ghost *gh, Pacman *pac);                  // Karakteristik mengejar

@@ -45,6 +45,56 @@ void designGhost(Ghost *gh) {
     fillellipse(x + 4, y - 5, 1, 1);
 }
 
+void addGhost(GhostNode** head, int x, int y, int color) {
+    GhostNode* newGhost = (GhostNode*)malloc(sizeof(GhostNode));
+    newGhost->ghost.x = x;
+    newGhost->ghost.y = y;
+    newGhost->ghost.initialX = x;
+    newGhost->ghost.initialY = y;
+    newGhost->ghost.radius = 8;
+    newGhost->ghost.stepCounter = 0;
+    newGhost->ghost.hue = color;
+    newGhost->ghost.lastDirX = 0;
+    newGhost->ghost.lastDirY = 0;
+
+    newGhost->lifetime = 999999; // Atur waktu hidup lama kalau tidak ingin menghilang
+    newGhost->color = color;
+    newGhost->next = *head;
+    *head = newGhost;
+}
+
+void updateGhosts(GhostNode** head) {
+    GhostNode* current = *head;
+    GhostNode* prev = NULL;
+
+    while (current != NULL) {
+        current->lifetime--;
+        if (current->lifetime <= 0) {
+            // Hapus ghost
+            GhostNode* toDelete = current;
+            if (prev == NULL) {
+                *head = current->next;
+                current = *head;
+            } else {
+                prev->next = current->next;
+                current = current->next;
+            }
+            free(toDelete);
+        } else {
+            prev = current;
+            current = current->next;
+        }
+    }
+}
+
+void drawGhosts(GhostNode* head) {
+    GhostNode* current = head;
+    while (current != NULL) {
+        designGhost(&(current->ghost));
+        current = current->next;
+    }
+}
+
 int isColliding(Ghost *gh, int newX, int newY) {
     int col = newX / TILE_SIZE;
     int row = newY / TILE_SIZE;
