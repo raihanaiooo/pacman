@@ -4,7 +4,7 @@
 #include <mmsystem.h> 
 #pragma comment(lib, "winmm.lib")  
 #include "../header/scoring.h"
-#include "../header/Revaldi.h"
+#include "../header/ui.h"
 #include "../header/powerup.h"
 
 extern int maze[ROWS][COLS]; // ambil peta dari Revaldi.c

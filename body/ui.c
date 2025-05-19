@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include <graphics.h>
 #include <conio.h>
-<<<<<<< HEAD:body/ui.c
 #include "../header/ui.h"
 #include "../header/leaderboard.h"
-=======
-#include "../header/Revaldi.h"
->>>>>>> revaldi:body/Revaldi.c
 #include "../header/scoring.h"
 #include "../header/powerup.h"
 
@@ -89,11 +85,7 @@ void GameStart() {
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
     outtextxy(320, 200, author);
 
-<<<<<<< HEAD:body/ui.c
     displayLeaderboard();
-=======
-    // Berfungsi untuk kedap kedip
->>>>>>> revaldi:body/Revaldi.c
     while (1) {
         setcolor(WHITE);
         outtextxy(320, 380, instruction);
@@ -198,13 +190,6 @@ int GameOver(int score) {
         delay(100);
     }
 }
-<<<<<<< HEAD:body/ui.c
-// Prosedur untuk menampilkan nyawa ke layar
-void displayLives(Pacman *pacman) {
-    int startX = 295;
-    int y = 20;
-    int size = 8;
-=======
 
 Life* createLife(int x, int y) {
     Life *newLife = (Life *)malloc(sizeof(Life));
@@ -213,7 +198,6 @@ Life* createLife(int x, int y) {
     newLife->next = NULL;
     return newLife;
 }
->>>>>>> revaldi:body/Revaldi.c
 
 void addLife(Life **head, int x, int y) {
     Life *newLife = createLife(x, y);
