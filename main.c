@@ -14,7 +14,9 @@
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);
-    clock_t lastMoveTime = 0; 
+    Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
+    initPacmanAnimation(&pacman); //animasi mulut pacman
+    clock_t lastMoveTime = 0;
     const int moveDelay = 100; // Delay Pac-Man dalam ms (0.1 detik)
     int lastKeyPressed = 0; // Menyimpan arah terakhir
     int score = 0;
@@ -26,8 +28,9 @@ int main() {
     spawnPowerUps();
 
     // Inisialisasi Pac-Man
-    Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
-    
+    // Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
+    // pindahin ke atas sama uni
+
     //Inisialisasi Ghost
     Ghost ghosts[MAX_GHOSTS];
     int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost

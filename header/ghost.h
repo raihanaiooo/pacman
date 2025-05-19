@@ -34,7 +34,7 @@ void shiftGhost(Ghost *gh);                                 // Karakteristik ger
 void pursuePacman(Ghost *gh, Pacman *pac);                  // Karakteristik mengejar
 void escapePacman(Ghost *gh, Pacman *pac);                  // Karakteristik menjauh (Teknik Ancaman)
 void blockPacman(Ghost *gh, Pacman *pac);                   // Karakteristik memotong jalur
-void resetGhost(Ghost *gh);                                 // Posisi Reset
+//void resetGhost(Ghost *gh); (dipindahin ke pacman.h)                             // Posisi Reset
 int isColliding(Ghost *gh, int newX, int newY);             // Cek tabrakan dengan dinding
 int CollisionWithGhost(Pacman *pacman, Ghost *ghost);       // Cek tabrakan dengan Pacman
 
