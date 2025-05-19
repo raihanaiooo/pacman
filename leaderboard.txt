@@ -1,1 +1,2 @@
-sasa 7
+sasa 19
+aji 8

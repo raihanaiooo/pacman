@@ -92,5 +92,3 @@ void movePacman(Pacman *p, int key, int *score) {
         checkPowerUpCollision(p->x, p->y);
     }
 }
-
-

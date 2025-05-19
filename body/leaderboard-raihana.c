@@ -36,11 +36,11 @@ void updateLeaderboard(const char *playerName, int score) {
     loadLeaderboard(entries, &count);
 
     // Cek apakah nama sudah ada
-    int found = 0;
+int found = 0;
     for (int i = 0; i < count; i++) {
         if (strcmp(entries[i].name, playerName) == 0) {
-            // Jika nama ditemukan dan skor baru lebih tinggi, update
-            if (score > entries[i].score) {
+            // Update skor jika berbeda, baik lebih tinggi maupun lebih rendah
+            if (entries[i].score != score) {
                 entries[i].score = score;
             }
             found = 1;
@@ -48,7 +48,7 @@ void updateLeaderboard(const char *playerName, int score) {
         }
     }
 
-    // Kalau belum ditemukan, tambahkan entry baru
+        // Kalau belum ditemukan, tambahkan entry baru
     if (!found && count < MAX_ENTRIES + 1) {
         strcpy(entries[count].name, playerName);
         entries[count].score = score;
@@ -69,7 +69,9 @@ void updateLeaderboard(const char *playerName, int score) {
     // Batasi jumlah entri
     if (count > MAX_ENTRIES) count = MAX_ENTRIES;
 
+    // Selalu simpan leaderboard ke file
     saveLeaderboard(entries, count);
+
 }
 
 
