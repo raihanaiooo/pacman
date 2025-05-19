@@ -47,15 +47,9 @@ void designGhost(Ghost *gh) {
 }
 
 int isColliding(Ghost *gh, int newX, int newY) {
-    int col = newX / TILE_SIZE;
-    int row = newY / TILE_SIZE;
-
-    // Mengecek apakah keluar dari batas array
-    if (row < 0 || row >= 24 || col < 0 || col >= 32) {
-        return 1;  
-    }
-    return (maze[row][col] == 2);
+    return isColliding(newX, newY, gh->radius, -1);
 }
+
 
 void moveGhost(Ghost *gh, Pacman *pac) {
     if (freezeActive) return;
@@ -256,7 +250,7 @@ int CollisionWithGhost(Pacman *p, Ghost *g) {
         return 1;  // Tabrakan normal
     }
     
-    return (distanceSquared <= collisionDistance);  // True jika tabrakan
+    return 0;  // True jika tabrakan
 }
 
 // prosedur reset ghost 
