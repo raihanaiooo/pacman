@@ -93,4 +93,3 @@ void handleInput(char key, Pacman *pacman, Ghost ghosts[]) {
         }
     }
 }
-

@@ -14,7 +14,7 @@
 				"body/pause.c",
 				"body/powerup.c",
 				"body/scoring.c",
-				"body/ui.c",
+				"body/Revaldi.c",
 				"${file}",
 				"-o",
 				"${fileDirname}/output.exe",
