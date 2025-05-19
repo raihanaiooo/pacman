@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <math.h>
-#include "header/ui.h"
+#include "header/Revaldi.h"
 #include "header/ghost.h"
 #include "header/pacman.h"
 #include "header/scoring.h"
@@ -19,6 +19,7 @@ int main() {
     int lastKeyPressed = 0; // Menyimpan arah terakhir
     int score = 0;
     int page = 0; 
+    initLives();      // Initialize lives with the starting number of lives
 
 
     // Inisialisasi titik-titik
@@ -53,7 +54,8 @@ int main() {
         Map();
         drawPowerUps();
         gambarDot();
-        displayLives(&pacman);
+        drawLives(lives);
+        displayPowerUpInfo();
 
         // **Ghost Movement**
         for (int i = 0; i < MAX_GHOSTS; i++) {
@@ -85,26 +87,28 @@ int main() {
             }
         }
 
-        // **Cek tabrakan dengan Ghost**
+        // Kurangi nyawa Pac-Man
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
                 updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
+                removeLife(&lives);  // Hapus satu nyawa dari linked list
                 break;
             }
         }
         
-        // **Kondisi jika nyawa Pac-Man habis**
-        if (pacman.lives == 0) {
+        // Cek jika nyawa habis
+        if (lives == NULL) {
             setactivepage(1);
             setvisualpage(1);
             cleardevice();
 
             int isRestart = handleGameOver(&pacman, &score, ghosts, MAX_GHOSTS);
-
+                initLives();  // Restart nyawa
             if (isRestart) {
-                continue; // Restart permainan
+                initLives();  // Restart nyawa
+                continue;     // Restart permainan
             } else {
-                break; // Keluar dari loop utama
+                break;        // Keluar dari loop utama
             }
         }
         

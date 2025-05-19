@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <graphics.h>
 #include <conio.h>
-#include "../header/ui.h"
+#include "../header/Revaldi.h"
 #include "../header/scoring.h"
+#include "../header/powerup.h"
 
 #define TILE_SIZE 20
 #define ROWS 24
 #define COLS 32
+
+Life *lives = NULL; // Pointer ke nyawa
+
 // Deklarasi Array Labirin
 int maze[ROWS][COLS] = {
     {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
@@ -80,6 +84,7 @@ void GameStart() {
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
     outtextxy(320, 200, author);
 
+    // Berfungsi untuk kedap kedip
     while (1) {
         setcolor(WHITE);
         outtextxy(320, 380, instruction);
@@ -157,25 +162,73 @@ int GameOver(int score) {
     }
 }
 
-// Prosedur untuk menampilkan nyawa ke layar
-void displayLives(Pacman *pacman) {
-    int startX = 295;
-    int y = 20;
-    int size = 8;
+Life* createLife(int x, int y) {
+    Life *newLife = (Life *)malloc(sizeof(Life));
+    newLife->x = x;
+    newLife->y = y;
+    newLife->next = NULL;
+    return newLife;
+}
 
-    for (int i = 0; i < pacman->lives; i++) {
-        int x = startX + (i * 25);
+void addLife(Life **head, int x, int y) {
+    Life *newLife = createLife(x, y);
+    newLife->next = *head;
+    *head = newLife;
+}
 
+void removeLife(Life **head) {
+    if (*head == NULL) return;
+    Life *temp = *head;
+    *head = (*head)->next;
+    free(temp);
+}
+
+void drawLives(Life *head) {
+    Life *current = head;
+    while (current != NULL) {
+        int x = current->x;
+        int y = current->y;
+        // Warna hati
         setcolor(RED);
         setfillstyle(SOLID_FILL, RED);
-        fillellipse(x - size / 2, y, size / 2, size / 2);
-        fillellipse(x + size / 2, y, size / 2, size / 2);
+        // Gambar dua lingkaran atas hati
+        fillellipse(x - 5, y - 5, 5, 5); // Lingkaran kiri
+        fillellipse(x + 5, y - 5, 5, 5); // Lingkaran kanan
+        // Gambar segitiga bawah hati
+        int points[] = {x - 10, y - 5, x + 10, y - 5, x, y + 10, x - 10, y - 5};
+        fillpoly(4, points);
 
-        int heartPoints[] = {
-            x - size, y,
-            x + size, y,
-            x, y + size + 4
-        };
-        fillpoly(3, heartPoints); // Tampilan 3 nyawa berbentuk hati 
+        current = current->next;
+    }
+}
+
+void initLives() {
+    // Tambahkan 3 nyawa di posisi tertentu (misalnya, di pojok kiri atas layar)
+    addLife(&lives, 295, 25);  // Nyawa pertama
+    addLife(&lives, 320, 25);  // Nyawa kedua
+    addLife(&lives, 345, 25);  // Nyawa ketiga
+}
+
+void displayPowerUpInfo() {
+    if (activePowerUpType > 0 && powerUpCountdown > 0) {
+        char infoText[50];
+        char countdownText[20];
+
+        // Tentukan nama power-up berdasarkan jenisnya
+        switch (activePowerUpType) {
+            case 1: sprintf(infoText, "Power-Up: Double Score"); break;
+            case 2: sprintf(infoText, "Power-Up: Kebal"); break;
+            case 3: sprintf(infoText, "Power-Up: Freeze"); break;
+            default: sprintf(infoText, "Power-Up: Unknown"); break;
+        }
+
+        // Tampilkan waktu sisa
+        sprintf(countdownText, "Time Left: %d s", powerUpCountdown);
+
+        // Gambar teks di layar
+        setcolor(WHITE);
+        settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 1);
+        outtextxy(200, 476, infoText);        // Info power-up
+        outtextxy(400, 476, countdownText);  // Countdown
     }
 }
