@@ -15,36 +15,23 @@ clock_t doublePointTimer = 0;
 clock_t kebalTimer = 0;
 clock_t freezeTimer = 0;
 
+int predefinedPowerUpPositions[][2] = {
+    {3, 5}, {6, 10}, {12, 15}, {18, 20}, {21, 25}
+};
+
 // Fungsi untuk menempatkan beberapa Power-Up di lokasi acak
 void spawnPowerUps() {
-  srand(time(NULL));
-  for (int i = 0; i < MAX_POWERUPS; i++) {
-      int row, col;
-      int attempts = 0;
+    for (int i = 0; i < MAX_POWERUPS; i++) {
+        int row = predefinedPowerUpPositions[i][0];
+        int col = predefinedPowerUpPositions[i][1];
 
-      do {
-          row = rand() % ROWS;
-          col = rand() % COLS;
-          attempts++;
+        if (maze[row][col] != 0) continue;  // pastikan bukan tembok
 
-          if (attempts > 500) {  // Jika lebih dari 500 percobaan, hentikan pencarian
-              printf("Gagal menemukan lokasi Power-Up setelah %d percobaan.\n", attempts);
-              return;
-          }
-
-      } while (maze[row][col] != 0);  // Hanya spawn di area jalan (tidak menimpa dinding)
-
-      // Jika Power-Up spawn di atas dot, hapus dot tersebut
-      if (dots[row][col] == 1) {
-          dots[row][col] = 0;  // Dot dihapus
-          printf("Power-Up muncul di atas dot, dot dihapus di (%d, %d)\n", row, col);
-      }
-
-      powerUps[i].x = col * TILE_SIZE + TILE_SIZE / 2;
-      powerUps[i].y = row * TILE_SIZE + TILE_SIZE / 2;
-      powerUps[i].type = (rand() % 3) + 1;  // 1 = Double Score, 2 = Kebal, 3 = Freeze
-      powerUps[i].active = 1;  // Power-Up aktif
-  }
+        powerUps[i].x = col * TILE_SIZE + TILE_SIZE / 2;
+        powerUps[i].y = row * TILE_SIZE + TILE_SIZE / 2;
+        powerUps[i].type = (rand() % 3) + 1;
+        powerUps[i].active = 1;
+    }
 }
 
 
@@ -142,5 +129,12 @@ void updatePowerUpState() {
             powerUpCountdown--;
         }
         lastUpdate = clock();
+    }
+}
+
+// free powerup
+void freePowerUps() {
+    for (int i = 0; i < MAX_POWERUPS; i++) {
+        powerUps[i].active = 0;
     }
 }

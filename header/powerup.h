@@ -26,5 +26,6 @@ void spawnPowerUps();
 void drawPowerUps();
 void checkPowerUpCollision(int pacmanX, int pacmanY);
 void updatePowerUpState();
+void freePowerUps();
 
 #endif

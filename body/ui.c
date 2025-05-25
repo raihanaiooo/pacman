@@ -119,11 +119,17 @@ void GameWin() {
 // Fungsi untuk menghitung dots
 int countDotsAndPowerUps() {
     int count = 0;
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            if (dots[i][j] == 1) count++;  // dots[] assumed declared elsewhere
-        }
+
+    Dot* current = dotHead;
+    while (current != NULL) {
+        count++;
+        current = current->next;
     }
+
+    for (int i = 0; i < MAX_POWERUPS; i++) {
+        if (powerUps[i].active) count++;
+    }
+
     return count;
 }
 

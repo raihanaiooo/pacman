@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <graphics.h>
-#include <windows.h>  
-#include <mmsystem.h> 
-#pragma comment(lib, "winmm.lib")  
+#include <windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 #include "../header/scoring.h"
 #include "../header/ui.h"
 #include "../header/powerup.h"
@@ -11,11 +11,13 @@ extern int maze[ROWS][COLS]; // ambil peta dari Revaldi.c
 
 // Array buat nyimpen status dot dimakan atau belum
 int dots[ROWS][COLS];
+Dot *dotHead = NULL;
 
-int dotKosong(int i, int j) {
+int dotKosong(int i, int j)
+{
     return (
         // kosongin titik
-        ((i == 18 && (j == 11 || j == 12)) ||  
+        ((i == 18 && (j == 11 || j == 12)) ||
          (i == 20 && (j == 11 || j == 12))) ||
         (i == 9 && (j >= 0 && j <= 4)) ||
         (i == 9 && (j >= 27 && j <= 31)) ||
@@ -30,52 +32,81 @@ int dotKosong(int i, int j) {
         (i == 18 && (j == 19 || (j >= 23 && j <= 24))) ||
         (i == 17 && (j >= 19 && j <= 20)) ||
         (i == 20 && (j == 19 || (j >= 24 && j <= 25))) ||
-        (i == 21 && (j >= 19 && j <= 20))||
-        ((i >= 18 && i <= 29) && j == 21)||
+        (i == 21 && (j >= 19 && j <= 20)) ||
+        ((i >= 18 && i <= 29) && j == 21) ||
         (i == 19 && j == 20) ||
-        (i == 23 && (j >= 0 && j <= 31)) 
-    );
+        (i == 23 && (j >= 0 && j <= 31)) ||
+        (i == 3 && j == 5) ||
+        (i == 6 && j == 10) ||
+        (i == 12 && j == 15) ||
+        (i == 18 && j == 20) ||
+        (i == 21 && j == 25));
 }
 
 // inisialisasi titik
-void setTitikDot() {
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            if (maze[i][j] == 0 && !dotKosong(i, j)) { 
-                dots[i][j] = 1;  // Tetap ada dot di jalur biasa
-            } else {
-                dots[i][j] = 0;  // Kosongin titik di dinding
+void setTitikDot()
+{
+    dotHead = NULL; // Reset linked list
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLS; j++)
+        {
+            if (maze[i][j] == 0 && !dotKosong(i, j))
+            {
+                Dot *newDot = (Dot *)malloc(sizeof(Dot));
+                newDot->x = j * TILE_SIZE + TILE_SIZE / 2;
+                newDot->y = i * TILE_SIZE + TILE_SIZE / 2;
+                newDot->next = dotHead;
+                dotHead = newDot;
             }
         }
     }
 }
 
 // generate titik-titik yang belum dimakan
-void gambarDot() {
+void gambarDot()
+{
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, WHITE);
-
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            if (dots[i][j]) {  // Hanya menggambar titik yang belum dimakan
-                int x = j * 20 + 10;
-                int y = i * 20 + 10;
-                fillellipse(x, y, DOT_RADIUS, DOT_RADIUS);
-            }
-        }
+    Dot *current = dotHead;
+    while (current != NULL)
+    {
+        fillellipse(current->x, current->y, DOT_RADIUS, DOT_RADIUS);
+        current = current->next;
     }
 }
 
 // pacman makan titik
-void scoring(int pacmanX, int pacmanY, int *score) {
-    int row = pacmanY / TILE_SIZE;
-    int col = pacmanX / TILE_SIZE;
+void scoring(int pacmanX, int pacmanY, int *score)
+{
+    Dot **current = &dotHead;
+    while (*current != NULL)
+    {
+        if (abs((*current)->x - pacmanX) < TILE_SIZE / 2 &&
+            abs((*current)->y - pacmanY) < TILE_SIZE / 2)
+        {
 
-    if (dots[row][col] == 1) {  // Jika ada dot di posisi Pac-Man
-        dots[row][col] = 0;  // Hilangkan dot dari layar
-        *score += doublePointActive ? 2 : 1;  // Tambah skor (doubled jika power-up aktif)
+            Dot *temp = *current;
+            *current = (*current)->next;
+            free(temp);
 
-        PlaySound("sound/makan.wav", NULL, SND_FILENAME | SND_ASYNC);
-
+            *score += doublePointActive ? 2 : 1;
+            PlaySound("sound/makan.wav", NULL, SND_FILENAME | SND_ASYNC);
+            break;
+        }
+        current = &((*current)->next);
     }
+}
+
+// free memory dot
+void freeDot()
+{
+    Dot *current = dotHead;
+    while (current != NULL)
+    {
+        Dot *temp = current;
+        current = current->next;
+        free(temp);
+    }
+    dotHead = NULL;
 }
