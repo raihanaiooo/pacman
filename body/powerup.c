@@ -9,6 +9,8 @@ extern int maze[24][32];
 int doublePointActive = 0;
 int kebalActive = 0;
 int freezeActive = 0;
+int activePowerUpType = 0;
+int powerUpCountdown = 0;
 clock_t doublePointTimer = 0;
 clock_t kebalTimer = 0;
 clock_t freezeTimer = 0;
@@ -75,7 +77,10 @@ void checkPowerUpCollision(int pacmanX, int pacmanY) {
             int powerUpY = powerUps[i].y;
 
             if (abs(pacmanX - powerUpX) < TILE_SIZE / 2 && abs(pacmanY - powerUpY) < TILE_SIZE / 2) {
-                // ✅ Aktifkan efek sesuai tipe Power-Up
+                // Aktifkan efek sesuai tipe Power-Up
+                activePowerUpType = powerUps[i].type;
+                powerUpCountdown = POWERUP_DURATION / 1000; // Set countdown dalam detik
+
                 if (powerUps[i].type == 1) {
                     doublePointActive = 1;
                     doublePointTimer = clock();
@@ -104,29 +109,38 @@ void updatePowerUpState() {
     clock_t elapsedTime;
 
     if (doublePointActive) {
-        clock_t elapsedTime = (clock() - doublePointTimer) * 1000 / CLOCKS_PER_SEC;
+        elapsedTime = (clock() - doublePointTimer) * 1000 / CLOCKS_PER_SEC;
         if (elapsedTime > POWERUP_DURATION) {
-            doublePointActive = 0; // Efek Double Point selesai
-            printf("Efek Power-Up berakhir, skor kembali normal.\n");
+            doublePointActive = 0;
+            activePowerUpType = 0; // Nonaktifkan power-up
+            printf("Efek Double Score berakhir.\n");
         }
     }
 
-    // kebal
     if (kebalActive) {
         elapsedTime = (clock() - kebalTimer) * 1000 / CLOCKS_PER_SEC;
         if (elapsedTime > POWERUP_DURATION) {
             kebalActive = 0;
-            printf("Efek Kebal Berakhir!\n");
+            activePowerUpType = 0; // Nonaktifkan power-up
+            printf("Efek Kebal berakhir.\n");
         }
     }
 
-     // freeze
-     if (freezeActive) {
+    if (freezeActive) {
         elapsedTime = (clock() - freezeTimer) * 1000 / CLOCKS_PER_SEC;
         if (elapsedTime > POWERUP_DURATION) {
             freezeActive = 0;
-            freezeActive = false; 
-            printf("Ghost mulai bergerak kembali!\n");
+            activePowerUpType = 0; // Nonaktifkan power-up
+            printf("Efek Freeze berakhir.\n");
         }
+    }
+
+    // Kurangi countdown setiap detik
+    static clock_t lastUpdate = 0;
+    if ((clock() - lastUpdate) * 1000 / CLOCKS_PER_SEC >= 1000) {
+        if (powerUpCountdown > 0) {
+            powerUpCountdown--;
+        }
+        lastUpdate = clock();
     }
 }

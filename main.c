@@ -17,11 +17,14 @@ GhostNode* ghostList = NULL; // Linked list Ghost dinamis
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);
+    Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
+    initPacmanAnimation(&pacman); //animasi mulut pacman
     clock_t lastMoveTime = 0;
     const int moveDelay = 100; // Delay Pac-Man dalam ms (0.1 detik)
     int lastKeyPressed = 0; // Menyimpan arah terakhir
     int score = 0;
     int page = 0; 
+    initLives();      // Initialize lives with the starting number of lives
 
     // Inisialisasi titik-titik
     setTitikDot(); 
@@ -51,7 +54,8 @@ int main() {
         Map();
         drawPowerUps();
         gambarDot();
-        displayLives(&pacman);
+        drawLives(lives);
+        displayPowerUpInfo();
 
         // Perbarui dan gambar Ghost
         updateGhosts(&ghostList);
@@ -95,6 +99,9 @@ int main() {
         }
 
         if (pacman.lives == 0) {
+        
+        // Cek jika nyawa habis
+        if (lives == NULL) {
             setactivepage(1);
             setvisualpage(1);
             cleardevice();

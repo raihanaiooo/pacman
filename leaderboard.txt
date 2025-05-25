@@ -1,0 +1,6 @@
+<<<<<<< HEAD
+sasa 9
+=======
+sasa 18
+>>>>>>> sasa
+aji 8

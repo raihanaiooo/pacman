@@ -6,9 +6,11 @@
 			"type": "shell",
 			"command": "g++",
 			"args": [
+				"body/collision-raihana.c",
 				"body/ghost.c",
+				"body/leaderboard-raihana.c",
+				"body/pacman-raihana.c",
 				"body/pacman-seruni.c",
-				"body/pacman.c",
 				"body/pause.c",
 				"body/powerup.c",
 				"body/scoring.c",

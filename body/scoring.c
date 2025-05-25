@@ -7,7 +7,7 @@
 #include "../header/ui.h"
 #include "../header/powerup.h"
 
-extern int maze[ROWS][COLS]; // ambil peta dari ui.c
+extern int maze[ROWS][COLS]; // ambil peta dari Revaldi.c
 
 // Array buat nyimpen status dot dimakan atau belum
 int dots[ROWS][COLS];
