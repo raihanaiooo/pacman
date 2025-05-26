@@ -1,6 +1,5 @@
-<<<<<<< HEAD
-sasa 9
-=======
-sasa 18
->>>>>>> sasa
-aji 8
+UPA 22
+JSAIJS 20
+KOKO 15
+HERMAN 10
+OAJOSJA 10

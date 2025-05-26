@@ -12,7 +12,7 @@
  
 // ADDED: Bangun circular linked list frame mulut Pac‑Man
 void initPacmanAnimation(Pacman *p) {
-int angles[][2] = {{30,330},{45,315},{60,300},{75,285}};
+int angles[][2] = {{0,360},{30,330},{45,315},{60,300}};
 Frame *head = NULL, *prev = NULL;
 for (int i = 0; i < 4; i++) {
     Frame *f = (Frame*)malloc(sizeof(Frame));

@@ -76,29 +76,37 @@ void GameStart() {
     char title[] = "PAC-MAN";
     char author[] = "1B - GROUP 2";
     char instruction[] = "PRESS SPACE TO PLAY THE GAME!";
+    char leaderboardHint[] = "PRESS 'L' TO SHOW/HIDE LEADERBOARD";
+    int leaderboardVisible = 0;
 
-    settextstyle(GOTHIC_FONT, HORIZ_DIR, 7);
-    settextjustify(CENTER_TEXT, CENTER_TEXT);
-    setcolor(YELLOW);
-    outtextxy(320, 150, title);
-
-    settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
-    outtextxy(320, 200, author);
-
-    displayLeaderboard();
     while (1) {
+        cleardevice();
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 7);
+        settextjustify(CENTER_TEXT, CENTER_TEXT);
+        setcolor(YELLOW);
+        outtextxy(320, 100, title);
+
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+        outtextxy(320, 145, author);
+
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 1);
+        setcolor(LIGHTCYAN);
+        outtextxy(320, 195, leaderboardHint);
+
+        if (leaderboardVisible) {
+            displayLeaderboard();
+        }
+
         setcolor(WHITE);
-        outtextxy(320, 380, instruction);
-        delay(500);
+        outtextxy(320, 420, instruction);
 
-        setcolor(BLACK);
-        outtextxy(320, 380, instruction);
-        delay(500);
-
+        // Cek input
         if (kbhit()) {
             char key = getch();
-            if (key == 32) break;  // Space key
+            if (key == 32) break; // Space untuk mulai
+            if (key == 'l' || key == 'L') leaderboardVisible = !leaderboardVisible;
         }
+        delay(100);
     }
     cleardevice();
 }
@@ -190,6 +198,7 @@ int GameOver(int score) {
         delay(100);
     }
 }
+
 
 Life* createLife(int x, int y) {
     Life *newLife = (Life *)malloc(sizeof(Life));

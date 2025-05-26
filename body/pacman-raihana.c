@@ -15,7 +15,7 @@ void drawPacman(Pacman *p) {
     Frame *f = p->currentFrame; //izin nambahin
     
     /* Menggambar Pacman */
-    setcolor(YELLOW);
+    setcolor(BLACK);
     setfillstyle(SOLID_FILL, BLACK);
     fillellipse(p->x, p->y, p->radius, p->radius);
 

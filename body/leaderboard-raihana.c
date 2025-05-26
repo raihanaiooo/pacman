@@ -81,26 +81,20 @@ void displayLeaderboard() {
 
     loadLeaderboard(entries, &count);
     char text1[] = "LEADERBOARD";
-    char text2[] = "Press any key to return...";
-    cleardevice();
-    setbkcolor(BLACK);
     setcolor(YELLOW);
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 3);
-    outtextxy(250, 30, text1);
+    outtextxy(320, 235, text1); // Atur posisi agar tidak menutupi judul utama
 
     setcolor(WHITE);
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
-    int y = 100;
+    int y = 270;
 
     for (int i = 0; i < count; i++) {
         char line[100];
         sprintf(line, "%d. %s - %d", i + 1, entries[i].name, entries[i].score);
-        outtextxy(200, y, line);
-        y += 40;
+        outtextxy(320, y, line); // Atur posisi X agar rata tengah
+        y += 25;
     }
-
-    setcolor(LIGHTGREEN);
-    settextstyle(GOTHIC_FONT, HORIZ_DIR, 1);
-    outtextxy(220, y + 50, text2);
-    getch();
+    // Tidak perlu getch() atau cleardevice()
+    // izin ganti sa hehe :) *revaldi
 }
