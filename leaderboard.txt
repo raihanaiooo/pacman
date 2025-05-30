@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-sasa 9
-=======
-sasa 18
->>>>>>> sasa
-aji 8
+kjaksjda 81
+asdasdasdad 21
+rrasfa 8
+sdf 8
