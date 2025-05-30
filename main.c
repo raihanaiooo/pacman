@@ -21,16 +21,13 @@ int main() {
     int lastKeyPressed = 0; // Menyimpan arah terakhir
     int score = 0;
     int page = 0; 
-    initLives();      // Initialize lives with the starting number of lives
+    initLives();
 
 
     // Inisialisasi titik-titik
     setTitikDot(); 
     spawnPowerUps();
 
-    // Inisialisasi Pac-Man
-    // Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
-    // pindahin ke atas sama uni
 
     //Inisialisasi Ghost
     Ghost ghosts[MAX_GHOSTS];
