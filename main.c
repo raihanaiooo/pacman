@@ -42,9 +42,11 @@ int main() {
     GameStart();
     PlaySound(NULL, NULL, 0);
 
+    // Game Loop
     while (pacman.lives > 0) {
         clock_t currentTime = clock();
 
+        // Game Rendering
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
@@ -54,7 +56,7 @@ int main() {
         drawLives(lives);
         displayPowerUpInfo();
 
-        // Perbarui dan gambar Ghost
+        // Ghost Movement
         updateGhosts(&ghostList);
         GhostNode* node = ghostList;
         while (node != NULL) {
@@ -66,6 +68,7 @@ int main() {
             node = node->next;
         }
 
+        // Pacman Movement
         if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
             movePacman(&pacman, lastKeyPressed, &score);
             lastMoveTime = currentTime;
@@ -75,6 +78,7 @@ int main() {
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
+        // Input Handling
         if (kbhit()) {
             int newKey = getch();
             if (newKey == 0 || newKey == 224) {
@@ -85,6 +89,19 @@ int main() {
             }
         }
 
+        // Kurangi Nyawa Pacman
+        GhostNode* currentGhost = ghostList;  // Gunakan pointer sementara untuk iterasi
+
+        while (currentGhost != NULL) {
+            if (!doublePointActive && CollisionWithGhost(&pacman, currentGhost)) {
+                updatePacmanAfterCollision(&pacman, currentGhost, MAX_GHOSTS, &score);
+                removeLife(&lives);  // Hapus satu nyawa dari linked list
+                break;
+            }
+            currentGhost = currentGhost->next;
+        }
+
+        // Pac-Man menabrak Ghost
         node = ghostList;
         while (node != NULL) {
             if (CollisionWithGhost(&pacman, node)) {
@@ -93,36 +110,40 @@ int main() {
             }
             node = node->next;
         }
-
-        if (pacman.lives == 0) {
-            if (lives == NULL) {
-                setactivepage(1);
-                setvisualpage(1);
-                cleardevice();
-
-                int isRestart = handleGameOver(&pacman, &score, NULL, 0);
-
-                if (isRestart) {
-                    continue;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        if (countDotsAndPowerUps() == 0) {
+        
+        // Cek jika nyawa habis
+        if (lives == NULL) {
             setactivepage(1);
             setvisualpage(1);
             cleardevice();
 
-            GameWin();
-            hitungScore(score, 320, 300, 1);
-            delay(1000);
-            getch();
+            int isRestart = handleGameOver(&pacman, &score, ghostList, MAX_GHOSTS); // pake ghostList linked list
+            initLives();  // Restart nyawa
 
-            break;
+            if (isRestart) {
+                initLives();  // Restart nyawa
+                continue;     // Restart permainan
+            } else {
+                break;        // Keluar dari loop utama
+            }
         }
 
+
+        // Kondisi jika semua dots & powerups habis
+        if (countDotsAndPowerUps() == 0) {
+            setactivepage(1); 
+            setvisualpage(1);  
+            cleardevice();  //  Pastikan layar bersih sebelum menampilkan kemenangan
+        
+            GameWin();  //  Tampilkan "You Win"
+            hitungScore(score, 320, 300, 1);  // Tampilkan skor akhir di tengah layar
+        
+            delay(1000);  // Beri jeda sejenak agar pemain bisa melihat layar
+            getch();  // Tunggu input sebelum keluar
+        
+            break;  // Keluar dari loop utama
+        }
+        
         delay(50);
         page = 1 - page;
     }
