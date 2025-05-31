@@ -89,7 +89,7 @@ void gambarDot()
     }
 }
 
-// pacman makan titik
+// pacman memakan dot
 void scoring(int pacmanX, int pacmanY, int *score)
 {
     Dot **current = &dotHead;

@@ -1,6 +1,7 @@
 #include "../header/powerup.h"
 #include "../header/scoring.h"
 #include "../header/ui.h"
+#include <graphics.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -32,7 +33,7 @@ int predefinedPowerUpPositions[][2] = {
 {22, 16},
 {1, 11}};
 
-// Fungsi untuk menempatkan beberapa Power-Up di lokasi acak
+// Fungsi untuk memenpatkan powerup di titik yang telah di tentukan 
 void spawnPowerUps()
 {
     printf("--- Notifikasi Lokasi Power-up ---\n"); // Judul notifikasi
@@ -40,14 +41,6 @@ void spawnPowerUps()
     {
         int row = predefinedPowerUpPositions[i][0];
         int col = predefinedPowerUpPositions[i][1];
-
-        // Cek apakah posisi adalah tembok (berdasarkan logika yang sudah ada)
-        if (maze[row][col] != 0)
-        { // Asumsi 'maze' dapat diakses di sini
-            printf("Power-up %d: GAGAL dimunculkan. Posisi grid (%d, %d) adalah tembok.\n",
-                   i + 1, row, col);
-            continue;
-        }
 
         // Kalkulasi posisi piksel (berdasarkan logika yang sudah ada)
         powerUps[i].x = col * TILE_SIZE + TILE_SIZE / 2; // Pastikan TILE_SIZE terdefinisi
@@ -64,7 +57,6 @@ void spawnPowerUps()
 }
 
 // Fungsi untuk menggambar Power-Up yang masih ada di layar
-#include <graphics.h> // Pastikan untuk menggambar menggunakan graphics.h
 
 void drawPowerUps()
 {
