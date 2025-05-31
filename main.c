@@ -30,15 +30,12 @@ int main() {
     setTitikDot(); 
     spawnPowerUps();
 
-
-    //Inisialisasi Ghost
-    Ghost ghosts[MAX_GHOSTS];
-    int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost
-    const int ghostSpeed = 4;  // Ghost hanya bergerak setiap 4 frame Pac-Man
-    theGhost(&ghosts[0], 320, 240, RED);
-    theGhost(&ghosts[1], 330, 240, WHITE);
-    theGhost(&ghosts[2], 310, 240, GREEN);
-    theGhost(&ghosts[3], 340, 240, CYAN);
+    // Inisialisasi Ghost dinamis
+    addGhost(&ghostList, 320, 240, RED);
+    addGhost(&ghostList, 330, 240, WHITE);
+    addGhost(&ghostList, 310, 240, GREEN);
+    addGhost(&ghostList, 340, 240, CYAN);
+    const int ghostSpeed = 4; // Ghost akan bergerak setiap 4 frame
 
     // Musik start
     PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -65,10 +62,9 @@ int main() {
             if (node->ghost.stepCounter % ghostSpeed == 0) {
                 moveGhost(&node->ghost, &pacman);
             }
+            drawGhostWithEffect(node); // Efek visual jika kebalActive
             node = node->next;
         }
-        
-        drawGhosts(ghostList);
 
         if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
             movePacman(&pacman, lastKeyPressed, &score);
@@ -89,29 +85,28 @@ int main() {
             }
         }
 
-        // Kurangi nyawa Pac-Man
-        for (int i = 0; i < MAX_GHOSTS; i++) {
-            if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
-                updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
-                removeLife(&lives);  // Hapus satu nyawa dari linked list
+        node = ghostList;
+        while (node != NULL) {
+            if (CollisionWithGhost(&pacman, node)) {
+                updatePacmanAfterCollision(&pacman, node, 0, &score);
                 break;
             }
             node = node->next;
         }
-        
-        // Cek jika nyawa habis
-        if (lives == NULL) {
-            setactivepage(1);
-            setvisualpage(1);
-            cleardevice();
 
-            int isRestart = handleGameOver(&pacman, &score, ghosts, MAX_GHOSTS);
-                initLives();  // Restart nyawa
-            if (isRestart) {
-                initLives();  // Restart nyawa
-                continue;     // Restart permainan
-            } else {
-                break;        // Keluar dari loop utama
+        if (pacman.lives == 0) {
+            if (lives == NULL) {
+                setactivepage(1);
+                setvisualpage(1);
+                cleardevice();
+
+                int isRestart = handleGameOver(&pacman, &score, NULL, 0);
+
+                if (isRestart) {
+                    continue;
+                } else {
+                    break;
+                }
             }
         }
 

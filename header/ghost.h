@@ -28,16 +28,19 @@ typedef struct Ghost {
 
 typedef struct GhostNode {
     Ghost ghost;
-    int x, y;
-    int lifetime; // misalnya dalam frame
+    int lifetime;
     int color;
+    int isScared;         // True jika ghost dalam mode takut
+    int scaredTimer;      // Waktu sisa untuk takut
     struct GhostNode* next;
 } GhostNode;
+;
 
 extern int maze[24][32];
 
 void theGhost(Ghost *gh, int x, int y, int hue);            // Inisialisasi Ghost
-void designGhost(Ghost *gh);                                // Pengaturan bentuk dan warna Ghost
+void designGhost(Ghost* gh, int isScared, int scaredTimer); // Pengaturan bentuk dan warna Ghost
+void drawGhostWithEffect(GhostNode *node);
 void addGhost(GhostNode** head, int x, int y, int color);
 void updateGhosts(GhostNode** head);
 void drawGhosts(GhostNode* head);
@@ -48,6 +51,6 @@ void escapePacman(Ghost *gh, Pacman *pac);                  // Karakteristik men
 void blockPacman(Ghost *gh, Pacman *pac);                   // Karakteristik memotong jalur
 //void resetGhost(Ghost *gh); (dipindahin ke pacman.h)                             // Posisi Reset
 int isColliding(Ghost *gh, int newX, int newY);             // Cek tabrakan dengan dinding
-int CollisionWithGhost(Pacman *pacman, Ghost *ghost);       // Cek tabrakan dengan Pacman
+int CollisionWithGhost(Pacman *pacman, GhostNode *node);       // Cek tabrakan dengan Pacman
 
 #endif
