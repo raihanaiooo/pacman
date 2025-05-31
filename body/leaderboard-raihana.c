@@ -6,22 +6,25 @@
 
 void loadLeaderboard(Leaderboard entries[], int *count) {
     FILE *file = fopen("leaderboard.txt", "r");
-    *count = 0;
+    *count = 0; // Inisialisasi jumlah entri yang dibaca menjadi 0
 
     if (file == NULL) return;
 
+    // Baca nama dan skor dari file selama berhasil dan belum melebihi kapasitas maksimal
     while (fscanf(file, "%s %d", entries[*count].name, &entries[*count].score) == 2) {
-        (*count)++;
-        if (*count >= MAX_ENTRIES) break;
+        (*count)++; // Tambah jumlah entri yang berhasil dibaca
+        if (*count >= MAX_ENTRIES) break;  // Hentikan jika sudah mencapai batas maksimal entri
     }
 
     fclose(file);
 }
 
+
 void saveLeaderboard(Leaderboard entries[], int count) {
     FILE *file = fopen("leaderboard.txt", "w");
     if (file == NULL) return;
 
+    // Tulis setiap entri nama dan skor ke file, satu per baris
     for (int i = 0; i < count; i++) {
         fprintf(file, "%s %d\n", entries[i].name, entries[i].score);
     }
@@ -35,27 +38,14 @@ void updateLeaderboard(const char *playerName, int score) {
 
     loadLeaderboard(entries, &count);
 
-    // Cek apakah nama sudah ada
-int found = 0;
-    for (int i = 0; i < count; i++) {
-        if (strcmp(entries[i].name, playerName) == 0) {
-            // Update skor jika berbeda, baik lebih tinggi maupun lebih rendah
-            if (entries[i].score != score) {
-                entries[i].score = score;
-            }
-            found = 1;
-            break;
-        }
-    }
-
-        // Kalau belum ditemukan, tambahkan entry baru
-    if (!found && count < MAX_ENTRIES + 1) {
+    // Tambahkan entry baru
+    if (count < MAX_ENTRIES + 1) {
         strcpy(entries[count].name, playerName);
         entries[count].score = score;
         count++;
     }
 
-    // Urutkan leaderboard (skor tertinggi dulu)
+    // Urutkan leaderboard berdasarkan skor tertinggi dulu
     for (int i = 0; i < count - 1; i++) {
         for (int j = i + 1; j < count; j++) {
             if (entries[j].score > entries[i].score) {
@@ -66,14 +56,11 @@ int found = 0;
         }
     }
 
-    // Batasi jumlah entri
+    // Batasi jumlah entri maksimum
     if (count > MAX_ENTRIES) count = MAX_ENTRIES;
 
-    // Selalu simpan leaderboard ke file
     saveLeaderboard(entries, count);
-
 }
-
 
 void displayLeaderboard() {
     Leaderboard entries[MAX_ENTRIES];
@@ -89,12 +76,11 @@ void displayLeaderboard() {
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
     int y = 270;
 
+    // Loop untuk menampilkan setiap entri leaderboard
     for (int i = 0; i < count; i++) {
         char line[100];
-        sprintf(line, "%d. %s - %d", i + 1, entries[i].name, entries[i].score);
+        sprintf(line, "%d. %s - %d", i + 1, entries[i].name, entries[i].score); // Format entri ke dalam string
         outtextxy(320, y, line); // Atur posisi X agar rata tengah
-        y += 25;
+        y += 25; // Geser posisi vertikal untuk entri berikutnya
     }
-    // Tidak perlu getch() atau cleardevice()
-    // izin ganti sa hehe :) *revaldi
 }

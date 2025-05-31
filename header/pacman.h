@@ -30,6 +30,7 @@ typedef struct {
 
 // Forward declaration untuk Ghost (struktur didefinisikan di ghost.h)
 typedef struct Ghost Ghost;
+typedef struct GhostNode GhostNode;
 
 // ==== FUNGSI-FUNGSI PACMAN ====
 
@@ -47,13 +48,13 @@ void movePacman(Pacman *p, int key, int *score);
 void resetPacman(Pacman *p);
 
 // Reset ghost ke posisi awal (digunakan saat collision)
-void resetGhost(Ghost *gh);
+void resetGhost(GhostNode* node);
 
 // Update status pacman setelah collision dengan ghost
-void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score);
+void updatePacmanAfterCollision(Pacman *pacman, GhostNode *node, int numGhosts, int *score);
 
 // Tangani kondisi game over, kembalikan 1 jika game over
-int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts);
+int handleGameOver(Pacman *pacman, int *score, GhostNode *node, int numGhosts);
 
 // ==== RESET GENERIC UNTUK PACMAN ATAU GHOST ====
 

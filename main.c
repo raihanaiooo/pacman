@@ -4,12 +4,15 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <math.h>
+#include <stdlib.h>
 #include "header/ui.h"
 #include "header/ghost.h"
 #include "header/pacman.h"
 #include "header/scoring.h"
 #include "header/powerup.h"
 #include "header/pause.h"
+
+GhostNode* ghostList = NULL; // Linked list Ghost dinamis
 
 int main() {
     int gd = DETECT, gm;
@@ -21,36 +24,29 @@ int main() {
     int lastKeyPressed = 0; // Menyimpan arah terakhir
     int score = 0;
     int page = 0; 
-    initLives();      // Initialize lives with the starting number of lives
-
+    initLives();
 
     // Inisialisasi titik-titik
     setTitikDot(); 
     spawnPowerUps();
 
-    // Inisialisasi Pac-Man
-    // Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
-    // pindahin ke atas sama uni
-
-    //Inisialisasi Ghost
-    Ghost ghosts[MAX_GHOSTS];
-    int ghostStepCounter[MAX_GHOSTS] = {0};  // Step counter untuk setiap Ghost
-    const int ghostSpeed = 4;  // Ghost hanya bergerak setiap 4 frame Pac-Man
-    theGhost(&ghosts[0], 320, 240, RED);
-    theGhost(&ghosts[1], 330, 240, WHITE);
-    theGhost(&ghosts[2], 310, 240, GREEN);
-    theGhost(&ghosts[3], 340, 240, CYAN);
+    // Inisialisasi Ghost dinamis
+    addGhost(&ghostList, 320, 240, RED);
+    addGhost(&ghostList, 330, 240, WHITE);
+    addGhost(&ghostList, 310, 240, GREEN);
+    addGhost(&ghostList, 340, 240, CYAN);
+    const int ghostSpeed = 4; // Ghost akan bergerak setiap 4 frame
 
     // Musik start
-    PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // * puter music
-    GameStart(); // Tampilan awal
-    PlaySound(NULL, NULL, 0);  // suara ilang pas mulai main
+    PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+    GameStart();
+    PlaySound(NULL, NULL, 0);
 
     // Game Loop
     while (pacman.lives > 0) {
         clock_t currentTime = clock();
 
-        // **Game Rendering**
+        // Game Rendering
         setactivepage(page);
         setvisualpage(1 - page);
         cleardevice();
@@ -60,16 +56,19 @@ int main() {
         drawLives(lives);
         displayPowerUpInfo();
 
-        // **Ghost Movement**
-        for (int i = 0; i < MAX_GHOSTS; i++) {
-            if (ghostStepCounter[i] % ghostSpeed == 0) {
-                moveGhost(&ghosts[i], &pacman);
+        // Ghost Movement
+        updateGhosts(&ghostList);
+        GhostNode* node = ghostList;
+        while (node != NULL) {
+            node->ghost.stepCounter++;
+            if (node->ghost.stepCounter % ghostSpeed == 0) {
+                moveGhost(&node->ghost, &pacman);
             }
-            designGhost(&ghosts[i]);
-            ghostStepCounter[i]++;  // Tambahkan step counter untuk Ghost ini
+            drawGhostWithEffect(node); // Efek visual jika kebalActive
+            node = node->next;
         }
-         
-        // **Pac-Man Movement**
+
+        // Pacman Movement
         if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
             movePacman(&pacman, lastKeyPressed, &score);
             lastMoveTime = currentTime;
@@ -79,24 +78,37 @@ int main() {
         hitungScore(score, 48, 476, 0);
         updatePowerUpState();
 
-        // **Input Handling**
+        // Input Handling
         if (kbhit()) {
             int newKey = getch();
-            if (newKey == 0 || newKey == 224) { // Menangkap arrow key
+            if (newKey == 0 || newKey == 224) {
                 newKey = getch();
                 lastKeyPressed = newKey; 
             } else {
-                handleInput(newKey, &pacman, ghosts);
+                handleInput(newKey, &pacman, NULL);
             }
         }
 
-        // Kurangi nyawa Pac-Man
-        for (int i = 0; i < MAX_GHOSTS; i++) {
-            if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
-                updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
+        // Kurangi Nyawa Pacman
+        GhostNode* currentGhost = ghostList;  // Gunakan pointer sementara untuk iterasi
+
+        while (currentGhost != NULL) {
+            if (!doublePointActive && CollisionWithGhost(&pacman, currentGhost)) {
+                updatePacmanAfterCollision(&pacman, currentGhost, MAX_GHOSTS, &score);
                 removeLife(&lives);  // Hapus satu nyawa dari linked list
                 break;
             }
+            currentGhost = currentGhost->next;
+        }
+
+        // Pac-Man menabrak Ghost
+        node = ghostList;
+        while (node != NULL) {
+            if (CollisionWithGhost(&pacman, node)) {
+                updatePacmanAfterCollision(&pacman, node, 0, &score);
+                break;
+            }
+            node = node->next;
         }
         
         // Cek jika nyawa habis
@@ -105,8 +117,9 @@ int main() {
             setvisualpage(1);
             cleardevice();
 
-            int isRestart = handleGameOver(&pacman, &score, ghosts, MAX_GHOSTS);
-                initLives();  // Restart nyawa
+            int isRestart = handleGameOver(&pacman, &score, ghostList, MAX_GHOSTS); // pake ghostList linked list
+            initLives();  // Restart nyawa
+
             if (isRestart) {
                 initLives();  // Restart nyawa
                 continue;     // Restart permainan
@@ -114,8 +127,9 @@ int main() {
                 break;        // Keluar dari loop utama
             }
         }
-        
-        // **Kondisi jika semua dots & powerups habis**
+
+
+        // Kondisi jika semua dots & powerups habis
         if (countDotsAndPowerUps() == 0) {
             setactivepage(1); 
             setvisualpage(1);  

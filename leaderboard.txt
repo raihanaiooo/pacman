@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 kontol 51
 UPA 22
 JSAIJS 20
 KOKO 15
 OAJOSJA 10
+=======
+SASA 31
+sasa 8
+SASA 3
+>>>>>>> sasa

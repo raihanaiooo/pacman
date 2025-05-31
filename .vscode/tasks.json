@@ -7,7 +7,7 @@
 			"command": "g++",
 			"args": [
 				"body/collision-raihana.c",
-				"body/ghost.c",
+				"body/ghost-adjie.c",
 				"body/leaderboard-raihana.c",
 				"body/pacman-raihana.c",
 				"body/pacman-seruni.c",
