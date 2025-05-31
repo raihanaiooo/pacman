@@ -49,7 +49,7 @@ void designGhost(Ghost* gh, int isScared, int scaredTimer) {
     int x = gh->x;
     int y = gh->y;
 
-    // Warna utama (badan ghost)
+    // Kondisi ketika kebalActive
     if (isScared) {
         if (scaredTimer < 30 && (scaredTimer / 5) % 2 == 0) {
             setcolor(WHITE);
@@ -93,6 +93,7 @@ void drawGhostWithEffect(GhostNode *node) {
     int x = gh->x;
     int y = gh->y;
 
+    // Efek ketika kebalActive
     if (kebalActive && (flickerCounter / 5) % 2 == 0) {
         int originalColor = gh->hue;
         gh->hue = LIGHTBLUE;
@@ -103,10 +104,12 @@ void drawGhostWithEffect(GhostNode *node) {
     }
 }
 
+// Cek tabrakan dengan Map
 int isColliding(Ghost *gh, int newX, int newY) {
     return isColliding(newX, newY, gh->radius, -1);
 }
 
+// Sistem Movement Ghost
 void moveGhost(Ghost *gh, Pacman *pac) {
     if (freezeActive) return;
 
@@ -124,7 +127,7 @@ void moveGhost(Ghost *gh, Pacman *pac) {
             escapePacman(gh, pac);
             break;
         default:
-            shiftGhost(gh); 
+            shiftGhost(gh);  // Gerak acak
             break;
     }
 }
