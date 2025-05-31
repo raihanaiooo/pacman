@@ -17,8 +17,12 @@ GhostNode* ghostList = NULL; // Linked list Ghost dinamis
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, NULL);
+
+    // Inisialisasi Pacman
     Pacman pacman = {320, 290, 8, 0, 3, 320, 290}; // Pac-Man dengan 3 nyawa
     initPacmanAnimation(&pacman); //animasi mulut pacman
+
+    // Setup waktu dan input
     clock_t lastMoveTime = 0;
     const int moveDelay = 100; // Delay Pac-Man dalam ms (0.1 detik)
     int lastKeyPressed = 0; // Menyimpan arah terakhir
@@ -30,7 +34,7 @@ int main() {
     setTitikDot(); 
     spawnPowerUps();
 
-    // Inisialisasi Ghost dinamis
+    // Inisialisasi Ghost 
     addGhost(&ghostList, 320, 240, RED);
     addGhost(&ghostList, 330, 240, WHITE);
     addGhost(&ghostList, 310, 240, GREEN);
@@ -56,7 +60,7 @@ int main() {
         drawLives(lives);
         displayPowerUpInfo();
 
-        // Ghost Movement
+        // Ghost Draw & Movement
         updateGhosts(&ghostList);
         GhostNode* node = ghostList;
         while (node != NULL) {
@@ -89,24 +93,17 @@ int main() {
             }
         }
 
-        // Kurangi Nyawa Pacman
-        GhostNode* currentGhost = ghostList;  // Gunakan pointer sementara untuk iterasi
-
-        while (currentGhost != NULL) {
-            if (!doublePointActive && CollisionWithGhost(&pacman, currentGhost)) {
-                updatePacmanAfterCollision(&pacman, currentGhost, MAX_GHOSTS, &score);
-                removeLife(&lives);  // Hapus satu nyawa dari linked list
-                break;
-            }
-            currentGhost = currentGhost->next;
-        }
-
         // Pac-Man menabrak Ghost
         node = ghostList;
         while (node != NULL) {
             if (CollisionWithGhost(&pacman, node)) {
-                updatePacmanAfterCollision(&pacman, node, 0, &score);
-                break;
+                if (kebalActive) {
+                    score += 100;
+                    resetGhost(node);
+                } else {
+                    updatePacmanAfterCollision(&pacman, node, 0, &score);
+                    break;
+                }
             }
             node = node->next;
         }

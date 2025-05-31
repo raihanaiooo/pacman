@@ -8,16 +8,41 @@
 int directionX[4] = {1, -1, 0, 0}; 
 int directionY[4] = {0, 0, -1, 1};  
 
-void theGhost(Ghost *gh, int x, int y, int hue) {
-    gh->x = x;
-    gh->y = y;
-    gh->initialX = x;
-    gh->initialY = y;
-    gh->hue = hue;
-    gh->radius = 8;  
-    
-    gh->lastDirX = 0;  
-    gh->lastDirY = 0;
+void addGhost(GhostNode** head, int x, int y, int color) {
+    GhostNode* newGhost = (GhostNode*)malloc(sizeof(GhostNode));
+    newGhost->ghost.x = x;
+    newGhost->ghost.y = y;
+    newGhost->ghost.initialX = x;
+    newGhost->ghost.initialY = y;
+    newGhost->ghost.radius = 8;
+    newGhost->ghost.stepCounter = 0;
+    newGhost->ghost.hue = color;
+    newGhost->ghost.lastDirX = 0;
+    newGhost->ghost.lastDirY = 0;
+
+    newGhost->isScared = 0;
+    newGhost->scaredTimer = 0;
+    newGhost->color = color;
+    newGhost->next = *head;
+    *head = newGhost;
+}
+
+void updateGhosts(GhostNode** head) {
+    GhostNode* current = *head;
+    GhostNode* prev = NULL;
+
+    while (current != NULL) {
+        // Mode takut berakhir
+        if (current->isScared) {
+            current->scaredTimer--;
+            if (current->scaredTimer <= 0) {
+                current->isScared = 0;
+                current->ghost.hue = current->color;  // Kembali ke warna awal
+            }
+        }
+        prev = current;
+        current = current->next;
+    }
 }
 
 void designGhost(Ghost* gh, int isScared, int scaredTimer) {
@@ -65,6 +90,8 @@ void drawGhostWithEffect(GhostNode *node) {
     flickerCounter++;
 
     Ghost *gh = &node->ghost;
+    int x = gh->x;
+    int y = gh->y;
 
     if (kebalActive && (flickerCounter / 5) % 2 == 0) {
         int originalColor = gh->hue;
@@ -73,59 +100,6 @@ void drawGhostWithEffect(GhostNode *node) {
         gh->hue = originalColor;
     } else {
         designGhost(gh, node->isScared, node->scaredTimer);
-    }
-}
-
-
-void addGhost(GhostNode** head, int x, int y, int color) {
-    GhostNode* newGhost = (GhostNode*)malloc(sizeof(GhostNode));
-    newGhost->ghost.x = x;
-    newGhost->ghost.y = y;
-    newGhost->ghost.initialX = x;
-    newGhost->ghost.initialY = y;
-    newGhost->ghost.radius = 8;
-    newGhost->ghost.stepCounter = 0;
-    newGhost->ghost.hue = color;
-    newGhost->ghost.lastDirX = 0;
-    newGhost->ghost.lastDirY = 0;
-
-    newGhost->lifetime = 999999; // Atur waktu hidup lama kalau tidak ingin menghilang
-    newGhost->color = color;
-    newGhost->next = *head;
-    *head = newGhost;
-}
-
-void updateGhosts(GhostNode** head) {
-    GhostNode* current = *head;
-    GhostNode* prev = NULL;
-
-    while (current != NULL) {
-        // Mode takut berakhir
-        if (current->isScared) {
-            current->scaredTimer--;
-            if (current->scaredTimer <= 0) {
-                current->isScared = 0;
-                current->ghost.hue = current->color;  // Kembali ke warna awal
-            }
-        }
-
-        // Tetap kode hapus jika lifetime habis (seperti sebelumnya)
-        current->lifetime--;
-
-        if (current->lifetime <= 0) {
-            GhostNode* toDelete = current;
-            if (prev == NULL) {
-                *head = current->next;
-                current = *head;
-            } else {
-                prev->next = current->next;
-                current = current->next;
-            }
-            free(toDelete);
-        } else {
-            prev = current;
-            current = current->next;
-        }
     }
 }
 
@@ -315,7 +289,6 @@ void escapePacman(Ghost *gh, Pacman *pac) {
     }
 }
 
-
 // Fungsi untuk mengecek tabrakan antara Pac-Man dan Ghost
 int CollisionWithGhost(Pacman *p, GhostNode *node){
     
@@ -342,9 +315,3 @@ int CollisionWithGhost(Pacman *p, GhostNode *node){
     
     return 0;  // True jika tabrakan
 }
-
-// prosedur reset ghost 
-// void resetGhost(Ghost *gh) {
-// gh->x = gh->initialX;
-// gh->y = gh->initialY;
-// } (DIHAPUS)

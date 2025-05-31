@@ -77,11 +77,6 @@ void handleInput(char key, Pacman *pacman, Ghost ghosts[]) {
                         setTitikDot();
                         spawnPowerUps();
                         
-                        theGhost(&ghosts[0], 320, 240, RED);
-                        theGhost(&ghosts[1], 330, 240, WHITE);
-                        theGhost(&ghosts[2], 310, 240, GREEN);
-                        theGhost(&ghosts[3], 340, 240, CYAN);
-                        
                         /* Tampilkan layar awal kembali */
                         PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
                         GameStart();

@@ -38,7 +38,6 @@ typedef struct GhostNode {
 
 extern int maze[24][32];
 
-void theGhost(Ghost *gh, int x, int y, int hue);            // Inisialisasi Ghost
 void designGhost(Ghost* gh, int isScared, int scaredTimer); // Pengaturan bentuk dan warna Ghost
 void drawGhostWithEffect(GhostNode *node);
 void addGhost(GhostNode** head, int x, int y, int color);
