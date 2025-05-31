@@ -17,7 +17,7 @@
 				"body/ui-revaldi.c",
 				"${file}",
 				"-o",
-				"${fileDirname}/output.exe",
+				"${fileDirname}/pacman.exe",
 				"-lbgi",
 				"-lgdi32",
 				"-lcomdlg32",

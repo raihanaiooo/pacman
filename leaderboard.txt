@@ -4,4 +4,8 @@ adjie 21
 SASA 3
 =======
 pras 6
+<<<<<<< HEAD
 >>>>>>> revaldi
+=======
+SASA 6
+>>>>>>> sasa
