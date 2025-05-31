@@ -26,6 +26,8 @@ void GameWin();
 int countDotsAndPowerUps();
 // Prosedur untuk menampilkan game over
 int GameOver(int score);
+// Prosedur untuk menampilkan panduan bermain
+void GuideScreen();
 // Prosedur untuk menginisiasi nyawa
 void initLives();
 // Fungsi untuk menggambar nyawa
