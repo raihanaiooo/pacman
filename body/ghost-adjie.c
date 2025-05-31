@@ -20,31 +20,62 @@ void theGhost(Ghost *gh, int x, int y, int hue) {
     gh->lastDirY = 0;
 }
 
-void designGhost(Ghost *gh) {
+void designGhost(Ghost* gh, int isScared, int scaredTimer) {
     int x = gh->x;
     int y = gh->y;
 
-    setcolor(gh->hue);
-    setfillstyle(SOLID_FILL, gh->hue);
-    fillellipse(x, y, gh->radius, gh->radius);  
+    // Warna utama (badan ghost)
+    if (isScared) {
+        if (scaredTimer < 30 && (scaredTimer / 5) % 2 == 0) {
+            setcolor(WHITE);
+            setfillstyle(SOLID_FILL, WHITE);
+        } else {
+            setcolor(BLUE);
+            setfillstyle(SOLID_FILL, BLUE);
+        }
+    } else {
+        setcolor(gh->hue);
+        setfillstyle(SOLID_FILL, gh->hue);
+    }
 
-    // Duri dibawah Ghost
+    // Badan ghost
+    fillellipse(x, y, gh->radius, gh->radius);
+
+    // Duri di bawah
     for (int i = -10; i <= 10; i += 5) {
         int spikeY = y + gh->radius;
         fillellipse(x + i, spikeY, 2, 3);
     }
 
-    // Mata Ghost
+    // Mata Ghost (putih)
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, WHITE);
     fillellipse(x - 4, y - 5, 2, 2);
     fillellipse(x + 4, y - 5, 2, 2);
 
+    // Bola mata biru
     setcolor(BLUE);
     setfillstyle(SOLID_FILL, BLUE);
     fillellipse(x - 4, y - 5, 1, 1);
     fillellipse(x + 4, y - 5, 1, 1);
 }
+
+void drawGhostWithEffect(GhostNode *node) {
+    static int flickerCounter = 0;
+    flickerCounter++;
+
+    Ghost *gh = &node->ghost;
+
+    if (kebalActive && (flickerCounter / 5) % 2 == 0) {
+        int originalColor = gh->hue;
+        gh->hue = LIGHTBLUE;
+        designGhost(gh, node->isScared, node->scaredTimer);
+        gh->hue = originalColor;
+    } else {
+        designGhost(gh, node->isScared, node->scaredTimer);
+    }
+}
+
 
 void addGhost(GhostNode** head, int x, int y, int color) {
     GhostNode* newGhost = (GhostNode*)malloc(sizeof(GhostNode));
@@ -69,9 +100,19 @@ void updateGhosts(GhostNode** head) {
     GhostNode* prev = NULL;
 
     while (current != NULL) {
+        // Mode takut berakhir
+        if (current->isScared) {
+            current->scaredTimer--;
+            if (current->scaredTimer <= 0) {
+                current->isScared = 0;
+                current->ghost.hue = current->color;  // Kembali ke warna awal
+            }
+        }
+
+        // Tetap kode hapus jika lifetime habis (seperti sebelumnya)
         current->lifetime--;
+
         if (current->lifetime <= 0) {
-            // Hapus ghost
             GhostNode* toDelete = current;
             if (prev == NULL) {
                 *head = current->next;
@@ -88,18 +129,9 @@ void updateGhosts(GhostNode** head) {
     }
 }
 
-void drawGhosts(GhostNode* head) {
-    GhostNode* current = head;
-    while (current != NULL) {
-        designGhost(&(current->ghost));
-        current = current->next;
-    }
-}
-
 int isColliding(Ghost *gh, int newX, int newY) {
     return isColliding(newX, newY, gh->radius, -1);
 }
-
 
 void moveGhost(Ghost *gh, Pacman *pac) {
     if (freezeActive) return;
@@ -285,18 +317,26 @@ void escapePacman(Ghost *gh, Pacman *pac) {
 
 
 // Fungsi untuk mengecek tabrakan antara Pac-Man dan Ghost
-int CollisionWithGhost(Pacman *p, Ghost *g) {
+int CollisionWithGhost(Pacman *p, GhostNode *node){
+    
+    Ghost *g = &node->ghost;
+    
     int dx = p->x - g->x;
     int dy = p->y - g->y;
     int distanceSquared = dx * dx + dy * dy;
     int collisionDistance = (p->radius + g->radius) * (p->radius + g->radius);
+    extern int doublePointActive;
 
     if (distanceSquared <= collisionDistance) {
         if (kebalActive) {
             printf("⚡ Pac-Man kebal! Ghost akan kembali ke posisi awal.\n");
-            resetGhost(g);  // Ghost respawn ke posisi awal
+            resetGhost(node);  // Ghost respawn ke posisi awal
             return 0;  // Jangan hitung tabrakan sebagai kerugian bagi Pac-Man
+        } else if (doublePointActive && freezeActive){
+            resetGhost(node); 
+            return 1;  
         }
+        resetGhost(node);
         return 1;  // Tabrakan normal
     }
     

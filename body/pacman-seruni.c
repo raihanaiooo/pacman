@@ -56,22 +56,30 @@ void resetPacman(Pacman *p) {
                 &p->x, &p->y,p->initialX, p->initialY); // alamat koordinat pacman
 }
 
-void resetGhost(Ghost *gh) {
+void resetGhost(GhostNode *node) {
+    Ghost *gh = &node->ghost;
+
     resetEntity(gh,
-                (ClearFunc)clearGhost, (DrawFunc)designGhost,
+                (ClearFunc)clearGhost,
+                (DrawFunc)drawGhostWithEffect,
                 &gh->x, &gh->y,
                 gh->initialX, gh->initialY);
+
+    node->isScared = 0;
+    node->scaredTimer = 0;
 }
 
-
 // Fungsi handle game over
-int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
+int handleGameOver(Pacman *pacman, int *score, GhostNode *node, int numGhosts) {
     int playAgain = GameOver(*score);
     if (playAgain) {
         // Reset seluruh game state
         resetPacman(pacman);
+
+        Ghost *g = &node->ghost;
+
         for (int i = 0; i < numGhosts; i++) {
-            resetGhost(&ghosts[i]);
+            resetGhost(node);
         }
         *score = 0;
         pacman->lives = 3;
@@ -85,30 +93,16 @@ int handleGameOver(Pacman *pacman, int *score, Ghost ghosts[], int numGhosts) {
 }
 
 // Prosedure respawn pacman 
-void updatePacmanAfterCollision(Pacman *pacman, Ghost ghosts[], int numGhosts, int *score) {
+void updatePacmanAfterCollision(Pacman *pacman, GhostNode *node, int numGhosts, int *score) {
     pacman->lives--; // mengurangi nyawa 
     
     if (pacman->lives > 0) {
     
         resetPacman(pacman);
         
-        for (int i = 0; i < numGhosts; i++)
-        {
-        if (CollisionWithGhost(pacman, &ghosts[i])) {
-        
-        // Jika Pac-Man kebal, reset posisi Ghost tanpa mengurangi nyawa
-        if (kebalActive) {
-        printf("🔥 Pac-Man kebal! Ghost kembali ke posisi awal.\n");
-        
-            // Respawn Ghost ke posisi awal
-            resetGhost(&ghosts[i]);
-            continue;  // Lewati proses pengurangan nyawa
-            }
+        for (int i = 0; i < numGhosts; i++){
+            CollisionWithGhost(pacman, node);  
         }
-        resetGhost(&ghosts[i]);
-        }
-    
-   }
    
+    }
 }
-

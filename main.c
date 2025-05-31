@@ -30,9 +30,6 @@ int main() {
     setTitikDot(); 
     spawnPowerUps();
 
-    // Inisialisasi Pac-Man
-    Pacman pacman = {320, 290, 8, 0, 3, 320, 290};
-
     // Inisialisasi Ghost dinamis
     addGhost(&ghostList, 320, 240, RED);
     addGhost(&ghostList, 330, 240, WHITE);
@@ -65,10 +62,9 @@ int main() {
             if (node->ghost.stepCounter % ghostSpeed == 0) {
                 moveGhost(&node->ghost, &pacman);
             }
+            drawGhostWithEffect(node); // Efek visual jika kebalActive
             node = node->next;
         }
-        
-        drawGhosts(ghostList);
 
         if ((currentTime - lastMoveTime) * 1000 / CLOCKS_PER_SEC >= moveDelay) {
             movePacman(&pacman, lastKeyPressed, &score);
@@ -91,27 +87,26 @@ int main() {
 
         node = ghostList;
         while (node != NULL) {
-            if (!doublePointActive && CollisionWithGhost(&pacman, &node->ghost)) {
-                updatePacmanAfterCollision(&pacman, NULL, 0, &score);
+            if (CollisionWithGhost(&pacman, node)) {
+                updatePacmanAfterCollision(&pacman, node, 0, &score);
                 break;
             }
             node = node->next;
         }
 
         if (pacman.lives == 0) {
-        
-        // Cek jika nyawa habis
-        if (lives == NULL) {
-            setactivepage(1);
-            setvisualpage(1);
-            cleardevice();
+            if (lives == NULL) {
+                setactivepage(1);
+                setvisualpage(1);
+                cleardevice();
 
-            int isRestart = handleGameOver(&pacman, &score, NULL, 0);
+                int isRestart = handleGameOver(&pacman, &score, NULL, 0);
 
-            if (isRestart) {
-                continue;
-            } else {
-                break;
+                if (isRestart) {
+                    continue;
+                } else {
+                    break;
+                }
             }
         }
 
