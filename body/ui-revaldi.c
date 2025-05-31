@@ -2,11 +2,16 @@
 #include <graphics.h>
 #include <conio.h>
 #include "../header/ui.h"
+#include "../header/leaderboard.h"
 #include "../header/scoring.h"
+#include "../header/powerup.h"
 
 #define TILE_SIZE 20
 #define ROWS 24
 #define COLS 32
+
+Life *lives = NULL; // Pointer ke nyawa
+
 // Deklarasi Array Labirin
 int maze[ROWS][COLS] = {
     {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
@@ -71,28 +76,37 @@ void GameStart() {
     char title[] = "PAC-MAN";
     char author[] = "1B - GROUP 2";
     char instruction[] = "PRESS SPACE TO PLAY THE GAME!";
-
-    settextstyle(GOTHIC_FONT, HORIZ_DIR, 7);
-    settextjustify(CENTER_TEXT, CENTER_TEXT);
-    setcolor(YELLOW);
-    outtextxy(320, 150, title);
-
-    settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
-    outtextxy(320, 200, author);
+    char leaderboardHint[] = "PRESS 'L' TO SHOW/HIDE LEADERBOARD";
+    int leaderboardVisible = 0;
 
     while (1) {
+        cleardevice();
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 7);
+        settextjustify(CENTER_TEXT, CENTER_TEXT);
+        setcolor(YELLOW);
+        outtextxy(320, 100, title);
+
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+        outtextxy(320, 145, author);
+
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 1);
+        setcolor(LIGHTCYAN);
+        outtextxy(320, 195, leaderboardHint);
+
+        if (leaderboardVisible) {
+            displayLeaderboard();
+        }
+
         setcolor(WHITE);
-        outtextxy(320, 380, instruction);
-        delay(500);
+        outtextxy(320, 420, instruction);
 
-        setcolor(BLACK);
-        outtextxy(320, 380, instruction);
-        delay(500);
-
+        // Cek input
         if (kbhit()) {
             char key = getch();
-            if (key == 32) break;  // Space key
+            if (key == 32) break; // Space untuk mulai
+            if (key == 'l' || key == 'L') leaderboardVisible = !leaderboardVisible;
         }
+        delay(100);
     }
     cleardevice();
 }
@@ -126,23 +140,51 @@ int GameOver(int score) {
     char gameOverText[] = "GAME OVER!";
     char finalScoreText[30];
     char playAgainText[] = "PRESS 'R' TO PLAY AGAIN OR 'Q' TO QUIT";
+    char name[50] = "";
+    int nameIndex = 0;
 
-    // Bersihkan layar
     cleardevice();
 
-    // Tampilkan teks "GAME OVER"
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 5);
     settextjustify(CENTER_TEXT, CENTER_TEXT);
     setcolor(RED);
-    outtextxy(320, 150, gameOverText);
+    outtextxy(320, 100, gameOverText);
 
-    // Tampilkan skor akhir
     sprintf(finalScoreText, "FINAL SCORE: %d", score);
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
     setcolor(WHITE);
-    outtextxy(320, 200, finalScoreText);
+    outtextxy(320, 150, finalScoreText);
 
-    // Tampilkan pilihan untuk bermain lagi atau keluar
+    // Input nama pemain
+    setcolor(LIGHTCYAN);
+    char text[] = "ENTER YOUR NAME";
+    outtextxy(320, 200, text);
+
+    while (1) {
+        setcolor(WHITE);
+        settextstyle(GOTHIC_FONT, HORIZ_DIR, 2);
+        // outtextxy(320, 230, "                         ");  // clear line
+        outtextxy(320, 230, name);
+
+        if (kbhit()) {
+            char ch = getch();
+            if (ch == 13) break;  // ENTER untuk konfirmasi nama
+            else if (ch == 8 && nameIndex > 0) {
+                nameIndex--;
+                name[nameIndex] = '\0';
+            }
+            else if (nameIndex < 20 && ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) {
+                name[nameIndex++] = ch;
+                name[nameIndex] = '\0';
+            }
+        }
+        delay(100);
+    }
+
+    // Simpan ke leaderboard
+    updateLeaderboard(name, score);
+
+    // Tampilkan instruksi lanjut
     settextstyle(GOTHIC_FONT, HORIZ_DIR, 1);
     setcolor(YELLOW);
     outtextxy(320, 300, playAgainText);
@@ -157,25 +199,74 @@ int GameOver(int score) {
     }
 }
 
-// Prosedur untuk menampilkan nyawa ke layar
-void displayLives(Pacman *pacman) {
-    int startX = 295;
-    int y = 20;
-    int size = 8;
 
-    for (int i = 0; i < pacman->lives; i++) {
-        int x = startX + (i * 25);
+Life* createLife(int x, int y) {
+    Life *newLife = (Life *)malloc(sizeof(Life));
+    newLife->x = x;
+    newLife->y = y;
+    newLife->next = NULL;
+    return newLife;
+}
 
+void addLife(Life **head, int x, int y) {
+    Life *newLife = createLife(x, y);
+    newLife->next = *head;
+    *head = newLife;
+}
+
+void removeLife(Life **head) {
+    if (*head == NULL) return;
+    Life *temp = *head;
+    *head = (*head)->next;
+    free(temp);
+}
+
+void drawLives(Life *head) {
+    Life *current = head;
+    while (current != NULL) {
+        int x = current->x;
+        int y = current->y;
+        // Warna hati
         setcolor(RED);
         setfillstyle(SOLID_FILL, RED);
-        fillellipse(x - size / 2, y, size / 2, size / 2);
-        fillellipse(x + size / 2, y, size / 2, size / 2);
+        // Gambar dua lingkaran atas hati
+        fillellipse(x - 5, y - 5, 5, 5); // Lingkaran kiri
+        fillellipse(x + 5, y - 5, 5, 5); // Lingkaran kanan
+        // Gambar segitiga bawah hati
+        int points[] = {x - 10, y - 5, x + 10, y - 5, x, y + 10, x - 10, y - 5};
+        fillpoly(4, points);
 
-        int heartPoints[] = {
-            x - size, y,
-            x + size, y,
-            x, y + size + 4
-        };
-        fillpoly(3, heartPoints); // Tampilan 3 nyawa berbentuk hati 
+        current = current->next;
+    }
+}
+
+void initLives() {
+    // Tambahkan 3 nyawa di posisi tertentu (misalnya, di pojok kiri atas layar)
+    addLife(&lives, 295, 25);  // Nyawa pertama
+    addLife(&lives, 320, 25);  // Nyawa kedua
+    addLife(&lives, 345, 25);  // Nyawa ketiga
+}
+
+void displayPowerUpInfo() {
+    if (activePowerUpType > 0 && powerUpCountdown > 0) {
+        char infoText[50];
+        char countdownText[20];
+
+        // Tentukan nama power-up berdasarkan jenisnya
+        switch (activePowerUpType) {
+            case 1: sprintf(infoText, "Power-Up: Double Score"); break;
+            case 2: sprintf(infoText, "Power-Up: Kebal"); break;
+            case 3: sprintf(infoText, "Power-Up: Freeze"); break;
+            default: sprintf(infoText, "Power-Up: Unknown"); break;
+        }
+
+        // Tampilkan waktu sisa
+        sprintf(countdownText, "Time Left: %d s", powerUpCountdown);
+
+        // Gambar teks di layar
+        setcolor(WHITE);
+        settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 1);
+        outtextxy(200, 476, infoText);        // Info power-up
+        outtextxy(400, 476, countdownText);  // Countdown
     }
 }
