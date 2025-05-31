@@ -22,14 +22,6 @@ void drawPacman(Pacman *p) {
     /* Menggambar mulut Pacman */
     setcolor(BLACK);
     setfillstyle(SOLID_FILL, YELLOW);
-
-    /* Menggambar mulut Pacman dengan bentuk terbuka sesuai arah pergerakannya */
-    //switch (p->direction) {
-    //case 0: pieslice(p->x, p->y, 30, 330, p->radius); break;  // Ke kanan
-    //case 1: pieslice(p->x, p->y, 210, 150, p->radius); break; // Ke kiri
-    //case 2: pieslice(p->x, p->y, 120, 60, p->radius); break;  // Ke atas
-    //case 3: pieslice(p->x, p->y, 300, 240, p->radius); break; // Ke bawah
-    //} (mau coba ganti dulu yaa sama yang di bawah)
     
     // gunakan sudut dari frame linked list
    int sa = f->start_angle, ea = f->end_angle;
