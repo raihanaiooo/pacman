@@ -93,6 +93,18 @@ int main() {
             }
         }
 
+        // Kurangi Nyawa Pacman
+        GhostNode* currentGhost = ghostList;  // Gunakan pointer sementara untuk iterasi
+
+        while (currentGhost != NULL) {
+            if (!doublePointActive && CollisionWithGhost(&pacman, currentGhost)) {
+                updatePacmanAfterCollision(&pacman, currentGhost, MAX_GHOSTS, &score);
+                removeLife(&lives);  // Hapus satu nyawa dari linked list
+                break;
+            }
+            currentGhost = currentGhost->next;
+        }
+
         // Pac-Man menabrak Ghost
         node = ghostList;
         while (node != NULL) {
