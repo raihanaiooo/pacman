@@ -30,17 +30,6 @@ int main() {
     setTitikDot(); 
     spawnPowerUps();
 
-<<<<<<< HEAD
-    // Inisialisasi Pac-Man
-    Pacman pacman = {320, 290, 8, 0, 3, 320, 290};
-
-    // Inisialisasi Ghost dinamis
-    addGhost(&ghostList, 320, 240, RED);
-    addGhost(&ghostList, 330, 240, WHITE);
-    addGhost(&ghostList, 310, 240, GREEN);
-    addGhost(&ghostList, 340, 240, CYAN);
-    const int ghostSpeed = 4; // Ghost akan bergerak setiap 4 frame
-=======
 
     //Inisialisasi Ghost
     Ghost ghosts[MAX_GHOSTS];
@@ -50,7 +39,6 @@ int main() {
     theGhost(&ghosts[1], 330, 240, WHITE);
     theGhost(&ghosts[2], 310, 240, GREEN);
     theGhost(&ghosts[3], 340, 240, CYAN);
->>>>>>> sasa
 
     // Musik start
     PlaySound("sound/start.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -101,42 +89,22 @@ int main() {
             }
         }
 
-<<<<<<< HEAD
-        node = ghostList;
-        while (node != NULL) {
-            if (!doublePointActive && CollisionWithGhost(&pacman, &node->ghost)) {
-                updatePacmanAfterCollision(&pacman, NULL, 0, &score);
-=======
         // Kurangi nyawa Pac-Man
         for (int i = 0; i < MAX_GHOSTS; i++) {
             if (!doublePointActive && CollisionWithGhost(&pacman, &ghosts[i])) {
                 updatePacmanAfterCollision(&pacman, ghosts, MAX_GHOSTS, &score);
                 removeLife(&lives);  // Hapus satu nyawa dari linked list
->>>>>>> sasa
                 break;
             }
             node = node->next;
         }
-<<<<<<< HEAD
-
-        if (pacman.lives == 0) {
-=======
         
         // Cek jika nyawa habis
         if (lives == NULL) {
->>>>>>> sasa
             setactivepage(1);
             setvisualpage(1);
             cleardevice();
 
-<<<<<<< HEAD
-            int isRestart = handleGameOver(&pacman, &score, NULL, 0);
-
-            if (isRestart) {
-                continue;
-            } else {
-                break;
-=======
             int isRestart = handleGameOver(&pacman, &score, ghosts, MAX_GHOSTS);
                 initLives();  // Restart nyawa
             if (isRestart) {
@@ -144,7 +112,6 @@ int main() {
                 continue;     // Restart permainan
             } else {
                 break;        // Keluar dari loop utama
->>>>>>> sasa
             }
         }
 
