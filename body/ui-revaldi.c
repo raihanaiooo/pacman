@@ -23,11 +23,11 @@ int maze[ROWS][COLS] = {
     {2,0,2,2,2,2,0,2,0,2,2,2,2,2,0,2,2,0,2,2,2,2,2,0,2,0,2,2,2,2,0,2},
     {2,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,2},
     {2,2,2,2,2,2,0,2,2,2,0,2,2,2,2,2,2,2,2,2,2,0,2,2,2,0,2,2,2,2,2,2},
-    {0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0},
+    {2,2,2,2,2,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,2,2,2,2,2},
     {2,2,2,2,2,2,0,2,0,2,2,0,2,2,2,0,0,2,2,2,0,2,2,0,2,0,2,2,2,2,2,2},
     {0,0,0,0,0,0,0,0,0,2,2,0,2,0,0,0,0,0,0,2,0,2,2,0,0,0,0,0,0,0,0,0}, //TENGAHHH
     {2,2,2,2,2,2,0,2,0,2,2,0,2,0,0,0,0,0,0,2,0,2,2,0,2,0,2,2,2,2,2,2},
-    {0,0,0,0,0,2,0,2,0,2,2,0,2,2,2,2,2,2,2,2,0,2,2,0,2,0,2,0,0,0,0,0},
+    {2,2,2,2,2,2,0,2,0,2,2,0,2,2,2,2,2,2,2,2,0,2,2,0,2,0,2,2,2,2,2,2},
     {2,2,2,2,2,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,2,2,2,2,2},
     {2,0,0,0,0,0,0,2,2,2,2,0,2,2,2,2,2,2,2,2,0,2,2,2,2,0,0,0,0,0,0,2},
     {2,0,2,2,2,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,2,2,2,0,2},
@@ -77,6 +77,7 @@ void GameStart() {
     char author[] = "1B - GROUP 2";
     char instruction[] = "PRESS SPACE TO PLAY THE GAME!";
     char leaderboardHint[] = "PRESS 'L' TO SHOW/HIDE LEADERBOARD";
+    char guideHint[] = "PRESS 'G' FOR GUIDE";
     int leaderboardVisible = 0;
 
     while (1) {
@@ -100,11 +101,16 @@ void GameStart() {
         setcolor(WHITE);
         outtextxy(320, 420, instruction);
 
+        settextstyle(DEFAULT_FONT, HORIZ_DIR, 2);
+        setcolor(WHITE);
+        outtextxy(320, 450, guideHint);
+
         // Cek input
         if (kbhit()) {
             char key = getch();
             if (key == 32) break; // Space untuk mulai
-            if (key == 'l' || key == 'L') leaderboardVisible = !leaderboardVisible;
+            if (key == 'l' || key == 'L') leaderboardVisible = !leaderboardVisible; // Tampilkan leaderboard
+            if (key == 'g' || key == 'G') GuideScreen();  // Tampilkan panduan
         }
         delay(100);
     }
@@ -199,6 +205,61 @@ int GameOver(int score) {
     }
 }
 
+void GuideScreen() {
+    cleardevice();
+    setbkcolor(BLACK);
+
+    char title[] = "HOW TO PLAY";
+    char satu[]= "1. Gunakan ARROW KEY untuk menggerakkan Pac-Man.";
+    char dua[]= "2. Makan semua DOT (titik putih) untuk menang.";
+    char tiga[]= "3. Hindari Ghost! Jika tertangkap, nyawa berkurang.";
+    char empat[]= "4. Ambil POWER-UP untuk efek spesial:";
+    char powerUp1[] = "- Double Score: Skor dobel sementara";
+    char powerUp2[] = "- Kebal: Pac-Man kebal dari Ghost";
+    char powerUp3[] = "- Freeze: Ghost berhenti bergerak sementara";
+    char lima[] = "5. Tekan 'P' untuk pause, 'Q' untuk keluar.";
+    char kembali[] = "Tekan SPACE untuk kembali ke menu";
+
+    settextstyle(GOTHIC_FONT, HORIZ_DIR, 4);
+    setcolor(YELLOW);
+    settextjustify(CENTER_TEXT, CENTER_TEXT);
+    outtextxy(320, 60, title);
+
+    settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
+    setcolor(WHITE);
+
+    int y = 120;
+    outtextxy(320, y, satu);
+    y += 35;
+    outtextxy(320, y, dua);
+    y += 35;
+    outtextxy(320, y, tiga);
+    y += 35;
+    outtextxy(320, y, empat);
+    y += 30;
+    setcolor(YELLOW);
+    outtextxy(340, y, powerUp1);
+    y += 25;
+    setcolor(RED);
+    outtextxy(340, y, powerUp2);
+    y += 25;
+    setcolor(BLUE);
+    outtextxy(340, y, powerUp3);
+    y += 35;
+    setcolor(WHITE);
+    outtextxy(320, y, lima);
+
+    y += 50;
+    setcolor(YELLOW);
+    outtextxy(320, y, kembali);
+
+    // Tunggu sampai user menekan SPACE
+    while (1) {
+        if (kbhit() && getch() == 32) break;
+        delay(50);
+    }
+    cleardevice();
+}
 
 Life* createLife(int x, int y) {
     Life *newLife = (Life *)malloc(sizeof(Life));

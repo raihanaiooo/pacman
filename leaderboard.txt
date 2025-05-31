@@ -1,3 +1,7 @@
+<<<<<<< HEAD
 SASA 31
 adjie 21
 SASA 3
+=======
+pras 6
+>>>>>>> revaldi
