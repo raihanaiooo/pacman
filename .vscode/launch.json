@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/pacman",
-      "program": "d:/pacman/build/Debug/outDebug",
+      "cwd": "c:/Users/adjie/OneDrive - Politeknik Negeri Bandung/Documents/Kuliah POLBAN/Semester 2/PROJEK 2/pacman",
+      "program": "c:/Users/adjie/OneDrive - Politeknik Negeri Bandung/Documents/Kuliah POLBAN/Semester 2/PROJEK 2/pacman/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
