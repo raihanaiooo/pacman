@@ -1,5 +1,5 @@
 #include "../header/powerup.h"
-#include "../header/scoring.h"
+// #include "../header/scoring.h"
 #include "../header/ui.h"
 #include <graphics.h>
 #include <stdlib.h>

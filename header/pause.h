@@ -6,7 +6,7 @@
 #include "../header/ghost.h"
 #include "../header/powerup.h"
 #include "../header/ui.h"
-#include "../header/scoring.h"
+// #include "../header/scoring.h"
 
 /* Import struct, fungsi, dan procedure */
 extern void gambarDot();

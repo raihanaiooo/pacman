@@ -4,7 +4,7 @@
 #include <graphics.h>
 #include "../header/pacman.h"
 #include "../header/ghost.h"
-#include "../header/scoring.h"
+#include "../header/dot.h"
 #include "../header/ui.h"
 #include "../header/powerup.h"
 

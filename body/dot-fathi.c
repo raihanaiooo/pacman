@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
-#include "../header/scoring.h"
+#include "../header/dot.h"
 #include "../header/ui.h"
 #include "../header/powerup.h"
 

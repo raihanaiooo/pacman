@@ -2,6 +2,7 @@
 #include "../header/pause.h"
 #include "../header/pacman.h"
 #include "../header/ghost.h"
+#include "../header/dot.h"
 
 /* Variabel global */
 int isPaused = 0;

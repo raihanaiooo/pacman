@@ -1,6 +1,6 @@
 #include <graphics.h>
 #include "../header/pacman.h"
-#include "../header/scoring.h"
+#include "../header/dot.h"
 #include "../header/powerup.h"
 #include "../header/collision.h"
 #include <stdio.h>

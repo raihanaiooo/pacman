@@ -1,8 +1,1 @@
-<<<<<<< HEAD
-sasa 4
-=======
-kjaksjda 81
-asdasdasdad 21
-rrasfa 8
-sdf 8
->>>>>>> fathi
+sasa 56

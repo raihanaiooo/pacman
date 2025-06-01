@@ -3,7 +3,7 @@
 #include <conio.h>
 #include "../header/ui.h"
 #include "../header/leaderboard.h"
-#include "../header/scoring.h"
+#include "../header/dot.h"
 #include "../header/powerup.h"
 
 #define TILE_SIZE 20
