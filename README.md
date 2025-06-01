@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎮 Game Pacman - Proyek Akhir
 
 Selamat datang di repositori game **Pacman** kami! Proyek ini dikembangkan sebagai tugas akhir mata kuliah Projek 2. Game ini dibuat menggunakan bahasa C dan berjalan di Windows dengan bantuan beberapa library.
@@ -106,3 +107,6 @@ g++ body/collision-raihana.c body/ghost-adjie.c body/leaderboard-raihana.c body/
 ---
 
 Terima kasih telah memainkan game kami! 🎉
+=======
+# pacman
+>>>>>>> fathi

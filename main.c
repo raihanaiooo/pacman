@@ -135,6 +135,8 @@ int main() {
             } else {
                 break;        // Keluar dari loop utama
             }
+            freeDot();
+            freePowerUps();
         }
 
 
@@ -148,6 +150,9 @@ int main() {
             hitungScore(score, 320, 300, 1);  // Tampilkan skor akhir di tengah layar
         
             delay(1000);  // Beri jeda sejenak agar pemain bisa melihat layar
+            freeDot();
+            freePowerUps();
+
             getch();  // Tunggu input sebelum keluar
         
             break;  // Keluar dari loop utama

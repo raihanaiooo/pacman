@@ -6,7 +6,7 @@
 extern int activePowerUpType;
 extern int powerUpCountdown;
 
-#define MAX_POWERUPS 5
+#define MAX_POWERUPS 15
 #define POWERUP_DURATION 5000  // Durasi power-up dalam milidetik (5 detik)
 
 typedef struct {
@@ -26,5 +26,6 @@ void spawnPowerUps();
 void drawPowerUps();
 void checkPowerUpCollision(int pacmanX, int pacmanY);
 void updatePowerUpState();
+void freePowerUps();
 
 #endif
